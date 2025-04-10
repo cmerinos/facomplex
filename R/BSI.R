@@ -1,0 +1,104 @@
+#' @title BSI - Bentler Simplicity Index
+#' @description Computes the Bentler Simplicity Index (BSI) from a matrix or 
+#' data frame of factor loadings.
+#'
+#' @param data A matrix or data frame of factor loadings, with k rows (items) and n columns (factors).
+#' @param item_names Optional vector of item names. If NULL, default names will 
+#' be generated.
+#' @param sort_items Controls the ordering of items in the output. Options are 
+#' `"up"` (ascending), `"down"` (descending), or `NULL` (no ordering). Default
+#' is `NULL`.
+#'
+#' @return A list with two components:
+#' \itemize{
+#'   \item `BSI_per_item`: A data frame with the BSI calculated for each item.
+#'   \item `BSI_global`: The overall Bentler Simplicity Index (mean across all items).
+#' }
+#'
+#' @details
+#' The Bentler Simplicity Index (BSI) measures the extent to which each item loads primarily on one factor,
+#' indicating a simpler factor structure. Values closer to 1 suggest higher simplicity, while values near 0
+#' indicate factorial complexity.
+#'
+#' Users can choose whether to sort items by their simplicity values or retain the original item order.
+#'
+#' @references
+#' Bentler, P. M. (1977). Factor simplicity index and transformations. *Psychometrika, 42*(2), 277–295.
+#' https://doi.org/10.1007/BF02294054
+#'
+#' @seealso \code{\link{plot_simplicity}} for graphical representation of BSI values.
+#'
+#' @examples
+#' # Example data
+#' ex1_data <- data.frame(
+#'   F1 = c(0.536, 0.708, 0.600, 0.673, 0.767, 0.481, -0.177, 0.209, -0.097, -0.115, 0.047, 0.024),
+#'   F2 = c(-0.110, 0.026, 0.076, 0.011, -0.160, 0.106, 0.668, 0.438, 0.809, 0.167, 0.128, 0.041),
+#'   F3 = c(-0.100, 0.036, 0.086, 0.021, -0.150, 0.116, 0.678, 0.448, 0.819, 0.577, 0.738, 0.751)
+#' )
+#'
+#' # Compute BSI without ordering
+#' BSI_result <- BSI(ex1_data)
+#'
+#' # Compute BSI with ascending order
+#' BSI_result_up <- BSI(ex1_data, sort_items = "up")
+#'
+#' # Compute BSI with descending order
+#' BSI_result_down <- BSI(ex1_data, sort_items = "down")
+#'
+#' @author Your Name
+#' @export
+BSI <- function(data, item_names = NULL, sort_items = NULL) {
+  # Validar si el argumento es una matriz o data.frame
+  if (!is.matrix(data) && !is.data.frame(data)) {
+    stop("El argumento 'data' debe ser una matriz o un data.frame.")
+  }
+  
+  # Convertir data.frame a matriz si es necesario
+  loadings <- as.matrix(data)
+  
+  # Asegurarse de que los valores sean numéricos
+  if (!is.numeric(loadings)) {
+    stop("Los valores de 'data' deben ser numéricos (cargas factoriales).")
+  }
+  
+  # Manejar posibles NA en la matriz
+  if (any(is.na(loadings))) {
+    warning("Se encontraron valores NA. Se ignorarán en los cálculos.")
+    loadings[is.na(loadings)] <- 0  # Opcional: reemplazar NA con 0
+  }
+  
+  # Calcular BSI por ítem (fila)
+  bsi_values <- rowSums(loadings^4) / (rowSums(loadings^2)^2)
+  
+  # Calcular el índice de simplicidad global como promedio de los valores por ítem
+  simplicity_index <- mean(bsi_values, na.rm = TRUE)
+  
+  # Si el usuario no proporciona nombres de ítems, generar nombres automáticos
+  if (is.null(item_names)) {
+    item_names <- paste0("Item_", seq_along(bsi_values))
+  }
+  
+  # Crear un data frame con los valores de BSI
+  results <- data.frame(
+    Item = item_names,
+    BSI_Value = round(bsi_values, 3),
+    stringsAsFactors = FALSE
+  )
+  
+  # Aplicar ordenamiento si el usuario lo indica
+  if (!is.null(sort_items)) {
+    if (sort_items == "up") {
+      results <- results[order(results$BSI_Value), ]
+    } else if (sort_items == "down") {
+      results <- results[order(results$BSI_Value, decreasing = TRUE), ]
+    } else {
+      stop("El argumento 'sort_items' debe ser 'up', 'down' o NULL.")
+    }
+  }
+  
+  # Retornar los resultados
+  return(list(
+    BSI_per_item = results,
+    BSI_global = round(simplicity_index, 3)
+  ))
+}
