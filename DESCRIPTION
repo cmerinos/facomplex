@@ -15,7 +15,7 @@ Description: Estima coeficientes de complejidad factorial en resultados EFA/CFA:
 		Min, Max, Mean de target-loadings and non-target-loadings
 		Plot results
 
-License: GPL (>= 2)
+License: GPL-3
 Encoding: UTF-8
 NeedsCompilation: no
 LazyData: true
