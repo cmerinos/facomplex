@@ -46,41 +46,33 @@
 #' @author Cesar Merino-Sotro
 #' @export
 LSI <- function(loadings) {
-  # Validar que las cargas factoriales sean una matriz o data.frame
+  # Validar entrada
   if (!is.matrix(loadings) && !is.data.frame(loadings)) {
-    stop("El argumento 'loadings' debe ser una matriz o un data.frame.")
+    stop("The argument 'loadings' must be a matrix or data frame.")
   }
   
-  # Convertir a matriz si es necesario
   B <- as.matrix(loadings)
-  
-  # Dimensiones
-  p <- nrow(B) # Número de variables
-  r <- ncol(B) # Número de factores
-  
-  # Constante epsilon
+  p <- nrow(B)
+  r <- ncol(B)
   epsilon <- 1e-6
   
-  # Calcular w por ítem
+  # Calcular w_i para cada ítem (no es LSI aún)
   w_items <- apply(B, 1, function(row) {
     sum((row^2 + epsilon) * 10^(row^2)) / r
   })
   
-  # Promedio de w para todos los ítems (índice global w)
+  # Calcular w global
   w_global <- mean(w_items)
   
   # Calcular e (mínimo posible de w)
   e <- (1 / r) * sum((1 / (1 + epsilon)) * 10^epsilon)
   
-  # Calcular LS (Loading Simplicity Index) global
-  LS_global <- (w_global - e) / (1 - e)
+  # Calcular LSI global con normalización
+  LSI_global <- (w_global - e) / (1 - e)
   
-  # Calcular LS para cada ítem
-  LS_items <- (w_items - e) / (1 - e)
-  
-  # Retornar resultados como lista
+  # Retornar valores
   return(list(
-    LSI.item = LS_items,   # Índice por ítem
-    LSI.global = LS_global     # Índice global
+    w_per_item = round(w_items, 4),  # valores originales w_i (sin escalar)
+    LSI_global = round(LSI_global, 4)
   ))
 }
