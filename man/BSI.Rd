@@ -60,5 +60,5 @@ https://doi.org/10.1007/BF02294054
 \code{\link{plot_simplicity}} for graphical representation of BSI values.
 }
 \author{
-Your Name
+Cesar Merino-Soto
 }
