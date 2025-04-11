@@ -85,22 +85,22 @@ BSI <- function(data, item_names = NULL, sort_items = NULL) {
   
   # Si el usuario no proporciona nombres de ítems, generar nombres automáticos
   if (is.null(item_names)) {
-    item_names <- paste0("Item_", seq_along(bsi_values))
+    item_names <- paste0("Item.", seq_along(bsi_values))
   }
   
   # Crear un data frame con los valores de BSI
   results <- data.frame(
     Item = item_names,
-    BSI_Value = round(bsi_values, 3),
+    BSI.Value = round(bsi_values, 3),
     stringsAsFactors = FALSE
   )
   
   # Aplicar ordenamiento si el usuario lo indica
   if (!is.null(sort_items)) {
     if (sort_items == "up") {
-      results <- results[order(results$BSI_Value), ]
+      results <- results[order(results$BSI.Value), ]
     } else if (sort_items == "down") {
-      results <- results[order(results$BSI_Value, decreasing = TRUE), ]
+      results <- results[order(results$BSI.Value, decreasing = TRUE), ]
     } else {
       stop("El argumento 'sort_items' debe ser 'up', 'down' o NULL.")
     }
@@ -108,7 +108,7 @@ BSI <- function(data, item_names = NULL, sort_items = NULL) {
   
   # Retornar los resultados
   return(list(
-    BSI_per_item = results,
-    BSI_global = round(simplicity_index, 3)
+    BSI.item = results,
+    BSI.global = round(simplicity_index, 3)
   ))
 }
