@@ -51,17 +51,14 @@ profile.facomplex <- function(loadings, target, abs = TRUE, cutoff = NULL, digit
   }
   loadings <- as.data.frame(loadings)
   
-  # Verifica nombres de fila
   if (is.null(rownames(loadings))) {
     stop("`loadings` must have row names (item names).")
   }
   
-  # Verifica que los nombres de factores estén en las columnas
   if (!all(names(target) %in% colnames(loadings))) {
     stop("All names in `target` must match column names in `loadings`.")
   }
   
-  # Usa valores absolutos si se indica
   if (abs) loadings <- abs(loadings)
   
   result_list <- list()
@@ -70,7 +67,6 @@ profile.facomplex <- function(loadings, target, abs = TRUE, cutoff = NULL, digit
     items_f <- target[[f]]
     other_factors <- setdiff(colnames(loadings), f)
     
-    # Verifica existencia de ítems
     if (!all(items_f %in% rownames(loadings))) {
       stop(paste("Some items for factor", f, "are not found in `loadings`."))
     }
@@ -79,17 +75,19 @@ profile.facomplex <- function(loadings, target, abs = TRUE, cutoff = NULL, digit
     target_vals <- load_f[[f]]
     cross_vals <- as.matrix(load_f[, other_factors, drop = FALSE])
     
-    # Estadísticos descriptivos
     stat <- c(
       Mean.Target = mean(target_vals),
       Median.Target = median(target_vals),
       SD.Target = sd(target_vals),
+      Min.Target = min(target_vals),
+      Max.Target = max(target_vals),
       Mean.Cross = mean(cross_vals),
       Median.Cross = median(cross_vals),
-      SD.Cross = sd(cross_vals)
+      SD.Cross = sd(cross_vals),
+      Min.Cross = min(cross_vals),
+      Max.Cross = max(cross_vals)
     )
     
-    # Si hay cutoff, calcular % por debajo/encima
     if (!is.null(cutoff)) {
       total_cross <- length(cross_vals)
       below <- mean(cross_vals <= cutoff) * 100
@@ -103,7 +101,6 @@ profile.facomplex <- function(loadings, target, abs = TRUE, cutoff = NULL, digit
     result_list[[f]] <- round(stat, digits)
   }
   
-  # Convertir lista a data.frame largo
   df <- do.call(cbind, result_list)
   stat_names <- rownames(df)
   df <- data.frame(Statistic = stat_names, df, row.names = NULL)
