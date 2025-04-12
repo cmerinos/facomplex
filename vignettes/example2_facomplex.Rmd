@@ -1,0 +1,88 @@
+
+---
+title: "Example 2: Assessing Factor Simplicity from psych::fa() Output"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Example 2: Assessing Factor Simplicity from psych::fa() Output}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(facomplex)
+library(psych)
+```
+
+# Example 2: Assessing Factor Simplicity from `psych::fa()` Output
+
+This example demonstrates how to compute factor simplicity and complexity indices using loadings obtained from an exploratory factor analysis conducted via `psych::fa()`.
+
+## Step 1: Load data from `psych`
+
+We use the `bfi` dataset available in the `psych` package.
+
+```{r}
+data(bfi, package = "psych")
+```
+
+## Step 2: Fit a 2-factor exploratory model
+
+We fit an EFA model with 2 factors using oblimin rotation and unweighted least squares (ULS) estimation.
+
+```{r}
+fa.output <- psych::fa(bfi[, 1:10], 
+                       nfactors = 2, 
+                       rotate = "oblimin",
+                       fm = "uls")
+```
+
+## Step 3: View and save the loading matrix
+
+We inspect the factor loadings and convert them to a standard data frame for analysis.
+
+```{r}
+unclass(fa.output$loadings)
+fa.load <- as.data.frame(unclass(fa.output$loadings))
+```
+
+## Step 4: Compute complexity and simplicity indices
+
+We now use the `facomplex` package to compute various measures of factor simplicity and complexity.
+
+### Hofmann Index
+
+```{r}
+Hofmann(fa.load)
+```
+
+### Bentler’s Simplicity Index
+
+```{r}
+BSI(fa.load)
+```
+
+### Kaiser-Cerny (KC) Criterion
+
+```{r}
+KC(data = fa.load, b = 4)
+```
+
+### Factor Simplicity Index (FSI)
+
+We define the target items for each factor to compute the total, factor-level, and item-level simplicity.
+
+```{r}
+FSI(data = fa.load, 
+    items_target = list(
+      ULS1 = c(6,7,8,9,10), 
+      ULS2 = c(1,2,3,4,5)
+    ))
+```
+
+---
+
+This example shows how to apply `facomplex` to factor solutions derived from classical exploratory methods, making it an accessible tool for researchers working with `psych::fa()` and other traditional EFA approaches.
