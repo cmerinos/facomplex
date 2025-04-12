@@ -51,11 +51,11 @@
 #' print(results)
 #'
 #' @references
-#' Hofman, J. (1977). A coefficient of complexity for factorial structures.
+#' Hofmann, J. (1977). A coefficient of complexity for factorial structures.
 #'  \emph{Psychometrika}, 42(4), 453-464. 
 #'
 #' @export
-Chofman <- function(data) {
+Hofmann <- function(data) {
   # Paso 2: Elevar al cuadrado cada carga factorial en cada fila
   datos_cuadrado <- data^2
   
@@ -75,7 +75,7 @@ Chofman <- function(data) {
   Choff_R <- 1 / Choff
   
   # Crear el data frame con los resultados
-  resultado <- data.frame(Choff = Choff, Choff_R = Choff_R)
+  resultado <- data.frame(Hoff = Choff, Hoff_R = Choff_R)
   
   return(round(resultado, 3))
   
