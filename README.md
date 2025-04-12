@@ -1,16 +1,16 @@
-
 # facomplex
 
 **facomplex** is an R package that provides tools for assessing factor complexity in exploratory and confirmatory factor analysis (EFA/CFA) solutions.
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 ## Installation
 
 You can install the development version of **facomplex** from GitHub using:
 
-```r
+``` r
 # If you don't have 'pak' installed:
 install.packages("pak")
 
@@ -22,18 +22,18 @@ pak::pak("cmerinos/facomplex")
 
 The package includes several methods for evaluating factor complexity:
 
-- **Hofman coefficient** (Hofman, 1977)
-- **Revised Hofman coefficient**
-- **Factor Simplicity Index (FSI)** (Fleming, 2003)
-- **Bentler’s Simplicity Index** (Bentler, 1977)
-- Descriptive statistics (min, max, mean) of target and non-target loadings
-- Visualization tools for complexity structures
+-   **Hofman coefficient** (Hofman, 1977)
+-   **Revised Hofman coefficient**
+-   **Factor Simplicity Index (FSI)** (Fleming, 2003)
+-   **Bentler’s Simplicity Index** (Bentler, 1977)
+-   Descriptive statistics (min, max, mean) of target and non-target loadings
+-   Visualization tools for complexity structures
 
 ## Example
 
 Here's a basic example using `facomplex`:
 
-```r
+``` r
 library(facomplex)
 
 # Example factor loading matrix
@@ -44,17 +44,23 @@ ex1_fl <- data.frame(
 )
 
 # Run a complexity analysis function (e.g., FSI)
-FSI(ex1_fl)
+FSIout <- FSI(ex1_fl,  
+     items_target = list(F1 = c(1, 2, 3, 4, 5, 6),
+                         F2 = c(7, 8, 9),
+                         F3 = c(10, 11, 12)))
 
 # Visualize the results
-plot.simp1icity(ex1_fl)
+plot.simplicity(
+   data = FSIout$FSI_i,
+   item.col = "Items",
+   value.col = "FSI_i")
 ```
 
 ## References
 
-- Hofman, R. J. (1977). *Simplicity and complexity in factor analysis*. Multivariate Behavioral Research, 12(2), 149–165.
-- Fleming, M. (2003). *Factor simplicity index for item and factor clarity*.
-- Bentler, P. M. (1977). *Factor simplicity index*. Psychological Bulletin, 84(1), 115–117.
+-   Hofman, R. J. (1977). *Simplicity and complexity in factor analysis*. Multivariate Behavioral Research, 12(2), 149–165.
+-   Fleming, M. (2003). *Factor simplicity index for item and factor clarity*.
+-   Bentler, P. M. (1977). *Factor simplicity index*. Psychological Bulletin, 84(1), 115–117.
 
 ## License
 
