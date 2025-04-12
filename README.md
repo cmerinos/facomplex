@@ -15,7 +15,7 @@ You can install the development version of **facomplex** from GitHub using:
 install.packages("devtools")
 
 # Then install the package from GitHub
-devtools::install_github("cmerinos/facomplex")
+devtools::install_github("cmerinos/facomplex", build_vignettes = TRUE)
 ```
 
 ## Overview
@@ -58,9 +58,17 @@ plot.simplicity(
 
 ## References
 
--   Hofman, R. J. (1977). *Simplicity and complexity in factor analysis*. Multivariate Behavioral Research, 12(2), 149–165.
--   Fleming, M. (2003). *Factor simplicity index for item and factor clarity*.
--   Bentler, P. M. (1977). *Factor simplicity index*. Psychological Bulletin, 84(1), 115–117.
+-   Bentler, P. M. (1977). Factor Simplicity Index and Transformations. *Psychometrika*, *42*(2), 277–295. <https://doi.org/10.1007/BF02294054>
+
+-   Fleming, J. S. (1985). An index of fit for factor scales. Educational and Psychological Measurement, 45, 725-728. [https://doi.org/10.1177/0013164485454002](https://psycnet.apa.org/doi/10.1177/0013164485454002)
+
+-   Fleming, J. S. (2003). Computing measures of simplicity of fit for loadings in factor-analytically derived scales. Behavior Research Methods, Instruments, & Computers, 35, 520–524. <https://doi.org/10.3758/BF03195531>
+
+-   Fleming, J., S. & Merino-Soto, C. (2005). Medidas de simplicidad y de ajuste factorial: un enfoque para la evaluación de escalas construidas factorialmente. Revista de Psicología, 23(2), 249-266.
+
+-   Hofman, R. J. (1977). *Simplicity and complexity in factor analysis*. Multivariate Behavioral Research, 12(2), 149–165. <https://doi.org/10.18800/psico.200502.002>
+
+-   Kaiser, H. F. (1974). An Index of Factorial Simplicity. *Psychometrika*, *39*(1), 31–36. [https://doi.org/](https://doi.org/10.1007/BF02294054){.uri}[10.1007/BF02291575](https://doi.org/10.1007/BF02291575)
 
 ## License
 
