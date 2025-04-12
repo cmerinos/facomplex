@@ -78,7 +78,9 @@ summary(INV.esem.fit, standardized = TRUE, fit.measures = TRUE)
 We now use the `facomplex` package to calculate various indices of factor complexity.
 
 ### Factor Simplicity Index (FSI)
+
 The items grouped in both lists, within the `items_target` argument, are the expected items in their factors. The use of FSI to interpret its results at the factor level requires this prior knowledge of the items in their expected factors.
+
 ```{r}
 FSI(data = lavInspect(INV.esem.fit, what = "std")$lambda,
     items_target = list(f1 = c(1,2,3,4,5,6), 
