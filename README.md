@@ -13,12 +13,17 @@ You can install the development version of facomplex from [GitHub](https://githu
 ``` r
 # install.packages("facomplex")
 facomplex::facomplex("cmerinos/facomplex")
+
+```
+``` r
+library(facomplex)
+## basic example code
 ```
 
-## Example
+# Example
 
 This is a basic example which shows you how to solve a common problem:
-# Example data
+## Example data
 ex1_data <- data.frame(
 F1 = c(0.536, 0.708, 0.600, 0.673, 0.767, 0.481, -0.177, 0.209, -0.097, -0.115, 0.047, 0.024),
 F2 = c(-0.110, 0.026, 0.076, 0.011, -0.160, 0.106, 0.668, 0.438, 0.809, 0.167, 0.128, 0.041),
@@ -33,7 +38,3 @@ F3 = c(10, 11, 12)))
 
 Chofman(ex1_data)
 
-``` r
-library(facomplex)
-## basic example code
-```
