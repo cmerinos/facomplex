@@ -1,4 +1,3 @@
-
 ---
 title: "Example 2: Assessing Factor Simplicity from psych::fa() Output"
 output: rmarkdown::html_vignette
@@ -83,6 +82,6 @@ FSI(data = fa.load,
     ))
 ```
 
----
+------------------------------------------------------------------------
 
 This example shows how to apply `facomplex` to factor solutions derived from classical exploratory methods, making it an accessible tool for researchers working with `psych::fa()` and other traditional EFA approaches.
