@@ -11,11 +11,11 @@
 You can install the development version of **facomplex** from GitHub using:
 
 ``` r
-# If you don't have 'pak' installed:
-install.packages("pak")
+# Install devtools if not already installed
+install.packages("devtools")
 
-# Then install the package
-pak::pak("cmerinos/facomplex")
+# Then install the package from GitHub
+devtools::install_github("cmerinos/facomplex")
 ```
 
 ## Overview
