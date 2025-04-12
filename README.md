@@ -1,10 +1,25 @@
-# mi_paquete
+# facomplex
 
-Este paquete contiene funciones útiles para realizar análisis estadísticos. 
+<!-- badges: start -->
 
-## Instalación
+<!-- badges: end -->
 
-Puedes instalarlo desde GitHub (una vez subido) usando:
+The goal of facomplex is to ...
 
-```R
-devtools::install_github("tuusuario/facomplex")
+## Installation
+
+You can install the development version of facomplex from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("cmerinos/facomplex")
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+``` r
+library(facomplex)
+## basic example code
+```
