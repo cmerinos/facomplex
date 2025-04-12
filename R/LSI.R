@@ -51,23 +51,29 @@ LSI <- function(loadings) {
     stop("The argument 'loadings' must be a matrix or data frame.")
   }
   
-  B <- as.matrix(loadings)
-  r <- ncol(B)
+  L <- as.matrix(loadings)
+  p <- nrow(L)  # Number of items
+  r <- ncol(L)  # Number of factors
   epsilon <- 1e-6
   
-  # Weighted complexity per item (not reported)
-  w_items <- apply(B, 1, function(row) {
+  # Paso 1: Normalización por columnas
+  col_norms <- sqrt(colSums(L^2))
+  Lc <- sweep(L, 2, col_norms, "/")
+  
+  # Paso 2: Normalización por filas
+  row_norms <- sqrt(rowSums(Lc^2))
+  B <- sweep(Lc, 1, row_norms, "/")
+  
+  # Paso 3: Cálculo de w (complejidad promedio ponderada)
+  w <- mean(apply(B, 1, function(row) {
     sum((row^2 + epsilon) * 10^(row^2)) / r
-  })
+  }))
   
-  # Global average
-  w_global <- mean(w_items)
+  # Paso 4: Valor mínimo teórico (e) cuando las cargas están distribuidas uniformemente
+  bij <- rep(1 / sqrt(r), r)
+  e <- sum((bij^2 + epsilon) * 10^(bij^2)) / r
   
-  # Minimum possible value (theoretical lower bound)
-  e <- (1 / r) * sum((1 / (1 + epsilon)) * 10^epsilon)
-  
-  # Normalized LSI
-  LSI_global <- (w_global - e) / (1 - e)
-  
+  # Paso 5: Índice final
+  LSI_global <- (w - e) / (1 - e)
   return(round(LSI_global, 4))
 }
