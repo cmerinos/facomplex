@@ -1,0 +1,103 @@
+
+---
+title: "Exploring Factor Complexity with ESEM: Example 1"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Exploring Factor Complexity with ESEM: Example 1}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(facomplex)
+library(lavaan)
+```
+
+# Example 1: Estimating Factor Complexity in an ESEM Solution
+
+This example demonstrates a full workflow for estimating factor complexity in an Exploratory Structural Equation Modeling (ESEM) context using the `facomplex` package. We use a two-factor target rotation on a set of 12 items.
+
+## 1. Load the data
+
+We start by loading the dataset `fullclean` which should contain the observed variables for the ESEM model.
+
+```{r}
+data(fullclean)
+```
+
+## 2. Create a target matrix
+
+We define the hypothesized factor structure using a target matrix. This matrix guides the target rotation by specifying which items are expected to load on each factor.
+
+```{r}
+INV.target <- matrix(0, 12, 2)
+INV.target[1:6, 1] <- NA
+INV.target[7:12, 2] <- NA
+INV.target
+```
+
+## 3. Specify the ESEM model
+
+Using `lavaan`, we define an ESEM model with exploratory factors `f1` and `f2`. All items load on both factors through exploratory syntax.
+
+```{r}
+INV.esem.model <- '
+efa("efa1")*f1 + 
+efa("efa1")*f2 =~ INV1 + INV4 + INV5 + INV7 + INV11 + INV12 + INV3 + INV6 + INV8 + INV9 + INV13 + INV14
+'
+```
+
+## 4. Fit the ESEM model
+
+We fit the model using the `sem()` function from `lavaan`, applying a target rotation based on our predefined matrix.
+
+```{r}
+INV.esem.fit <- sem(INV.esem.model,
+                    data = fullclean,
+                    ordered = FALSE,
+                    estimator = "ulsmv",
+                    rotation = "target",
+                    rotation.args = list(target = INV.target,
+                                         geomin.epsilon = 0.01, 
+                                         rstarts = 30,
+                                         algorithm = "gpa",
+                                         std.ov = TRUE))
+```
+
+We examine the model fit and standardized solution:
+
+```{r}
+summary(INV.esem.fit, standardized = TRUE, fit.measures = TRUE)
+```
+
+## 5. Compute factor complexity indices
+
+We now use the `facomplex` package to calculate various indices of factor complexity.
+
+### Factor Simplicity Index (FSI)
+
+```{r}
+FSI(data = lavInspect(INV.esem.fit, what = "std")$lambda,
+    items_target = list(f1 = c(1,2,3,4,5,6), 
+                        f2 = c(7,8,9,10,11,12)))
+```
+
+### Hofmann’s Index
+
+```{r}
+Hofmann(data = lavInspect(INV.esem.fit, what = "std")$lambda)
+```
+
+### Bentler’s Simplicity Index (BSI)
+
+```{r}
+BSI(lavInspect(INV.esem.fit, what = "std")$lambda)
+```
+
+---
+
+This concludes **Example 1**. Additional examples will build upon these procedures to showcase different model structures, datasets, and complexity conditions.
