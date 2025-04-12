@@ -19,18 +19,21 @@
 #'
 #' @examples
 #' # Example using FSI output:
-#' fsi.out <- FSI(ex1_data)
+#' FSIout <- FSI(ex1_fl,  
+#'               items_target = list(F1 = c(1, 2, 3, 4, 5, 6),
+#'                                   F2 = c(7, 8, 9),
+#'                                   F3 = c(10, 11, 12)))
 #'
 #' # Basic use (value.col is required)
 #' plot.simplicity(
-#'   data = fsi.out$FSI_i,
+#'   data = FSIout$FSI_i,
 #'   item.col = "Items",
 #'   value.col = "FSI_i"
 #' )
 #'
 #' # Customizing options:
 #' plot.simplicity(
-#'   data = fsi.out$FSI_i,
+#'   data = FSIout$FSI_i,
 #'   item.col = "Items",
 #'   value.col = "FSI_i",
 #'   sort.items = "none",
@@ -42,7 +45,7 @@
 #'
 #' # ❌ This will trigger an error if value.col is missing:
 #' \dontrun{
-#' plot.simplicity(data = fsi.out$FSI_i)  # Error: 'value.col' is required
+#' plot.simplicity(data = FSIout$FSI_i)  # Error: 'value.col' is required
 #' }
 plot.simplicity <- function(data,
                             item.col = "Item",
