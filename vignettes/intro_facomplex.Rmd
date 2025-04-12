@@ -1,4 +1,3 @@
-
 ---
 title: "Exploring Factor Complexity with ESEM: Example 1"
 output: rmarkdown::html_vignette
@@ -19,7 +18,7 @@ library(lavaan)
 
 # Example 1: Estimating Factor Complexity in an ESEM Solution
 
-This example demonstrates a full workflow for estimating factor complexity in an Exploratory Structural Equation Modeling (ESEM) context using the `facomplex` package. We use a two-factor target rotation on a set of 12 items.
+This example demonstrates a full workflow for estimating factor complexity in an Exploratory Structural Equation Modeling (ESEM) context using the `facomplex` package. We use a two-factor target rotation on a set of 12 items. This is a real data, about motivations for research in university teachers
 
 ## 1. Load the data
 
@@ -79,7 +78,7 @@ summary(INV.esem.fit, standardized = TRUE, fit.measures = TRUE)
 We now use the `facomplex` package to calculate various indices of factor complexity.
 
 ### Factor Simplicity Index (FSI)
-
+The items grouped in both lists, within the `items_target` argument, are the expected items in their factors. The use of FSI to interpret its results at the factor level requires this prior knowledge of the items in their expected factors.
 ```{r}
 FSI(data = lavInspect(INV.esem.fit, what = "std")$lambda,
     items_target = list(f1 = c(1,2,3,4,5,6), 
@@ -98,6 +97,6 @@ Hofmann(data = lavInspect(INV.esem.fit, what = "std")$lambda)
 BSI(lavInspect(INV.esem.fit, what = "std")$lambda)
 ```
 
----
+------------------------------------------------------------------------
 
 This concludes **Example 1**. Additional examples will build upon these procedures to showcase different model structures, datasets, and complexity conditions.
