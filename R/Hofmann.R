@@ -1,9 +1,9 @@
-#' Chofman: Hofman's Coefficient for assessing the factorial complexity of items
+#' Hofmann: Hofmann's Coefficient for assessing the factorial complexity of items
 #'
-#' This function calculates the Hofman coefficient (\code{Chof}, Hofman, 1977) to
+#' This function calculates the Hofmann coefficient (\code{Hofmann}, Hofmann, 1977) to
 #'  evaluate the factorial simplicity of items in a factorial model.
-#' It also implements a modified version of \code{Chof}, called \code{Choff_R}, 
-#' with values normalized between 0 and 1. The \code{Chof} coefficient ranges from 1 
+#' It also implements a modified version of \code{Hofmann}, called \code{Hoff_R}, 
+#' with values normalized between 0 and 1. The \code{Hofmann} coefficient ranges from 1 
 #' (indicating factorial simplicity or unidimensionality) to p (the total number 
 #' of factors in the model, indicating greater complexity).
 #'
@@ -13,25 +13,25 @@
 #'
 #' @return A \code{data.frame} with two numeric vectors:
 #' \itemize{
-#'   \item \code{Choff}: The Hofman coefficient calculated for each item, 
+#'   \item \code{Hoff}: The Hofman coefficient calculated for each item, 
 #'   indicating factorial complexity.
-#'   \item \code{Choff_R}: The modified Hofman coefficient, where
-#'    \code{Choff_R = 1 / Choff}, with values normalized between 0 and 1.
+#'   \item \code{Hoff_R}: The modified Hofman coefficient, where
+#'    \code{Hoff_R = 1 / Choff}, with values normalized between 0 and 1.
 #' }
 #'
 #' @details
-#' Hofman (1977) proposed the factorial complexity coefficient (\code{Chof}), 
+#' Hofmann (1977) proposed the factorial complexity coefficient (\code{Hofmann}), 
 #' which ranges from 1 (indicating that the item has a unidimensional structure,
 #' i.e., factorial simplicity) to p (the total number of factors in the model, 
 #' indicating that the item has a more complex structure). 
 #' This coefficient is calculated from the factor loadings of the items, assessing
 #'  how much variance each factor explains for each item. 
 #' 
-#' In this case, the modification of \code{Chof} (denoted \code{Choff_R}) is
-#'  obtained as the inverse of \code{Choff}, resulting in values between 0 and 1.
-#'  A value close to 1 for \code{Choff_R} indicates greater factorial simplicity.
+#' In this case, the modification of \code{Hofmann} (denoted \code{Hoff_R}) is
+#'  obtained as the inverse of \code{Hofmann}, resulting in values between 0 and 1.
+#'  A value close to 1 for \code{Hoff_R} indicates greater factorial simplicity.
 #'
-#' The values of \code{Choff} and \code{Choff_R} should be interpreted in the 
+#' The values of \code{Hoff} and \code{Hoff_R} should be interpreted in the 
 #' context of the factorial model and the user's judgment, as a single value may
 #' not be sufficient for a precise interpretation of the factorial simplicity or 
 #' unidimensionality of the items.
@@ -45,7 +45,7 @@
 #' )
 #' 
 #' # Call the function to calculate the Hofman coefficient
-#' results <- Chofman(ex1.data)
+#' results <- Hofmann(ex1.data)
 #' 
 #' # View the results
 #' print(results)
