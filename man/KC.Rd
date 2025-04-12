@@ -7,7 +7,7 @@
 KC(data, b = 4)
 }
 \arguments{
-\item{data}{A \code{data.frame} or numeric \code{matrix} of factor loadings, where rows represent items (variables) 
+\item{data}{A \code{data.frame} or numeric \code{matrix} of factor loadings, where rows represent items (variables)
 and columns represent factors.}
 
 \item{b}{A positive numeric value for the power parameter in the Kaiser-Cerny formula. Default is \code{4}.}
@@ -15,13 +15,13 @@ and columns represent factors.}
 \value{
 No return value. The function prints:
 \itemize{
-  \item The Kaiser-Cerny simplicity index \code{f_j} for each factor.
-  \item The ideal hyperplane count \code{m(p - 1)}.
+\item The Kaiser-Cerny simplicity index \code{f_j} for each factor.
+\item The ideal hyperplane count \code{m(p - 1)}.
 }
 }
 \description{
 Computes the Kaiser-Cerny (1978) criterion for factorial simplicity based on a power function
-of the absolute loadings (inspired by Kendall & Stuart, 1969). Also returns the ideal hyperplane count 
+of the absolute loadings (inspired by Kendall & Stuart, 1969). Also returns the ideal hyperplane count
 as an expected benchmark of factorial parsimony.
 }
 \details{
@@ -49,6 +49,6 @@ KC(loadings)
 
 }
 \references{
-Kaiser, H. F., & Cerny, B. A. (1978). Factor analysis of the image covariance matrix. \emph{Psychological Bulletin}, 85(6), 1272–1284.  
+Kaiser, H. F., & Cerny, B. A. (1978). Factor analysis of the image covariance matrix. \emph{Psychological Bulletin}, 85(6), 1272–1284.
 Kendall, M. G., & Stuart, A. (1969). \emph{The Advanced Theory of Statistics}, Vol. 2. London: Griffin.
 }

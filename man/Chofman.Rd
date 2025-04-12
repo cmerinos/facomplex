@@ -7,42 +7,42 @@
 Chofman(data)
 }
 \arguments{
-\item{data}{A \code{data.frame} containing the factor loadings. Rows correspond 
+\item{data}{A \code{data.frame} containing the factor loadings. Rows correspond
 to items, and columns correspond to factors in the factorial model.
 The values should be factor loadings, typically ranging from -0.9999 to 0.9999.}
 }
 \value{
 A \code{data.frame} with two numeric vectors:
 \itemize{
-  \item \code{Choff}: The Hofman coefficient calculated for each item, 
-  indicating factorial complexity.
-  \item \code{Choff_R}: The modified Hofman coefficient, where
-   \code{Choff_R = 1 / Choff}, with values normalized between 0 and 1.
+\item \code{Choff}: The Hofman coefficient calculated for each item,
+indicating factorial complexity.
+\item \code{Choff_R}: The modified Hofman coefficient, where
+\code{Choff_R = 1 / Choff}, with values normalized between 0 and 1.
 }
 }
 \description{
 This function calculates the Hofman coefficient (\code{Chof}, Hofman, 1977) to
- evaluate the factorial simplicity of items in a factorial model.
-It also implements a modified version of \code{Chof}, called \code{Choff_R}, 
-with values normalized between 0 and 1. The \code{Chof} coefficient ranges from 1 
-(indicating factorial simplicity or unidimensionality) to p (the total number 
+evaluate the factorial simplicity of items in a factorial model.
+It also implements a modified version of \code{Chof}, called \code{Choff_R},
+with values normalized between 0 and 1. The \code{Chof} coefficient ranges from 1
+(indicating factorial simplicity or unidimensionality) to p (the total number
 of factors in the model, indicating greater complexity).
 }
 \details{
-Hofman (1977) proposed the factorial complexity coefficient (\code{Chof}), 
+Hofman (1977) proposed the factorial complexity coefficient (\code{Chof}),
 which ranges from 1 (indicating that the item has a unidimensional structure,
-i.e., factorial simplicity) to p (the total number of factors in the model, 
-indicating that the item has a more complex structure). 
+i.e., factorial simplicity) to p (the total number of factors in the model,
+indicating that the item has a more complex structure).
 This coefficient is calculated from the factor loadings of the items, assessing
- how much variance each factor explains for each item. 
+how much variance each factor explains for each item.
 
 In this case, the modification of \code{Chof} (denoted \code{Choff_R}) is
- obtained as the inverse of \code{Choff}, resulting in values between 0 and 1.
- A value close to 1 for \code{Choff_R} indicates greater factorial simplicity.
+obtained as the inverse of \code{Choff}, resulting in values between 0 and 1.
+A value close to 1 for \code{Choff_R} indicates greater factorial simplicity.
 
-The values of \code{Choff} and \code{Choff_R} should be interpreted in the 
+The values of \code{Choff} and \code{Choff_R} should be interpreted in the
 context of the factorial model and the user's judgment, as a single value may
-not be sufficient for a precise interpretation of the factorial simplicity or 
+not be sufficient for a precise interpretation of the factorial simplicity or
 unidimensionality of the items.
 }
 \examples{
@@ -62,5 +62,5 @@ print(results)
 }
 \references{
 Hofman, J. (1977). A coefficient of complexity for factorial structures.
- \emph{Psychometrika}, 42(4), 453-464.
+\emph{Psychometrika}, 42(4), 453-464.
 }

@@ -1,12 +1,19 @@
 Package: facomplex
 Title: Methods for Assessing Factor Complexity in Factor Analysis Solutions
-Version: 0.0.0.9000
-Authors@R: person("Merino-Soto", "Cesar A.", role = c("aut", "cre"), email = "sikayax@yahoo.com.ar")
+Version: 0.0.1.000
+Authors@R: 
+    Authors@R: c(
+    (person("Merino-Soto", "Cesar A.", 
+    role = c("aut", "cre"), 
+    email = "sikayax@yahoo.com.ar"),
+    person("Dominguez-Lara, "Sergio",
+    role = c("ctb", "rev", "tst"),
+    email = "xxx@xxx")))
 Maintainer: Cesar Merino-Soto <sikayax@yahoo.com.ar>
 Depends: R (>= 3.1.0)
 Description: Provides methods for estimating factor complexity coefficients in exploratory and confirmatory factor analysis (EFA/CFA) results. Included indices are the Hofman coefficient (Hofman, 1977), its revised version, the Factor Simplicity Index (FSI; Fleming, 2003), and Bentler’s simplicity index (Bentler, 1977). Additional outputs include descriptive statistics (minimum, maximum, and mean) for target and non-target loadings, and visualization of results.
 License: GPL-3
 Encoding: UTF-8
-NeedsCompilation: no
-LazyData: true
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+LazyData: true

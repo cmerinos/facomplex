@@ -7,7 +7,7 @@
 FSI(data, items_target)
 }
 \arguments{
-\item{data}{A matrix or data frame where rows represent items and columns represent factors. 
+\item{data}{A matrix or data frame where rows represent items and columns represent factors.
 Each value should be a standardized or pattern factor loading.}
 
 \item{items_target}{A named list indicating the target items per factor. Each element should be a
@@ -17,20 +17,20 @@ on the corresponding factor (column).}
 \value{
 A list containing three elements:
 \describe{
-  \item{FSI_total}{A numeric value representing the factorial simplicity of the overall loading matrix.}
-  \item{FSI_F}{A named vector with the factorial simplicity index of each factor (column).}
-  \item{FSI_i}{A data frame with two columns: \code{Items} (item names) and \code{FSI_i} 
-               (simplicity index of each item).}
+\item{FSI_total}{A numeric value representing the factorial simplicity of the overall loading matrix.}
+\item{FSI_F}{A named vector with the factorial simplicity index of each factor (column).}
+\item{FSI_i}{A data frame with two columns: \code{Items} (item names) and \code{FSI_i}
+(simplicity index of each item).}
 }
 }
 \description{
-Calculates a factorial simplicity index (FSI) to evaluate the factorial complexity of 
-multidimensional scales. The function estimates factorial simplicity at the item level, 
-factor level, and overall solution level. It is particularly useful for solutions that 
+Calculates a factorial simplicity index (FSI) to evaluate the factorial complexity of
+multidimensional scales. The function estimates factorial simplicity at the item level,
+factor level, and overall solution level. It is particularly useful for solutions that
 include expected and cross-loadings.
 }
 \details{
-This function is designed for factorial solutions from models such as EFA with target rotation 
+This function is designed for factorial solutions from models such as EFA with target rotation
 or ESEM. It requires a matrix or data frame of standardized or pattern loadings.
 }
 \examples{
@@ -72,13 +72,13 @@ FSI(data = lavInspect(INV.esem.fit, what = "std")$lambda,
 
 }
 \references{
-Fleming, J. S., & Merino Soto, C. (2005). Medidas de simplicidad y de ajuste factorial: 
-un enfoque para la evaluación de escalas construidas factorialmente. \emph{Revista De Psicología}, 
+Fleming, J. S., & Merino Soto, C. (2005). Medidas de simplicidad y de ajuste factorial:
+un enfoque para la evaluación de escalas construidas factorialmente. \emph{Revista De Psicología},
 23(2), 250–266. \doi{10.18800/psico.200502.002} \cr
 Fleming, J. S. (1985). An index of fit for factor scales. \emph{Educational and Psychological Measurement}, 45, 725–728. \cr
 Kaiser, H. F. (1974). An index of factorial simplicity. \emph{Psychometrika}, 39, 31–35. \cr
-Fleming, J. S. (2003). Computing measures of simplicity of fit for loadings in factor-analytically 
-derived scales. \emph{Behavior Research Methods, Instruments, & Computers}, 35(4), 520–524. 
+Fleming, J. S. (2003). Computing measures of simplicity of fit for loadings in factor-analytically
+derived scales. \emph{Behavior Research Methods, Instruments, & Computers}, 35(4), 520–524.
 \doi{10.3758/bf03195531}
 }
 \author{

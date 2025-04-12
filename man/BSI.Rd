@@ -16,31 +16,31 @@ BSI(data, item_names = NULL, sort_items = NULL)
 \value{
 A list with two components:
 \itemize{
-  \item \code{BSI_per_item}: A data frame with the Bentler simplicity value computed for each item.
-  \item \code{BSI_global}: A scalar value representing the global Bentler Simplicity Index (i.e., the mean across all items).
+\item \code{BSI_per_item}: A data frame with the Bentler simplicity value computed for each item.
+\item \code{BSI_global}: A scalar value representing the global Bentler Simplicity Index (i.e., the mean across all items).
 }
 }
 \description{
-Computes the Bentler Simplicity Index (BSI), a scale-free matrix measure that quantifies the factorial simplicity of a solution. 
+Computes the Bentler Simplicity Index (BSI), a scale-free matrix measure that quantifies the factorial simplicity of a solution.
 It is derived from the squared factor loadings and indicates the extent to which the factor structure approaches a perfectly simple pattern.
 }
 \details{
-The BSI quantifies the simplicity of the factorial structure at the item level by assessing the 
+The BSI quantifies the simplicity of the factorial structure at the item level by assessing the
 degree to which each item predominantly loads on a single factor. It is computed using the formula:
 
 \deqn{BSI_i = \frac{\sum_j a_{ij}^4}{\left( \sum_j a_{ij}^2 \right)^2}}
 
-where \eqn{a_{ij}} is the loading of item \eqn{i} on factor \eqn{j}. This adaptation follows the logic 
-of the global Bentler Simplicity Index, but applies it row-wise (per item) instead of matrix-wise. 
-While Bentler (1977) originally defined the BSI as a scale-level index, computing it at the item level 
+where \eqn{a_{ij}} is the loading of item \eqn{i} on factor \eqn{j}. This adaptation follows the logic
+of the global Bentler Simplicity Index, but applies it row-wise (per item) instead of matrix-wise.
+While Bentler (1977) originally defined the BSI as a scale-level index, computing it at the item level
 offers a complementary view for identifying items that may contribute disproportionately to factorial complexity.
 
 The global BSI reported by this function is simply the mean of the item-level BSI values.
 
 \strong{Interpretation:} In practice, a BSI value near 1.0 suggests that the item reflects a "pure" or
-unidimensional measure aligned with a single latent factor. Conversely, lower values (e.g., below 0.50) may 
-indicate factorial complexity, potentially undermining the interpretability or construct validity of 
-that item within a scale. This makes BSI especially useful for refining multidimensional scales by 
+unidimensional measure aligned with a single latent factor. Conversely, lower values (e.g., below 0.50) may
+indicate factorial complexity, potentially undermining the interpretability or construct validity of
+that item within a scale. This makes BSI especially useful for refining multidimensional scales by
 identifying items with cross-loadings.
 }
 \examples{

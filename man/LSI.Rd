@@ -16,22 +16,22 @@ A single numeric value representing the global simplicity index.
 Computes the global Loading Simplicity Index (LSI) proposed by Lorenzo-Seva (2003), based on a matrix of factor loadings.
 }
 \details{
-The Loading Simplicity Index (LSI) is a global measure of factor simplicity that captures how clearly 
-items load on a single factor across the entire loading matrix. The LSI captures the extent to which 
+The Loading Simplicity Index (LSI) is a global measure of factor simplicity that captures how clearly
+items load on a single factor across the entire loading matrix. The LSI captures the extent to which
 each item's communality is concentrated on a single factor, emphasizing structural clarity across the matrix.
 The index applies a nonlinear weighting function to emphasize dominant loadings while down-weighting smaller ones.
-LSI ranges from 1 (perfectly simple structure) to 0 (fully complex structure). The index is designed to be 
+LSI ranges from 1 (perfectly simple structure) to 0 (fully complex structure). The index is designed to be
 scale-invariant and interpretable regardless of the number of factors or items in the matrix.
 
 The LSI is computed as:
 
 \deqn{LSI = \frac{w - e}{1 - e}}
 
-where \eqn{w} is the mean of weighted item complexity values, and \eqn{e} is the theoretical minimum 
-value of \eqn{w}, used for normalization. The result is scaled between 0 and 1, with higher values indicating 
+where \eqn{w} is the mean of weighted item complexity values, and \eqn{e} is the theoretical minimum
+value of \eqn{w}, used for normalization. The result is scaled between 0 and 1, with higher values indicating
 simpler structures.
 
-**Note:** Although the computation involves intermediate values per item (\eqn{w_i}), these should not 
+\strong{Note:} Although the computation involves intermediate values per item (\eqn{w_i}), these should not
 be interpreted individually. The LSI is validated and interpretable only as a global index.
 }
 \examples{
@@ -46,13 +46,13 @@ cat("Global LSI:", lsi, "\n")
 
 }
 \references{
-Lorenzo-Seva, U. (2003). A factor simplicity index. *Psychometrika, 68*(1), 49–60.
+Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika, 68}(1), 49–60.
 https://doi.org/10.1007/BF02296652
 }
 \seealso{
 \code{\link{BSI}}, \code{\link{FSI}}, \code{\link{plot_simplicity}} for related indices and visualizations.
 
-\code{\link{BSI}} for Bentler’s index, \code{\link{FSI}} for Fleming’s index, and \code{\link{plot_simplicity}} 
+\code{\link{BSI}} for Bentler’s index, \code{\link{FSI}} for Fleming’s index, and \code{\link{plot_simplicity}}
 for visual inspection of loadings.
 }
 \author{
