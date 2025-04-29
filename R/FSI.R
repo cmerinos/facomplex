@@ -71,6 +71,7 @@
 #'                         f2 = c(7, 8, 9, 10, 11, 12)))
 #'
 #' @author Tu Nombre
+#' 
 #' @export
 FSI <- function(data, items_target) {
   # Convert matrices to data frame
