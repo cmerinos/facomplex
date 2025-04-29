@@ -101,57 +101,46 @@ FSI <- function(data, items_target) {
   SSTF_total <- 0
   SS_NTF_total <- 0
   
-  # Compute FSI_F for each factor
+  # Ensure numeric indices are valid
+  n_rows <- nrow(data_squared)
+  
   for (factor in names(items_target)) {
-    # Get the index of target items for the current factor
     target_rows <- items_target[[factor]]
     
-    # Compute the sum of squared target items (SSTF)
-    SSTF <- sum(data_squared[target_rows, factor])
+    if (any(target_rows < 1 | target_rows > n_rows)) {
+      stop("One or more 'items_target' indices are out of range.")
+    }
     
-    # Compute the sum of squared non-target items (SS-NTF)
-    all_rows <- 1:nrow(data_squared)
-    no_target_rows <- setdiff(all_rows, target_rows)
+    # Compute SSTF and SS_NTF
+    SSTF <- sum(data_squared[target_rows, factor])
+    no_target_rows <- setdiff(seq_len(n_rows), target_rows)
     SS_NTF <- sum(data_squared[no_target_rows, factor])
     
-    # Compute RATIO
-    RATIO <- SS_NTF / SSTF
-    
-    # Compute FSI_F
-    FSI_F[[factor]] <- 1 - RATIO
-    
-    # Accumulate for total calculation
+    # FSI_F and totals
+    FSI_F[[factor]] <- 1 - (SS_NTF / SSTF)
     SSTF_total <- SSTF_total + SSTF
     SS_NTF_total <- SS_NTF_total + SS_NTF
     
-    # Compute FSI_i for each target item in the current factor
+    # FSI_i
     for (item in target_rows) {
       target_loading <- data_squared[item, factor]
       sum_non_target <- sum(data_squared[item, setdiff(names(data), factor)])
-      
-      # Compute FSI_i for the current item
       FSI_i[[row_names[item]]] <- 1 - (sum_non_target / target_loading)
     }
   }
   
-  # Compute FSI_total
-  RATIO_total <- SS_NTF_total / SSTF_total
-  FSI_total <- 1 - RATIO_total
+  # FSI_total
+  FSI_total <- 1 - (SS_NTF_total / SSTF_total)
   
-  # Create lists for results
+  # Output
   result_list <- list(
-    FSI_total = FSI_total,
-    FSI_F = FSI_F,
+    FSI_total = round(FSI_total, 3),
+    FSI_F = sapply(FSI_F, round, 3),
     FSI_i = data.frame(
       Items = names(FSI_i),
       FSI_i = round(unlist(FSI_i), 3),
-      row.names = NULL  # Remove automatic row names
+      row.names = NULL
     )
   )
-  
-  # Format and round results
-  result_list$FSI_total <- round(result_list$FSI_total, 3)
-  result_list$FSI_F <- sapply(result_list$FSI_F, round, 3)
-  
   return(result_list)
 }
