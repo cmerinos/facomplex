@@ -1,3 +1,21 @@
+#' SSindices: Target-Based Simple Structure Indices
+#'
+#' Computes three target-based indices of factorial simplicity:
+#' \code{SStarget}, \code{SSntarget}, and their ratio \code{SSratio}.
+#' These quantify how much of the total explained variance is aligned 
+#' with a predefined target structure versus misaligned (cross-loading) variance.
+#'
+#' @param loadings A numeric matrix or data frame of factor loadings (items × factors).
+#' @param target A binary matrix or data frame of the same dimensions as \code{loadings}, 
+#' indicating the expected loading structure: 1 = expected (target) loading, 0 = non-target.
+#'
+#' @return A data.frame with:
+#' \itemize{
+#'   \item \code{SStarget}: Proportion of total variance explained by target-aligned loadings.
+#'   \item \code{SSntarget}: Proportion of variance explained by non-target (cross) loadings.
+#'   \item \code{SSratio}: The ratio of SStarget to SSntarget. Values >1 indicate dominance of the expected structure.
+#' }
+#'
 #' @details
 #' This function builds on the logic of \code{lazy.fa::ss_index}, which evaluates off-diagonal 
 #' complexity based on squared loadings. \code{SSindices()} extends the concept by incorporating 
