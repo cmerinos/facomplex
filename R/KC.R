@@ -65,7 +65,7 @@ KC <- function(data, b = 4) {
   
   # Output results
   cat("Kaiser-Cerny Factor Simplicity Analysis:\n")
-  cat("- Simplicity index f_j for each factor:\n")
+  cat("- Threshold f_j for hyperplane inclusion (per factor):\n")
   for (i in 1:length(fj_values)) {
     cat(paste0("  F", i, ": ", round(fj_values[i], 6), "\n"))
   }
