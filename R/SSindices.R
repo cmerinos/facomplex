@@ -1,35 +1,35 @@
-#' SSindices: Target-Based Simple Structure Indices
-#'
-#' Computes three target-based indices of factorial simplicity:
-#' \code{SStarget}, \code{SSntarget}, and their ratio \code{SSratio}.
-#' These quantify how much of the total explained variance is aligned 
-#' with a predefined target structure versus misaligned (cross-loading) variance.
-#'
-#' @param loadings A numeric matrix or data frame of factor loadings (items × factors).
-#' @param target A binary matrix or data frame of the same dimensions as \code{loadings}, 
-#' indicating the expected loading structure: 1 = expected (target) loading, 0 = non-target.
-#'
-#' @return A data.frame with:
-#' \itemize{
-#'   \item \code{SStarget}: Proportion of total variance explained by target-aligned loadings.
-#'   \item \code{SSntarget}: Proportion of variance explained by non-target (cross) loadings.
-#'   \item \code{SSratio}: The ratio of SStarget to SSntarget. Values >1 indicate dominance of the expected structure.
-#' }
-#'
 #' @details
-#' This function complements traditional simplicity indices by directly quantifying how
-#' much of the loading matrix adheres to an expected factorial pattern.
-#' 
-#' \code{SSratio} serves as a comparative indicator:
+#' This function builds on the logic of \code{lazy.fa::ss_index}, which evaluates off-diagonal 
+#' complexity based on squared loadings. \code{SSindices()} extends the concept by incorporating 
+#' a user-defined binary target structure, allowing explicit evaluation of how well the factor 
+#' solution conforms to theoretical expectations.
+#'
+#' \strong{Interpretation of the indices:}
 #' \itemize{
-#'   \item \code{> 1} = expected structure dominates,
-#'   \item \code{≈ 1} = balanced structure vs. noise,
-#'   \item \code{< 1} = cross-loadings explain more variance.
+#'   \item \code{SStarget}: Proportion of total variance that is aligned with the expected structure. 
+#'   Higher values indicate clearer factor-item alignment.
+#'   \item \code{SSntarget}: Proportion of variance explained by unexpected (non-target or cross) loadings. 
+#'   Reflects the degree of noise or factorial complexity in the solution.
+#'   \item \code{SSratio}: The ratio between expected and non-expected variance.
+#'         It indicates how dominant the expected structure is over residual complexity.
 #' }
 #'
-#' @references
-#' Kaiser, H. F. (1974). An index of factorial simplicity. \emph{Psychometrika}, 39(1), 31–36.
+#' \strong{Interpreting SSntarget (cross-loading contribution):}
+#' \itemize{
+#'   \item \code{≈ 0.00}: Perfectly simple structure (each item loads clearly on only one factor).
+#'   \item \code{< 0.05}: Very good factor differentiation.
+#'   \item \code{0.05 – 0.15}: Moderate cross-loading complexity.
+#'   \item \code{> 0.15}: Substantial interdependence or noise across factors.
+#' }
 #'
+#' \strong{Interpreting SSratio:}
+#' \itemize{
+#'   \item \code{> 4}: Excellent structure – target pattern clearly dominates.
+#'   \item \code{2 – 4}: Good structure with acceptable noise.
+#'   \item \code{1 – 2}: Target and cross-loadings are comparable – caution advised.
+#'   \item \code{≈ 1}: Equal contribution – borderline structure.
+#'   \item \code{< 1}: Cross-loadings dominate – weak or misaligned structure.
+#' }
 #' @examples
 #' L <- matrix(c(
 #'   0.6, 0.2,
