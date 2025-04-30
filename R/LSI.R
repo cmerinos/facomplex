@@ -45,6 +45,7 @@
 #'for visual inspection of loadings.
 #'
 #' @author Cesar Merino-Soto
+#' 
 #' @export
 LSI <- function(loadings) {
   if (!is.matrix(loadings) && !is.data.frame(loadings)) {
@@ -52,28 +53,32 @@ LSI <- function(loadings) {
   }
   
   L <- as.matrix(loadings)
-  p <- nrow(L)  # Number of items
-  r <- ncol(L)  # Number of factors
+  p <- nrow(L)
+  r <- ncol(L)
   epsilon <- 1e-6
   
   # Paso 1: Normalización por columnas
   col_norms <- sqrt(colSums(L^2))
-  Lc <- sweep(L, 2, col_norms, "/")
+  if (any(col_norms == 0)) stop("One or more columns have zero norm (all-zero loadings).")
+  Lc <- sweep(L, 2, col_norms, FUN = "/")
   
   # Paso 2: Normalización por filas
   row_norms <- sqrt(rowSums(Lc^2))
-  B <- sweep(Lc, 1, row_norms, "/")
+  row_norms[row_norms == 0] <- 1
+  B <- sweep(Lc, 1, row_norms, FUN = "/")
   
-  # Paso 3: Cálculo de w (complejidad promedio ponderada)
+  # Paso 3: Cálculo de w
   w <- mean(apply(B, 1, function(row) {
     sum((row^2 + epsilon) * 10^(row^2)) / r
   }))
   
-  # Paso 4: Valor mínimo teórico (e) cuando las cargas están distribuidas uniformemente
+  # Paso 4: Valor mínimo teórico e
   bij <- rep(1 / sqrt(r), r)
   e <- sum((bij^2 + epsilon) * 10^(bij^2)) / r
   
   # Paso 5: Índice final
-  LSI_global <- (w - e) / (1 - e)
-  return(round(LSI_global, 4))
+  LSI_val <- (w - e) / (1 - e)
+  LSI_val <- max(min(LSI_val, 1), 0)  # Forzar al rango [0,1]
+  
+  return(round(LSI_val, 4))
 }
