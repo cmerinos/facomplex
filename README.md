@@ -26,6 +26,7 @@ The package includes several methods for evaluating factor complexity:
 -   **Revised Hofman coefficient**
 -   **Factor Simplicity Index (FSI)** (Fleming, 2003)
 -   **Bentler’s Simplicity Index** (Bentler, 1977)
+-   **Loading Simplicity Index** (Lorenzo-Seva, 2003)
 -   Descriptive statistics (min, max, mean) of target and non-target loadings
 -   Visualization tools for complexity structures
 
@@ -69,6 +70,8 @@ plot.simplicity(
 -   Hofman, R. J. (1977). *Simplicity and complexity in factor analysis*. Multivariate Behavioral Research, 12(2), 149–165. <https://doi.org/10.18800/psico.200502.002>
 
 -   Kaiser, H. F. (1974). An Index of Factorial Simplicity. *Psychometrika*, *39*(1), 31–36. [https://doi.org/](https://doi.org/10.1007/BF02294054){.uri}[10.1007/BF02291575](https://doi.org/10.1007/BF02291575)
+
+-   Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika}, 68(1), 49–60. [https://doi.org/](https://doi.org/10.1007/BF02294054){.uri}[10.1007/BF02296652](https://doi.org/10.1007/BF02296652)
 
 ## License
 
