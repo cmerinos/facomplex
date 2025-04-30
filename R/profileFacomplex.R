@@ -45,7 +45,7 @@
 #' profile.facomplex(loadings, target, cutoff = 0.30)
 #'
 #' @export
-profile.facomplex <- function(loadings, target, abs = TRUE, cutoff = NULL, digits = 3) {
+profileFacomplex <- function(loadings, target, abs = TRUE, cutoff = NULL, digits = 3) {
   if (!is.matrix(loadings) && !is.data.frame(loadings)) {
     stop("`loadings` must be a matrix or data.frame.")
   }
