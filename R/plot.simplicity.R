@@ -47,7 +47,7 @@
 #' \dontrun{
 #' plot.simplicity(data = FSIout$FSI_i)  # Error: 'value.col' is required
 #' }
-plot.simplicity <- function(data,
+plotFacomplex <- function(data,
                             item.col = "Item",
                             value.col = "Coefficient",
                             sort.items = c("ascending", "none", "descending"),
