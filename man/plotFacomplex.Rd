@@ -53,14 +53,14 @@ FSIout <- FSI(ex1_fl,
                                   F3 = c(10, 11, 12)))
 
 # Basic use (value.col is required)
-plot.simplicity(
+plotFacomplex(
   data = FSIout$FSI_i,
   item.col = "Items",
   value.col = "FSI_i"
 )
 
 # Customizing options:
-plot.simplicity(
+plotFacomplex(
   data = FSIout$FSI_i,
   item.col = "Items",
   value.col = "FSI_i",
@@ -73,6 +73,7 @@ plot.simplicity(
 
 # ❌ This will trigger an error if value.col is missing:
 \dontrun{
-plot.simplicity(data = FSIout$FSI_i)  # Error: 'value.col' is required
+plotFacomplex(data = FSIout$FSI_i)  # Error: 'value.col' is required
 }
+
 }
