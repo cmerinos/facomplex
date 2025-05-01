@@ -8,6 +8,7 @@
 #' @param loadings A numeric matrix or data frame of factor loadings (items × factors).
 #' @param target A binary matrix or data frame of the same dimensions as \code{loadings}, 
 #' indicating the expected loading structure: 1 = expected (target) loading, 0 = non-target.
+#' @param per.factor Logical. If TRUE, returns a data frame with indices computed per factor (column). Default is FALSE.
 #'
 #' @return A data.frame with:
 #' \itemize{
@@ -48,6 +49,7 @@
 #'   \item \code{≈ 1}: Equal contribution – borderline structure.
 #'   \item \code{< 1}: Cross-loadings dominate – weak or misaligned structure.
 #' }
+#'
 #' @examples
 #' L <- matrix(c(
 #'   0.6, 0.2,
@@ -62,12 +64,13 @@
 #' ), nrow = 3, byrow = TRUE)
 #'
 #' SSindices(L, T)
+#' SSindices(L, T, per.factor = TRUE)
 #'
-#'' @references
+#' @references
 #' Thurstone, L. L. (1947). *Multiple factor analysis*. University of Chicago Press.
 #' 
 #' @export
-SSindices <- function(loadings, target) {
+SSindices <- function(loadings, target, per.factor = FALSE) {
   L <- as.matrix(loadings)
   T <- as.matrix(target)
   
@@ -76,19 +79,38 @@ SSindices <- function(loadings, target) {
   }
   
   L2 <- L^2
-  total_var <- sum(L2)
-  var_target <- sum(L2 * T)
-  var_nontarget <- sum(L2 * (1 - T))
   
-  SStarget <- var_target / total_var
-  SSntarget <- var_nontarget / total_var
-  SSratio <- if (SSntarget == 0) Inf else SStarget / SSntarget
-  
-  result <- data.frame(
-    SStarget = round(SStarget, 4),
-    SSntarget = round(SSntarget, 4),
-    SSratio = round(SSratio, 4)
-  )
-  
-  return(result)
+  if (per.factor) {
+    results <- apply(seq_len(ncol(L)), 1, function(j) {
+      total_var_j <- sum(L2[, j])
+      if (total_var_j == 0) {
+        c(SStarget = NA, SSntarget = NA, SSratio = NA)
+      } else {
+        var_target_j <- sum(L2[, j] * T[, j])
+        var_nontarget_j <- sum(L2[, j] * (1 - T[, j]))
+        SStarget_j <- var_target_j / total_var_j
+        SSntarget_j <- var_nontarget_j / total_var_j
+        SSratio_j <- if (SSntarget_j == 0) Inf else SStarget_j / SSntarget_j
+        c(SStarget = round(SStarget_j, 4),
+          SSntarget = round(SSntarget_j, 4),
+          SSratio = round(SSratio_j, 4))
+      }
+    })
+    return(as.data.frame(t(results), row.names = paste0("Factor", seq_len(ncol(L)))))
+  } else {
+    total_var <- sum(L2)
+    var_target <- sum(L2 * T)
+    var_nontarget <- sum(L2 * (1 - T))
+    
+    SStarget <- var_target / total_var
+    SSntarget <- var_nontarget / total_var
+    SSratio <- if (SSntarget == 0) Inf else SStarget / SSntarget
+    
+    result <- data.frame(
+      SStarget = round(SStarget, 4),
+      SSntarget = round(SSntarget, 4),
+      SSratio = round(SSratio, 4)
+    )
+    return(result)
+  }
 }
