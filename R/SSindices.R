@@ -63,6 +63,9 @@
 #'
 #' SSindices(L, T)
 #'
+#'' @references
+#' Thurstone, L. L. (1947). *Multiple factor analysis*. University of Chicago Press.
+#' 
 #' @export
 SSindices <- function(loadings, target) {
   L <- as.matrix(loadings)
