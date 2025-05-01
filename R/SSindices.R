@@ -11,9 +11,9 @@
 #'
 #' @return A data.frame with:
 #' \itemize{
-#'   \item \code{SStarget}: Proportion of total variance explained by target-aligned loadings.
+#'   \item \code{SStarget}: Proportion of total explained variance due to target loadings.
 #'   \item \code{SSntarget}: Proportion of variance explained by non-target (cross) loadings.
-#'   \item \code{SSratio}: The ratio of SStarget to SSntarget. Values >1 indicate dominance of the expected structure.
+#'   \item \code{SSratio}:The ratio between target and non-target variance (\code{SStarget / SSntarget}). Values >1 indicate dominance of the expected structure.
 #' }
 #'
 #' @details
