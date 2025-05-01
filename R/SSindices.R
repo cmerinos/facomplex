@@ -81,7 +81,7 @@ SSindices <- function(loadings, target, per.factor = FALSE) {
   L2 <- L^2
   
   if (isTRUE(per.factor)) {
-    results <- apply(seq_len(ncol(L)), 1, function(j) {
+    results <- sapply(seq_len(ncol(L)), function(j) {
       total_var_j <- sum(L2[, j])
       if (total_var_j == 0) {
         c(SStarget = NA, SSntarget = NA, SSratio = NA)
