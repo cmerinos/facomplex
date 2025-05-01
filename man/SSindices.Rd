@@ -4,20 +4,22 @@
 \alias{SSindices}
 \title{SSindices: Target-Based Simple Structure Indices}
 \usage{
-SSindices(loadings, target)
+SSindices(loadings, target, per.factor = FALSE)
 }
 \arguments{
 \item{loadings}{A numeric matrix or data frame of factor loadings (items × factors).}
 
 \item{target}{A binary matrix or data frame of the same dimensions as \code{loadings},
 indicating the expected loading structure: 1 = expected (target) loading, 0 = non-target.}
+
+\item{per.factor}{Logical. If TRUE, returns a data frame with indices computed per factor (column). Default is FALSE.}
 }
 \value{
 A data.frame with:
 \itemize{
-\item \code{SStarget}: Proportion of total variance explained by target-aligned loadings.
+\item \code{SStarget}: Proportion of total explained variance due to target loadings.
 \item \code{SSntarget}: Proportion of variance explained by non-target (cross) loadings.
-\item \code{SSratio}: The ratio of SStarget to SSntarget. Values >1 indicate dominance of the expected structure.
+\item \code{SSratio}:The ratio between target and non-target variance (\code{SStarget / SSntarget}). Values >1 indicate dominance of the expected structure.
 }
 }
 \description{
@@ -73,5 +75,9 @@ T <- matrix(c(
 ), nrow = 3, byrow = TRUE)
 
 SSindices(L, T)
+SSindices(L, T, per.factor = TRUE)
 
+}
+\references{
+Thurstone, L. L. (1947). \emph{Multiple factor analysis}. University of Chicago Press.
 }
