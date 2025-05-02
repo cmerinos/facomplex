@@ -3,6 +3,7 @@
 export(BSI)
 export(FSI)
 export(Hofmann)
+export(HofmannFac)
 export(KC)
 export(LSIglobal)
 export(SSindices)
