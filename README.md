@@ -1,6 +1,6 @@
 # facomplex
 
-**facomplex** is an R package that provides tools for assessing factor complexity in exploratory and confirmatory factor analysis (EFA/CFA) solutions.
+**facomplex** is an R package that provides tools for assessing factor complexity in exploratory and exploratory structural equations modeling analysis (EFA/ESEM) solutions.
 
 <!-- badges: start -->
 
@@ -67,8 +67,7 @@ plot.simplicity(
 
 -   Fleming, J. S. (2003). Computing measures of simplicity of fit for loadings in factor-analytically derived scales. Behavior Research Methods, Instruments, & Computers, 35, 520–524. <https://doi.org/10.3758/BF03195531>
 
--   Hofmann, R. J. (1977). Indices descriptive of factor complexity. *The Journal of General Psychology*,
-    *96*(1), 103–110. <https://doi.org/10.1080/00221309.1977.9920803>
+-   Hofmann, R. J. (1977). Indices descriptive of factor complexity. *The Journal of General Psychology*, *96*(1), 103–110. <https://doi.org/10.1080/00221309.1977.9920803>
 
 -   Kaiser, H. F. (1974). An Index of Factorial Simplicity. *Psychometrika*, *39*(1), 31–36. [https://doi.org/](https://doi.org/10.1007/BF02294054){.uri}[10.1007/BF02291575](https://doi.org/10.1007/BF02291575)
 
