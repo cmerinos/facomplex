@@ -22,11 +22,13 @@ devtools::install_github("cmerinos/facomplex", build_vignettes = TRUE)
 
 The package includes several methods for evaluating factor complexity:
 
--   **Hofman coefficient** (Hofman, 1977)
+-   **Hofman coefficient** (Hofman, 1977) for items (rows) and factors (columns)
 -   **Revised Hofman coefficient**
--   **Factor Simplicity Index (FSI)** (Fleming, 2003)
+-   **Factor Simplicity Index: factor** (Fleming, 2003)
+-   **Factor Simplicity Index: items** (Kaiser, 1974)
 -   **Bentler’s Simplicity Index** (Bentler, 1977)
 -   **Loading Simplicity Index** (Lorenzo-Seva, 2003)
+-   **Sum of squared loadings for target and non-target factor loadings**
 -   Descriptive statistics (min, max, mean) of target and non-target loadings
 -   Visualization tools for complexity structures
 
@@ -65,9 +67,8 @@ plot.simplicity(
 
 -   Fleming, J. S. (2003). Computing measures of simplicity of fit for loadings in factor-analytically derived scales. Behavior Research Methods, Instruments, & Computers, 35, 520–524. <https://doi.org/10.3758/BF03195531>
 
--   Fleming, J., S. & Merino-Soto, C. (2005). Medidas de simplicidad y de ajuste factorial: un enfoque para la evaluación de escalas construidas factorialmente. Revista de Psicología, 23(2), 249-266.
-
--   Hofman, R. J. (1977). *Simplicity and complexity in factor analysis*. Multivariate Behavioral Research, 12(2), 149–165. <https://doi.org/10.18800/psico.200502.002>
+-   Hofmann, R. J. (1977). Indices descriptive of factor complexity. *The Journal of General Psychology*,
+    *96*(1), 103–110. <https://doi.org/10.1080/00221309.1977.9920803>
 
 -   Kaiser, H. F. (1974). An Index of Factorial Simplicity. *Psychometrika*, *39*(1), 31–36. [https://doi.org/](https://doi.org/10.1007/BF02294054){.uri}[10.1007/BF02291575](https://doi.org/10.1007/BF02291575)
 
