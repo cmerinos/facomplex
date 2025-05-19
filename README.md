@@ -1,4 +1,4 @@
-# facomplex
+# facomplex.
 
 **facomplex** is an R package that provides tools for assessing factor complexity in exploratory and exploratory structural equations modeling analysis (EFA/ESEM) solutions.
 
