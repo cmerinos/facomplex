@@ -2,7 +2,7 @@
 % Please edit documentation in R/FSI.R
 \name{FSI}
 \alias{FSI}
-\title{Factorial Simplicity Index (FSI)}
+\title{factor scale fit index (SFI))}
 \usage{
 FSI(data, items_target)
 }
@@ -24,7 +24,7 @@ A list containing three elements:
 }
 }
 \description{
-Calculates a factorial simplicity index (FSI) to evaluate the factorial complexity of
+Calculates a factor scale fit index (SFI) to evaluate the factorial complexity of
 multidimensional scales. The function estimates factorial simplicity at the item level,
 factor level, and overall solution level. It is particularly useful for solutions that
 include expected and cross-loadings.
@@ -72,11 +72,17 @@ FSI(data = lavInspect(INV.esem.fit, what = "std")$lambda,
 
 }
 \references{
+Bentler, P. M. (1977). Factor simplicity index and transformations. \emph{Psychometrika, 42}(2),
+277–295. https://doi.org/10.1007/BF02294054
+
 Fleming, J. S., & Merino Soto, C. (2005). Medidas de simplicidad y de ajuste factorial:
 un enfoque para la evaluación de escalas construidas factorialmente. \emph{Revista De Psicología},
-23(2), 250–266. \doi{10.18800/psico.200502.002} \cr
-Fleming, J. S. (1985). An index of fit for factor scales. \emph{Educational and Psychological Measurement}, 45, 725–728. \cr
-Kaiser, H. F. (1974). An index of factorial simplicity. \emph{Psychometrika}, 39, 31–35. \cr
+23(2), 250–266. \doi{10.18800/psico.200502.002}
+
+Fleming, J. S. (1985). An index of fit for factor scales. \emph{Educational and Psychological Measurement}, 45, 725–728.
+
+Kaiser, H. F. (1974). An index of factorial simplicity. \emph{Psychometrika}, 39, 31–35.
+
 Fleming, J. S. (2003). Computing measures of simplicity of fit for loadings in factor-analytically
 derived scales. \emph{Behavior Research Methods, Instruments, & Computers}, 35(4), 520–524.
 \doi{10.3758/bf03195531}

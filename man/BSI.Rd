@@ -62,7 +62,8 @@ BSI_result_down <- BSI(ex1_data, sort_items = "down")
 
 }
 \references{
-Bentler, P. M. (1977). Factor simplicity index and transformations. \emph{Psychometrika, 42}(2), 277–295. https://doi.org/10.1007/BF02294054
+Bentler, P. M. (1977). Factor simplicity index and transformations. \emph{Psychometrika, 42}(2),
+277–295. https://doi.org/10.1007/BF02294054
 }
 \seealso{
 \code{\link{plot_simplicity}} for a graphical representation of BSI values.
