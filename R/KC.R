@@ -2,7 +2,7 @@
 #'
 #' Computes the Kaiser-Cerny (1978) criterion for factorial simplicity based on a power function
 #' of the absolute loadings (inspired by Kendall & Stuart, 1969). Also returns the ideal hyperplane count 
-#' as an expected benchmark of factorial parsimony.
+#' as an expected benchmark of factorial parsimony (Catell, 1952).
 #'
 #' @param data A \code{data.frame} or numeric \code{matrix} of factor loadings, where rows represent items (variables) 
 #' and columns represent factors.
@@ -32,7 +32,11 @@
 #' }
 #'
 #' @references
-#' Kaiser, H. F., & Cerny, B. A. (1978). Factor analysis of the image covariance matrix. \emph{Psychological Bulletin}, 85(6), 1272–1284.  
+#' Cattell, R. B. (1952). Factor analysis: an introduction and manual for the psychologist and social scientist. Oxford, 
+#' England: Harper.
+#' Kaiser, H. F., & Cerny, B. A. (1978). Casey's Method For Fitting Hyperplanes From An Intermediate Orthomax Solution. 
+#' \emph{Multivariate Behavioral Research}, 13(4), 395–401. https://doi.org/10.1207/s15327906mbr1304_2
+#' 
 #' Kendall, M. G., & Stuart, A. (1969). \emph{The Advanced Theory of Statistics}, Vol. 2. London: Griffin.
 #'
 #' @examples
