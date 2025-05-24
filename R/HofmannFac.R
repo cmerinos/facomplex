@@ -1,4 +1,4 @@
-#' Calculate Hofmann Factor Complexity Index
+#' Calculate Hofmann Factor Complexity Index for columns/factors
 #'
 #' This function calculates the Hofmann complexity index (\code{Choff}) for each factor (column) in a factor loading matrix.
 #' The index estimates the factorial complexity at the factor level, indicating how many items contribute significantly to each factor.
@@ -41,10 +41,10 @@
 #' Hofmann, R. J. (1977). Indices descriptive of factor complexity. \emph{The Journal of General Psychology}, 96(1), 103-110.
 #'
 #' @export
-HofmannFac <- function(datos) {
+HofmannFac <- function(data) {
   # If the data is a matrix without column names, assign default names automatically
-  if (is.null(colnames(datos))) {
-    colnames(datos) <- paste("F", 1:ncol(datos), sep = "")
+  if (is.null(colnames(data))) {
+    colnames(data) <- paste("F", 1:ncol(data), sep = "")
   }
   
   # Step 1: Transpose the factor loading matrix
