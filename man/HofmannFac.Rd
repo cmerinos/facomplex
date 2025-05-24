@@ -2,9 +2,9 @@
 % Please edit documentation in R/HofmannFac.R
 \name{HofmannFac}
 \alias{HofmannFac}
-\title{Calculate Hofman Factor Complexity Index}
+\title{Calculate Hofmann Factor Complexity Index for columns/factors}
 \usage{
-HofmannFac(datos)
+HofmannFac(data)
 }
 \arguments{
 \item{data}{A \code{data.frame} or \code{matrix} containing the factor loadings. Rows represent items, and columns represent factors in the factorial model.
@@ -17,13 +17,16 @@ A \code{data.frame} containing one column:
 }
 }
 \description{
-This function calculates the Hofman complexity index (\code{Choff}) for each factor (column) in a factor loading matrix.
+This function calculates the Hofmann complexity index (\code{Choff}) for each factor (column) in a factor loading matrix.
 The index estimates the factorial complexity at the factor level, indicating how many items contribute significantly to each factor.
 }
 \details{
 The index ranges from 1 (indicating a factor with a single item) to p (the total number of \strong{items} in the factor, indicating the number of items involved in the definition of the factor).
-The formula for the index is based on summing squared and quartic factor loadings, similar to the original Hofman (1977) method applied to the factor (column) dimension.
-In this case, when calculating the complexity at the factor level, we assess how many items significantly contribute to each factor. A factor with only one item has a \strong{Choff} of 1, indicating a \strong{unidimensional} factor. As more items contribute to the factor, the value of \strong{Choff} increases, reaching p (the number of items) when all items significantly contribute to the factor.
+The formula for the index is based on summing squared and quartic factor loadings, similar to the original Hofmann (1977) method applied to the factor (column) dimension.
+In this case, when calculating the complexity at the factor level, we assess how many items significantly contribute to each
+factor. In a latent dimension with known structure, the resulting value should be equal or close to the number of items expected in this dimension. Values different from the expected
+number of items suggests there are items with significant loadings or items close to or in the hyperplane. As more items contribute to the factor,
+the value of \strong{Choff} increases, reaching p (the number of items) when all items significantly contribute to the factor.
 
 Hofman’s complexity index for factors evaluates how many items contribute to the definition of each factor. A value close to 1 indicates that a factor is well-defined by only one item (unidimensional), while values closer to p indicate higher complexity.
 
