@@ -1,4 +1,4 @@
-#' factor scale fit index (SFI))
+#' Factor Scale fit index (SFI))
 #'
 #' Calculates a factor scale fit index (SFI) to evaluate the factorial complexity of 
 #' multidimensional scales. The function estimates factorial simplicity at the item level, 
@@ -22,22 +22,28 @@
 #' @details
 #' This function is designed for factorial solutions from models such as EFA with target rotation 
 #' or ESEM. It requires a matrix or data frame of standardized or pattern loadings.
+#' These levels of adjustment in the factorial matrix come from Fleming's approach for the SIMLOAD software (Fleming, 2003). 
+#' Fleming (2003) proposes three levels of fit based on the degree of factorial simplicity: total, scale/factor and item. 
+#' The item fit he derived from index of factorial simplicity (Kaiser, 1974); at the scale/factor level, factor scale fit 
+#' index (SFI; Fleming, 1985, 2003); and at the total matrix, the Bentler Simplicity Index (BSI; Bentler, 1977).
 #' 
 #' @references
 #' Bentler, P. M. (1977). Factor simplicity index and transformations. \emph{Psychometrika, 42}(2), 
 #' 277–295. https://doi.org/10.1007/BF02294054
 #' 
 #' Fleming, J. S., & Merino Soto, C. (2005). Medidas de simplicidad y de ajuste factorial: 
-#' un enfoque para la evaluación de escalas construidas factorialmente. \emph{Revista De Psicología}, 
-#' 23(2), 250–266. \doi{10.18800/psico.200502.002}
+#' un enfoque para la evaluación de escalas construidas factorialmente. \emph{Revista De Psicologia}, 
+#' 23(2), 250–266. https://doi.org/10.18800/psico.200502.002
 #' 
 #' Fleming, J. S. (1985). An index of fit for factor scales. \emph{Educational and Psychological Measurement}, 45, 725–728.
+#' https://doi.org/10.1177/0013164485454002
 #' 
 #' Kaiser, H. F. (1974). An index of factorial simplicity. \emph{Psychometrika}, 39, 31–35.
+#' https://doi.org/10.1007/BF02291575
 #' 
 #' Fleming, J. S. (2003). Computing measures of simplicity of fit for loadings in factor-analytically 
 #' derived scales. \emph{Behavior Research Methods, Instruments, & Computers}, 35(4), 520–524. 
-#' \doi{10.3758/bf03195531}
+#' https://doi.org/10.3758/bf03195531
 #'
 #' @examples
 #' ##### Example 1 #####
@@ -58,7 +64,8 @@
 #' INV.target[1:6, 1] <- NA
 #' INV.target[7:12, 2] <- NA
 #'
-#' INV.esem.model <- 'efa("efa1")*f1 + efa("efa1")*f2 =~ INV1 + INV4 + INV5 + INV7 + INV11 + 
+#' INV.esem.model <- 'efa("efa1")*f1 + 
+#' efa("efa1")*f2 =~ INV1 + INV4 + INV5 + INV7 + INV11 + 
 #'                    INV12 + INV3 + INV6 + INV8 + INV9 + INV13 + INV14'
 #'
 #' INV.esem.fit <- lavaan::sem(INV.esem.model,

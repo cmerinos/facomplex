@@ -3,20 +3,20 @@
 #' Computes Hofmann’s (1977) coefficient of factorial complexity for each item 
 #' in a factor loading matrix, along with a normalized inverse version rescaled between 0 and 1.
 #'
-#' The original Hofmann index (\code{Hoff}) quantifies the extent to which an item loads 
+#' The original Hofmann index (\code{Hofmann}) quantifies the extent to which an item loads 
 #' on multiple factors. It ranges from 1 (perfect factorial simplicity, i.e., loading only 
 #' on one factor) to \eqn{p} (maximum complexity, where the item loads equally on all \eqn{p} factors).
 #' 
-#' The modified version, \code{Hoff_R}, is the reciprocal of \code{Hoff}, resulting in a simplicity index
-#' normalized to the interval [0, 1]. Higher values of \code{Hoff_R} indicate greater factorial simplicity.
+#' The modified version is the reciprocal of \code{Hofmann}, resulting in a simplicity index
+#' normalized to the interval [0, 1]. Higher values indicate greater factorial simplicity.
 #'
 #' @param data A numeric data frame or matrix of factor loadings, where rows represent items 
 #' and columns represent factors. Factor loadings are typically between -1 and 1.
 #'
 #' @return A data frame with two columns:
 #' \itemize{
-#'   \item \code{Hof}: Hofmann's original complexity coefficient for each item.
-#'   \item \code{Hof_R}: The inverse of \code{Hoff}, representing factorial simplicity in [0, 1].
+#'   \item \code{CHof}: Hofmann's original complexity coefficient for each item.
+#'   \item \code{CHof_R}: The inverse of \code{Hoff}, representing factorial simplicity in [0, 1].
 #' }
 #'
 #' @details
@@ -28,7 +28,8 @@
 #' bounded indicator of simplicity (closer to 1 means simpler structure).
 #' 
 #' These indices are particularly useful when comparing items in terms of their factorial clarity, 
-#' and complement other measures such as Bentler’s or Fleming’s simplicity indices.
+#' and complement other measures such as Bentler’s or Fleming’s simplicity indices. An extensive use of this 
+#' coefficient can be found in: Pettersson & Turkheimer (2010, 2014).
 #'
 #' @examples
 #' # Simulated factor loadings
@@ -46,8 +47,8 @@
 #' Pettersson, E., & Turkheimer, E. (2014). Self-Reported Personality Pathology Has Complex Structure and Imposing Simple 
 #' Structure Degrades Test Information. \emph{Multivariate Behavioral Research}, 49(4), 372–389. https://doi.org/10.1080/00273171.2014.911073
 #'
-#'Pettersson, E., & Turkheimer, E. (2010). Item selection, evaluation, and simple structure in personality data. \emph{Journal 
-#'of Research in Personality}, 44(4), 407–420. https://doi.org/10.1016/j.jrp.2010.03.002 
+#' Pettersson, E., & Turkheimer, E. (2010). Item selection, evaluation, and simple structure in personality data. \emph{Journal 
+#' of Research in Personality}, 44(4), 407–420. https://doi.org/10.1016/j.jrp.2010.03.002 
 #'
 #' @export
 Hofmann <- function(data) {
