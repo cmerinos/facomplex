@@ -51,43 +51,43 @@
 #' }
 #'
 #' @examples
-#' L <- matrix(c(
+#' Lx <- matrix(c(
 #'   0.6, 0.2,
 #'   0.5, 0.3,
 #'   0.1, 0.7
 #' ), nrow = 3, byrow = TRUE)
 #'
-#' T <- matrix(c(
+#' Tx <- matrix(c(
 #'   1, 0,
 #'   1, 0,
 #'   0, 1
 #' ), nrow = 3, byrow = TRUE)
 #'
-#' SSindices(L, T)
-#' SSindices(L, T, per.factor = TRUE)
+#' SSindices(Lx, Tx)
+#' SSindices(Lx, Tx, per.factor = TRUE)
 #'
 #' @references
 #' Thurstone, L. L. (1947). *Multiple factor analysis*. University of Chicago Press.
 #' 
 #' @export
 SSindices <- function(loadings, target, per.factor = FALSE) {
-  L <- as.matrix(loadings)
-  T <- as.matrix(target)
+  Lx <- as.matrix(loadings)
+  Tx <- as.matrix(target)
   
-  if (!all(dim(L) == dim(T))) {
+  if (!all(dim(L) == dim(Tx))) {
     stop("Dimensions of 'loadings' and 'target' must match.")
   }
   
   L2 <- L^2
   
   if (isTRUE(per.factor)) {
-    results <- sapply(seq_len(ncol(L)), function(j) {
+    results <- sapply(seq_len(ncol(Lx)), function(j) {
       total_var_j <- sum(L2[, j])
       if (total_var_j == 0) {
         c(SStarget = NA, SSntarget = NA, SSratio = NA)
       } else {
-        var_target_j <- sum(L2[, j] * T[, j])
-        var_nontarget_j <- sum(L2[, j] * (1 - T[, j]))
+        var_target_j <- sum(L2[, j] * Tx[, j])
+        var_nontarget_j <- sum(L2[, j] * (1 - Tx[, j]))
         SStarget_j <- var_target_j / total_var_j
         SSntarget_j <- var_nontarget_j / total_var_j
         SSratio_j <- if (SSntarget_j == 0) Inf else SStarget_j / SSntarget_j
@@ -99,8 +99,8 @@ SSindices <- function(loadings, target, per.factor = FALSE) {
     return(as.data.frame(t(results), row.names = paste0("Factor", seq_len(ncol(L)))))
   } else {
     total_var <- sum(L2)
-    var_target <- sum(L2 * T)
-    var_nontarget <- sum(L2 * (1 - T))
+    var_target <- sum(L2 * Tx)
+    var_nontarget <- sum(L2 * (1 - Tx))
     
     SStarget <- var_target / total_var
     SSntarget <- var_nontarget / total_var
