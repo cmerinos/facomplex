@@ -13,8 +13,8 @@ and columns represent factors. Factor loadings are typically between -1 and 1.}
 \value{
 A data frame with two columns:
 \itemize{
-\item \code{Hof}: Hofmann's original complexity coefficient for each item.
-\item \code{Hof_R}: The inverse of \code{Hoff}, representing factorial simplicity in \link{0, 1}.
+\item \code{CHof}: Hofmann's original complexity coefficient for each item.
+\item \code{CHof_R}: The inverse of \code{Hoff}, representing factorial simplicity in \link{0, 1}.
 }
 }
 \description{
@@ -22,12 +22,12 @@ Computes Hofmann’s (1977) coefficient of factorial complexity for each item
 in a factor loading matrix, along with a normalized inverse version rescaled between 0 and 1.
 }
 \details{
-The original Hofmann index (\code{Hoff}) quantifies the extent to which an item loads
+The original Hofmann index (\code{Hofmann}) quantifies the extent to which an item loads
 on multiple factors. It ranges from 1 (perfect factorial simplicity, i.e., loading only
 on one factor) to \eqn{p} (maximum complexity, where the item loads equally on all \eqn{p} factors).
 
-The modified version, \code{Hoff_R}, is the reciprocal of \code{Hoff}, resulting in a simplicity index
-normalized to the interval \link{0, 1}. Higher values of \code{Hoff_R} indicate greater factorial simplicity.
+The modified version is the reciprocal of \code{Hofmann}, resulting in a simplicity index
+normalized to the interval \link{0, 1}. Higher values indicate greater factorial simplicity.
 
 The Hofmann complexity index is computed as:
 \deqn{Hoff_i = \frac{(\sum_j \lambda_{ij}^2)^2}{\sum_j \lambda_{ij}^4}}
@@ -37,7 +37,8 @@ The rescaled index \code{Hoff_R} is computed as \code{1 / Hoff}, and provides a
 bounded indicator of simplicity (closer to 1 means simpler structure).
 
 These indices are particularly useful when comparing items in terms of their factorial clarity,
-and complement other measures such as Bentler’s or Fleming’s simplicity indices.
+and complement other measures such as Bentler’s or Fleming’s simplicity indices. An extensive use of this
+coefficient can be found in: Pettersson & Turkheimer (2010, 2014).
 }
 \examples{
 # Simulated factor loadings
