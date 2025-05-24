@@ -1,9 +1,9 @@
-#' Factor Scale fit index (SFI))
+#' Factor Simplicity indices for total, scale and items
 #'
-#' Calculates a factor scale fit index (SFI) to evaluate the factorial complexity of 
+#' Calculates a factor scale fit index (SFI) to evaluate the factorial simplicity of 
 #' multidimensional scales. The function estimates factorial simplicity at the item level, 
 #' factor level, and overall solution level. It is particularly useful for solutions that 
-#' include expected and cross-loadings.
+#' include expected cross-loadings.
 #'
 #' @param data A matrix or data frame where rows represent items and columns represent factors. 
 #'             Each value should be a standardized or pattern factor loading.
@@ -13,10 +13,10 @@
 #'
 #' @return A list containing three elements:
 #' \describe{
-#'   \item{FSI_total}{A numeric value representing the factorial simplicity of the overall loading matrix.}
-#'   \item{FSI_F}{A named vector with the factorial simplicity index of each factor (column).}
-#'   \item{FSI_i}{A data frame with two columns: \code{Items} (item names) and \code{FSI_i} 
-#'                (simplicity index of each item).}
+#'   \item{TSFI}{A numeric value representing the factorial simplicity of the overall loading matrix.}
+#'   \item{SFI}{A named vector with the factor scale fit index of each factor (column).}
+#'   \item{IFS}{A data frame with two columns: \code{Items} (item names) and \code{IFS} 
+#'                (index of factorial simplicity of each item).}
 #' }
 #'
 #' @details
@@ -25,7 +25,8 @@
 #' These levels of adjustment in the factorial matrix come from Fleming's approach for the SIMLOAD software (Fleming, 2003). 
 #' Fleming (2003) proposes three levels of fit based on the degree of factorial simplicity: total, scale/factor and item. 
 #' The item fit he derived from index of factorial simplicity (Kaiser, 1974); at the scale/factor level, factor scale fit 
-#' index (SFI; Fleming, 1985, 2003); and at the total matrix, the Bentler Simplicity Index (BSI; Bentler, 1977).
+#' index (SFI; Fleming, 1985, 2003); and at the total matrix, xxx.
+#' the Bentler Simplicity Index (BSI; Bentler, 1977).
 #' 
 #' @references
 #' Bentler, P. M. (1977). Factor simplicity index and transformations. \emph{Psychometrika, 42}(2), 
@@ -52,7 +53,7 @@
 #'   F2 = c(-0.110, 0.026, 0.076, 0.011, -0.160, 0.106, 0.668, 0.438, 0.809, 0.167, 0.128, 0.041),
 #'   F3 = c(-0.100, 0.036, 0.086, 0.021, -0.150, 0.116, 0.678, 0.448, 0.819, 0.577, 0.738, 0.751)
 #' )
-#' FSI(data = ex1_fl, 
+#' simload(data = ex1_fl, 
 #'     items_target = list(F1 = c(1, 2, 3, 4, 5, 6),
 #'                         F2 = c(7, 8, 9),
 #'                         F3 = c(10, 11, 12)))
@@ -79,14 +80,13 @@
 #'                                                   algorithm = "gpa",
 #'                                                   std.ov = TRUE))
 #'
-#' FSI(data = lavInspect(INV.esem.fit, what = "std")$lambda,
+#' simload(data = lavInspect(INV.esem.fit, what = "std")$lambda,
 #'     items_target = list(f1 = c(1, 2, 3, 4, 5, 6),
 #'                         f2 = c(7, 8, 9, 10, 11, 12)))
 #'
-#' @author Tu Nombre
 #' 
 #' @export
-FSI <- function(data, items_target) {
+simload <- function(data, items_target) {
   # Convert matrices to data frame
   if (is.matrix(data)) {
     data <- as.data.frame(data)
@@ -108,7 +108,7 @@ FSI <- function(data, items_target) {
   
   # Initialize lists to store results
   FSI_F <- list()
-  FSI_i <- list()
+  IFS <- list()
   
   # Initialize variables for total calculation
   SSTF_total <- 0
@@ -134,24 +134,24 @@ FSI <- function(data, items_target) {
     SSTF_total <- SSTF_total + SSTF
     SS_NTF_total <- SS_NTF_total + SS_NTF
     
-    # FSI_i
+    # IFS
     for (item in target_rows) {
       target_loading <- data_squared[item, factor]
       sum_non_target <- sum(data_squared[item, setdiff(names(data), factor)])
-      FSI_i[[row_names[item]]] <- 1 - (sum_non_target / target_loading)
+      IFS[[row_names[item]]] <- 1 - (sum_non_target / target_loading)
     }
   }
   
   # FSI_total
-  FSI_total <- 1 - (SS_NTF_total / SSTF_total)
+  TSFI_total <- 1 - (SS_NTF_total / SSTF_total)
   
   # Output
   result_list <- list(
-    FSI_total = round(FSI_total, 3),
-    FSI_F = sapply(FSI_F, round, 3),
-    FSI_i = data.frame(
-      Items = names(FSI_i),
-      FSI_i = round(unlist(FSI_i), 3),
+    TSFI = round(TSFI_total, 3),
+    SFI = sapply(FSI_F, round, 3),
+    IFS = data.frame(
+      Items = names(IFS),
+      IFS = round(unlist(IFS), 3),
       row.names = NULL
     )
   )
