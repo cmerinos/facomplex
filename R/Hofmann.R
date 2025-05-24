@@ -15,8 +15,8 @@
 #'
 #' @return A data frame with two columns:
 #' \itemize{
-#'   \item \code{Hoff}: Hofmann's original complexity coefficient for each item.
-#'   \item \code{Hoff_R}: The inverse of \code{Hoff}, representing factorial simplicity in [0, 1].
+#'   \item \code{Hof}: Hofmann's original complexity coefficient for each item.
+#'   \item \code{Hof_R}: The inverse of \code{Hoff}, representing factorial simplicity in [0, 1].
 #' }
 #'
 #' @details
@@ -40,9 +40,14 @@
 #' Hofmann(ex1.data)
 #'
 #' @references
-#' Hofmann, R. J. (1977). Indices descriptive of factor complexity. 
-#' \emph{The Journal of General Psychology}, 96(1), 103–110. 
+#' Hofmann, R. J. (1977). Indices descriptive of factor complexity. \emph{The Journal of General Psychology}, 96(1), 103–110. 
 #' https://doi.org/10.1080/00221309.1977.9920803
+#' 
+#' Pettersson, E., & Turkheimer, E. (2014). Self-Reported Personality Pathology Has Complex Structure and Imposing Simple 
+#' Structure Degrades Test Information. \emph{Multivariate Behavioral Research}, 49(4), 372–389. https://doi.org/10.1080/00273171.2014.911073
+#'
+#'Pettersson, E., & Turkheimer, E. (2010). Item selection, evaluation, and simple structure in personality data. \emph{Journal 
+#'of Research in Personality}, 44(4), 407–420. https://doi.org/10.1016/j.jrp.2010.03.002 
 #'
 #' @export
 Hofmann <- function(data) {
@@ -50,22 +55,22 @@ Hofmann <- function(data) {
   datos_cuadrado <- data^2
   
   # Paso 3: Sumar las cargas factoriales elevadas al cuadrado de todas las columnas
-  hoffman_num <- rowSums(datos_cuadrado)^2
+  hofmann_num <- rowSums(datos_cuadrado)^2
   
   # Paso 5: Elevar a la cuarta potencia cada carga factorial en cada fila
   datos_cuarta <- data^4
   
   # Paso 6: Sumar las cargas factoriales elevadas a la cuarta potencia de todas las columnas
-  hoffman_denom <- rowSums(datos_cuarta)
+  hofmann_denom <- rowSums(datos_cuarta)
   
   # Paso 7: Calcular Choff
-  Choff <- hoffman_num / hoffman_denom
+  Chof <- hofmann_num / hofmann_denom
   
-  # Paso 8: Modificar Choff como 1/Choff para obtener Choff_R
-  Choff_R <- 1 / Choff
+  # Paso 8: Modificar Choff como 1/Choff para obtener Chof_R
+  Chof_R <- 1 / Chof
   
   # Crear el data frame con los resultados
-  resultado <- data.frame(Hoff = Choff, Hoff_R = Choff_R)
+  resultado <- data.frame(CHof = Chof, CHof_R = Chof_R)
   
   return(round(resultado, 3))
   

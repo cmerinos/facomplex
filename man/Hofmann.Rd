@@ -13,8 +13,8 @@ and columns represent factors. Factor loadings are typically between -1 and 1.}
 \value{
 A data frame with two columns:
 \itemize{
-\item \code{Hoff}: Hofmann's original complexity coefficient for each item.
-\item \code{Hoff_R}: The inverse of \code{Hoff}, representing factorial simplicity in \link{0, 1}.
+\item \code{Hof}: Hofmann's original complexity coefficient for each item.
+\item \code{Hof_R}: The inverse of \code{Hoff}, representing factorial simplicity in \link{0, 1}.
 }
 }
 \description{
@@ -50,7 +50,12 @@ Hofmann(ex1.data)
 
 }
 \references{
-Hofmann, R. J. (1977). Indices descriptive of factor complexity.
-\emph{The Journal of General Psychology}, 96(1), 103–110.
+Hofmann, R. J. (1977). Indices descriptive of factor complexity. \emph{The Journal of General Psychology}, 96(1), 103–110.
 https://doi.org/10.1080/00221309.1977.9920803
+
+Pettersson, E., & Turkheimer, E. (2014). Self-Reported Personality Pathology Has Complex Structure and Imposing Simple
+Structure Degrades Test Information. \emph{Multivariate Behavioral Research}, 49(4), 372–389. https://doi.org/10.1080/00273171.2014.911073
+
+Pettersson, E., & Turkheimer, E. (2010). Item selection, evaluation, and simple structure in personality data. \emph{Journal
+of Research in Personality}, 44(4), 407–420. https://doi.org/10.1016/j.jrp.2010.03.002
 }
