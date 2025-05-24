@@ -8,12 +8,12 @@ HofmannFac(data)
 }
 \arguments{
 \item{data}{A \code{data.frame} or \code{matrix} containing the factor loadings. Rows represent items, and columns represent factors in the factorial model.
-The values in the matrix should be factor loadings, typically between -0.9999 and 0.9999.}
+The values in the matrix should be factor loadings.}
 }
 \value{
 A \code{data.frame} containing one column:
 \itemize{
-\item \code{Choff}: The Hofman factor complexity index for each factor, ranging from 1 (indicating simplicity) to p (maximum complexity).
+\item \code{Choff}: The Hofman factor complexity index for each factor, ranging from 1 (1 significant item) to p (maximum number of items in the matrix).
 }
 }
 \description{

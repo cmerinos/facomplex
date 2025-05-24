@@ -11,11 +11,11 @@
 #' the value of **Choff** increases, reaching p (the number of items) when all items significantly contribute to the factor.
 #'
 #' @param data A \code{data.frame} or \code{matrix} containing the factor loadings. Rows represent items, and columns represent factors in the factorial model.
-#'              The values in the matrix should be factor loadings, typically between -0.9999 and 0.9999.
+#'              The values in the matrix should be factor loadings.
 #'
 #' @return A \code{data.frame} containing one column:
 #' \itemize{
-#'   \item \code{Choff}: The Hofman factor complexity index for each factor, ranging from 1 (indicating simplicity) to p (maximum complexity).
+#'   \item \code{Choff}: The Hofman factor complexity index for each factor, ranging from 1 (1 significant item) to p (maximum number of items in the matrix).
 #' }
 #'
 #' @details
@@ -48,7 +48,7 @@ HofmannFac <- function(data) {
   }
   
   # Step 1: Transpose the factor loading matrix
-  datos_transpuestos <- t(datos)
+  datos_transpuestos <- t(data)
   
   # Step 2: Square each factor loading in each row (now for each factor)
   datos_cuadrado <- datos_transpuestos^2
