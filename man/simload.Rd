@@ -35,8 +35,8 @@ or ESEM. It requires a matrix or data frame of standardized or pattern loadings.
 These levels of adjustment in the factorial matrix come from Fleming's approach for the SIMLOAD software (Fleming, 2003).
 Fleming (2003) proposes three levels of fit based on the degree of factorial simplicity: total, scale/factor and item.
 The item fit he derived from index of factorial simplicity (Kaiser, 1974); at the scale/factor level, factor scale fit
-index (SFI; Fleming, 1985, 2003); and at the total matrix, xxx.
-the Bentler Simplicity Index (BSI; Bentler, 1977).
+index (SFI; Fleming, 1985, 2003); and at the total matrix, a derivated index from SFI. No like SIMLOAD software, here do
+not calculate the Bentler Simplicity Index (BSI; Bentler, 1977).
 }
 \examples{
 ##### Example 1 #####
