@@ -24,7 +24,7 @@ A list containing three elements:
 }
 }
 \description{
-Calculates a factor scale fit index (SFI) to evaluate the factorial simplicity of
+Calculates a fit indices to evaluate the factorial simplicity of
 multidimensional scales. The function estimates factorial simplicity at the item level,
 factor level, and overall solution level. It is particularly useful for solutions that
 include expected cross-loadings.
