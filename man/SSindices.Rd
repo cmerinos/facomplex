@@ -62,20 +62,20 @@ It indicates how dominant the expected structure is over residual complexity.
 }
 }
 \examples{
-L <- matrix(c(
+Lx <- matrix(c(
   0.6, 0.2,
   0.5, 0.3,
   0.1, 0.7
 ), nrow = 3, byrow = TRUE)
 
-T <- matrix(c(
+Tx <- matrix(c(
   1, 0,
   1, 0,
   0, 1
 ), nrow = 3, byrow = TRUE)
 
-SSindices(L, T)
-SSindices(L, T, per.factor = TRUE)
+SSindices(Lx, Tx)
+SSindices(Lx, Tx, per.factor = TRUE)
 
 }
 \references{
