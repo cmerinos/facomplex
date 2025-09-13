@@ -75,7 +75,7 @@ KC(data = fa.load, b = 4)
 We define the target items for each factor to compute the total, factor-level, and item-level simplicity.
 
 ```{r}
-FSI(data = fa.load, 
+simload(data = fa.load, 
     items_target = list(
       ULS1 = c(6,7,8,9,10), 
       ULS2 = c(1,2,3,4,5)
