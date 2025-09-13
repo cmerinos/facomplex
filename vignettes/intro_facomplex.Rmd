@@ -22,7 +22,7 @@ This example demonstrates a full workflow for estimating factor complexity in an
 
 ## 1. Load the data
 
-We start by loading the dataset `fullclean` which should contain the observed variables for the ESEM model.
+We start by loading the dataset `fullclean` which should contain the observed variables for the ESEM model, 12 items, 2 factors.
 
 ```{r}
 data(fullclean)
@@ -82,7 +82,7 @@ We now use the `facomplex` package to calculate various indices of factor comple
 The items grouped in both lists, within the `items_target` argument, are the expected items in their factors. The use of FSI to interpret its results at the factor level requires this prior knowledge of the items in their expected factors.
 
 ```{r}
-FSI(data = lavInspect(INV.esem.fit, what = "std")$lambda,
+simload(data = lavInspect(INV.esem.fit, what = "std")$lambda,
     items_target = list(f1 = c(1,2,3,4,5,6), 
                         f2 = c(7,8,9,10,11,12)))
 ```
