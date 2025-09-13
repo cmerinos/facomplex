@@ -53,10 +53,10 @@
 #'
 #' @return A list with:
 #' \describe{
-#'   \item{\code{H_i}}{A numeric vector with the normalized entropy for each item.}
-#'   \item{\code{H_f}}{A numeric vector with the normalized entropy for each factor.}
-#'   \item{\code{H_total_items}}{The average normalized entropy across items.}
-#'   \item{\code{H_total_factors}}{The average normalized entropy across factors.}
+#'   \item{\code{Hitems}}{A numeric vector with the normalized entropy for each item.}
+#'   \item{\code{Hffactors}}{A numeric vector with the normalized entropy for each factor.}
+#'   \item{\code{Htotal.items}}{The average normalized entropy across items.}
+#'   \item{\code{Htotal.factors}}{The average normalized entropy across factors.}
 #' }
 #'
 #' @examples
@@ -118,9 +118,9 @@ entropyFL <- function(loadings_matrix, base = 2, normalized = TRUE, nd = 3) {
   }
   
   list(
-    H_i = H_i,
-    H_f = H_f,
-    H_total_items = H_total_items,
-    H_total_factors = H_total_factors
+    Hitems = H_i,
+    Hfactors = H_f,
+    Htotal.items = H_total_items,
+    Htotal.factors = H_total_factors
   )
 }
