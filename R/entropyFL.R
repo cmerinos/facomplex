@@ -51,6 +51,10 @@
 #'   \item Useful to compare different rotation methods, number of factors, or loading patterns.
 #' }
 #'
+#' Although no formal cutoff exists, lower entropy values (e.g., < 0.20) typically reflect strong
+#' factorial simplicity, whereas values approaching 1 indicate dispersed or ambiguous loading 
+#' patterns. Interpretation should be contextualized with additional indices and visual inspection.
+#'
 #' @return A list with:
 #' \describe{
 #'   \item{\code{Hitems}}{A numeric vector with the normalized entropy for each item.}
