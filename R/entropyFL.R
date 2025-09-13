@@ -77,8 +77,11 @@
 #'
 #' @export
 entropyFL <- function(loadings_matrix, base = 2, normalized = TRUE, nd = 3) {
-  if (!is.matrix(loadings_matrix)) stop("Input must be a matrix")
+    if (!(is.matrix(loadings_matrix) || is.data.frame(loadings_matrix))) {
+    stop("Input must be a matrix or data.frame")
+    }
   
+  loadings_matrix <- as.matrix(loadings_matrix)
   # Número de ítems e índices
   n_items <- nrow(loadings_matrix)
   n_factors <- ncol(loadings_matrix)
