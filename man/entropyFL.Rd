@@ -18,14 +18,10 @@ entropyFL(loadings_matrix, base = 2, normalized = TRUE, scaled = FALSE, nd = 3)
 \item{nd}{Integer. Number of decimal places to round the results. Default is \code{3}. Use \code{NULL} for no rounding.}
 }
 \value{
-A list with:
+A list with the following components:
 \describe{
-\item{\code{Hitems}}{A numeric vector with the normalized entropy for each item.}
-\item{\code{Hfactors}}{A numeric vector with the normalized entropy for each factor.}
-\item{\code{Htotal.items}}{The average normalized entropy across items.}
-\item{\code{Htotal.factors}}{The average normalized entropy across factors.}
-\item{\code{Hmin.items}}{Theoretical minimum entropy for each item (if \code{scaled = TRUE}).}
-\item{\code{Hscaled.items}}{Scaled entropy index for each item (if \code{scaled = TRUE}).}
+\item{\code{Hnormalized}}{List with \code{H.items}, \code{H.factors}, and \code{H.total} entropy values.}
+\item{\code{Hscaled}}{(If \code{scaled = TRUE}) List with \code{Hmin.items}, \code{Hscaled.items}, and \code{Hscaled.total}.}
 }
 }
 \description{
@@ -61,11 +57,8 @@ Normalization is done by dividing by \eqn{\log_b(n)}.
 A factor with low entropy loads strongly on only a few items; high entropy suggests broad dispersion across many items.
 
 \strong{3. Total entropy:}
-The total entropy can be interpreted as a global index of factorial complexity:
-\itemize{
-\item \code{Htotal.items}: Average normalized entropy across items.
-\item \code{Htotal.factors}: Average normalized entropy across factors.
-}
+The total entropy (\code{H.total}) is computed by treating the entire matrix of squared loadings as a single probability vector. It represents global factorial complexity.
+This value is also equivalent to the scaled entropy for the total structure (\code{H.scaled.total}) when \code{scaled = TRUE}.
 
 \strong{4. Minimum and scaled entropy (optional):}
 When \code{scaled = TRUE}, the function returns additional values:
@@ -74,8 +67,8 @@ When \code{scaled = TRUE}, the function returns additional values:
 \item \code{Hscaled.items}: Scaled entropy index for each item:
 \deqn{H_{scaled} = \frac{H - H_{min}}{H_{max} - H_{min}}}
 where \eqn{H_{max} = \log_b(k)}
+\item \code{Hscaled.total}: Scaled entropy index for the total structure. This is mathematically equivalent to the normalized \code{H.total}.
 }
-This scaled index is useful for comparing factorial complexity across studies with different numbers of factors.
 
 \strong{Interpretation:}
 \itemize{
