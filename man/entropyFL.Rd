@@ -30,7 +30,7 @@ entropyFL(
 A list with:
 \describe{
 \item{\code{Hnormalized}}{A list with entropy by item, factor, and total.}
-\item{\code{Hscaled}}{A list with \code{Hmin.items}, \code{Hscaled.items}, and \code{Hscaled.total} (if \code{scaled = TRUE}).}
+\item{\code{Hscaled}}{A list with \code{Hmin.items}, \code{Hscaled.items}, \code{Hmin.factors}, \code{Hscaled.factors}, and \code{Hscaled.total} (if \code{scaled = TRUE}).}
 }
 
 #' \strong{Interpretation:}
@@ -79,6 +79,8 @@ When \code{scaled = TRUE}, the function returns:
 \item \eqn{H_{scaled}}: A scaled measure between \eqn{H_{min}} and \eqn{H_{max}}:
 \deqn{H_{scaled} = \frac{H - H_{min}}{H_{max} - H_{min}}}
 }
+
+This calculation is applied both to items and to factors. For factors, \eqn{k} is replaced by \eqn{n} (number of items).
 
 \strong{4. Argument \code{bounded}:}
 Scaled entropy can occasionally produce values outside \link{0, 1} if entropy is below the theoretical minimum.
