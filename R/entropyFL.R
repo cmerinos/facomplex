@@ -41,6 +41,8 @@
 #'     \deqn{H_{scaled} = \frac{H - H_{min}}{H_{max} - H_{min}}}
 #' }
 #'
+#' This calculation is applied both to items and to factors. For factors, \eqn{k} is replaced by \eqn{n} (number of items).
+#'
 #' \strong{4. Argument \code{bounded}:}
 #' Scaled entropy can occasionally produce values outside [0, 1] if entropy is below the theoretical minimum.
 #' If \code{bounded = TRUE}, the function truncates those values to stay within [0, 1] for interpretive clarity.
@@ -48,7 +50,7 @@
 #' @return A list with:
 #' \describe{
 #'   \item{\code{Hnormalized}}{A list with entropy by item, factor, and total.}
-#'   \item{\code{Hscaled}}{A list with \code{Hmin.items}, \code{Hscaled.items}, and \code{Hscaled.total} (if \code{scaled = TRUE}).}
+#'   \item{\code{Hscaled}}{A list with \code{Hmin.items}, \code{Hscaled.items}, \code{Hmin.factors}, \code{Hscaled.factors}, and \code{Hscaled.total} (if \code{scaled = TRUE}).}
 #' }
 #'
 #'#' \strong{Interpretation:}  
@@ -107,7 +109,8 @@ entropyFL <- function(loadings_matrix, base = 2, normalized = TRUE, scaled = FAL
   qij <- sweep(load_sq, 2, col_sums, FUN = "/")
   qij[is.nan(qij)] <- 0
   H_f <- -colSums(ifelse(qij > 0, qij * log(qij, base = base), 0))
-  if (normalized) H_f <- H_f / log(n_items, base = base)
+  Hmax_f <- log(n_items, base = base)
+  if (normalized) H_f <- H_f / Hmax_f
   
   # --- H_total (matriz completa)
   p_all <- load_sq / sum(load_sq)
@@ -131,16 +134,23 @@ entropyFL <- function(loadings_matrix, base = 2, normalized = TRUE, scaled = FAL
     Hmin_i[is.nan(Hmin_i)] <- 0
     if (normalized) Hmin_i <- Hmin_i / Hmax_i
     Hscaled_i <- (H_i - Hmin_i) / (Hmax_i - Hmin_i)
+    if (bounded) Hscaled_i <- pmin(1, pmax(0, Hscaled_i))
     
-    if (bounded) {
-      Hscaled_i <- pmin(1, pmax(0, Hscaled_i))
-    }
+    # Para factores
+    max_q <- apply(qij, 2, max)
+    Hmin_f <- - (max_q * log(max_q, base = base) + (1 - max_q) * log((1 - max_q)/(n_items - 1), base = base))
+    Hmin_f[is.nan(Hmin_f)] <- 0
+    if (normalized) Hmin_f <- Hmin_f / Hmax_f
+    Hscaled_f <- (H_f - Hmin_f) / (Hmax_f - Hmin_f)
+    if (bounded) Hscaled_f <- pmin(1, pmax(0, Hscaled_f))
     
     Hscaled_total <- H_total  # matemáticamente equivalente
     
     result$Hscaled <- list(
       Hmin.items     = if (!is.null(nd)) round(Hmin_i, nd) else Hmin_i,
       Hscaled.items  = if (!is.null(nd)) round(Hscaled_i, nd) else Hscaled_i,
+      Hmin.factors   = if (!is.null(nd)) round(Hmin_f, nd) else Hmin_f,
+      Hscaled.factors = if (!is.null(nd)) round(Hscaled_f, nd) else Hscaled_f,
       Hscaled.total  = if (!is.null(nd)) round(Hscaled_total, nd) else Hscaled_total
     )
   }
