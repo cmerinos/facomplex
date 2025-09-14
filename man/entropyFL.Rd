@@ -4,7 +4,7 @@
 \alias{entropyFL}
 \title{Entropy Index for Factor Simplicity}
 \usage{
-entropyFL(loadings_matrix, base = 2, normalized = TRUE, nd = 3)
+entropyFL(loadings_matrix, base = 2, normalized = TRUE, scaled = FALSE, nd = 3)
 }
 \arguments{
 \item{loadings_matrix}{A numeric matrix or data frame of factor loadings, where rows represent items and columns represent factors.}
@@ -13,15 +13,19 @@ entropyFL(loadings_matrix, base = 2, normalized = TRUE, nd = 3)
 
 \item{normalized}{Logical. If \code{TRUE} (default), entropy values are normalized to range from 0 to 1.}
 
+\item{scaled}{Logical. If \code{TRUE}, also returns the scaled entropy index and the theoretical minimum entropy (\eqn{H_{min}}). Default is \code{FALSE}.}
+
 \item{nd}{Integer. Number of decimal places to round the results. Default is \code{3}. Use \code{NULL} for no rounding.}
 }
 \value{
 A list with:
 \describe{
 \item{\code{Hitems}}{A numeric vector with the normalized entropy for each item.}
-\item{\code{Hffactors}}{A numeric vector with the normalized entropy for each factor.}
+\item{\code{Hfactors}}{A numeric vector with the normalized entropy for each factor.}
 \item{\code{Htotal.items}}{The average normalized entropy across items.}
 \item{\code{Htotal.factors}}{The average normalized entropy across factors.}
+\item{\code{Hmin.items}}{Theoretical minimum entropy for each item (if \code{scaled = TRUE}).}
+\item{\code{Hscaled.items}}{Scaled entropy index for each item (if \code{scaled = TRUE}).}
 }
 }
 \description{
@@ -59,14 +63,26 @@ A factor with low entropy loads strongly on only a few items; high entropy sugge
 \strong{3. Total entropy:}
 The total entropy can be interpreted as a global index of factorial complexity:
 \itemize{
-\item \code{H_total_items}: Average normalized entropy across items.
-\item \code{H_total_factors}: Average normalized entropy across factors.
+\item \code{Htotal.items}: Average normalized entropy across items.
+\item \code{Htotal.factors}: Average normalized entropy across factors.
 }
+
+\strong{4. Minimum and scaled entropy (optional):}
+When \code{scaled = TRUE}, the function returns additional values:
+\itemize{
+\item \code{Hmin.items}: Theoretical minimum entropy for each item, based on Beisel & Moreteau (1997)
+\item \code{Hscaled.items}: Scaled entropy index for each item:
+\deqn{H_{scaled} = \frac{H - H_{min}}{H_{max} - H_{min}}}
+where \eqn{H_{max} = \log_b(k)}
+}
+This scaled index is useful for comparing factorial complexity across studies with different numbers of factors.
 
 \strong{Interpretation:}
 \itemize{
 \item Values near 0 indicate highly simple structures (loadings concentrated in few components).
 \item Values near 1 suggest factorial ambiguity or complexity.
+\item \code{Hnormalized} compares \eqn{H} to the maximum entropy.
+\item \code{Hscaled} compares \eqn{H} relative to its minimum and maximum, offering finer distinctions.
 \item Useful to compare different rotation methods, number of factors, or loading patterns.
 }
 
@@ -83,13 +99,12 @@ loadings <- matrix(c(
   0.4, 0.4, 0.4    # maximally complex (equal loadings)
 ), nrow = 4, byrow = TRUE)
 
-entropyFL(loadings)
+entropyFL(loadings, scaled = TRUE)
 
 }
 \references{
 Shannon, C. E. (1948). A mathematical theory of communication. \emph{Bell System Technical Journal}, 27(3), 379--423. \doi{10.1002/j.1538-7305.1948.tb00917.x}
-
 Hofmann, R. J. (1978). Complexity and simplicity as objective indices descriptive of factor solutions. \emph{Multivariate Behavioral Research}, 13(2), 247--250.
-
 Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika}, 68(1), 49--60. \doi{10.1007/BF02296652}
+Beisel, J. N., & Moreteau, J.-C. (1997). A new method to estimate the lower bound of the Shannon-Wiener index of diversity. \emph{Ecological Modelling}, 99(1), 99--105.
 }
