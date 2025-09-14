@@ -39,11 +39,8 @@
 #' A factor with low entropy loads strongly on only a few items; high entropy suggests broad dispersion across many items.
 #'
 #' \strong{3. Total entropy:}  
-#' The total entropy can be interpreted as a global index of factorial complexity:
-#' \itemize{
-#'   \item \code{Htotal.items}: Average normalized entropy across items.
-#'   \item \code{Htotal.factors}: Average normalized entropy across factors.
-#' }
+#' The total entropy (\code{H.total}) is computed by treating the entire matrix of squared loadings as a single probability vector. It represents global factorial complexity.
+#' This value is also equivalent to the scaled entropy for the total structure (\code{H.scaled.total}) when \code{scaled = TRUE}.
 #'
 #' \strong{4. Minimum and scaled entropy (optional):}  
 #' When \code{scaled = TRUE}, the function returns additional values:
@@ -52,8 +49,8 @@
 #'   \item \code{Hscaled.items}: Scaled entropy index for each item:
 #'   \deqn{H_{scaled} = \frac{H - H_{min}}{H_{max} - H_{min}}}
 #'   where \eqn{H_{max} = \log_b(k)}
+#'   \item \code{Hscaled.total}: Scaled entropy index for the total structure. This is mathematically equivalent to the normalized \code{H.total}.
 #' }
-#' This scaled index is useful for comparing factorial complexity across studies with different numbers of factors.
 #'
 #' \strong{Interpretation:}  
 #' \itemize{
@@ -68,14 +65,10 @@
 #' factorial simplicity, whereas values approaching 1 indicate dispersed or ambiguous loading 
 #' patterns. Interpretation should be contextualized with additional indices and visual inspection.
 #'
-#' @return A list with:
+#' @return A list with the following components:
 #' \describe{
-#'   \item{\code{Hitems}}{A numeric vector with the normalized entropy for each item.}
-#'   \item{\code{Hfactors}}{A numeric vector with the normalized entropy for each factor.}
-#'   \item{\code{Htotal.items}}{The average normalized entropy across items.}
-#'   \item{\code{Htotal.factors}}{The average normalized entropy across factors.}
-#'   \item{\code{Hmin.items}}{Theoretical minimum entropy for each item (if \code{scaled = TRUE}).}
-#'   \item{\code{Hscaled.items}}{Scaled entropy index for each item (if \code{scaled = TRUE}).}
+#'   \item{\code{Hnormalized}}{List with \code{H.items}, \code{H.factors}, and \code{H.total} entropy values.}
+#'   \item{\code{Hscaled}}{(If \code{scaled = TRUE}) List with \code{Hmin.items}, \code{Hscaled.items}, and \code{Hscaled.total}.}
 #' }
 #'
 #' @examples
@@ -121,14 +114,18 @@ entropyFL <- function(loadings_matrix, base = 2, normalized = TRUE, scaled = FAL
   H_f <- -colSums(ifelse(qij > 0, qij * log(qij, base = base), 0))
   if (normalized) H_f <- H_f / log(n_items, base = base)
   
-  H_total_items <- mean(H_i)
-  H_total_factors <- mean(H_f)
+  # Global entropy
+  p_total <- as.vector(load_sq) / sum(load_sq)
+  p_total[is.nan(p_total)] <- 0
+  H_total <- -sum(ifelse(p_total > 0, p_total * log(p_total, base = base), 0))
+  if (normalized) H_total <- H_total / log(n_items * n_factors, base = base)
   
   result <- list(
-    Hitems = if (!is.null(nd)) round(H_i, nd) else H_i,
-    Hfactors = if (!is.null(nd)) round(H_f, nd) else H_f,
-    Htotal.items = if (!is.null(nd)) round(H_total_items, nd) else H_total_items,
-    Htotal.factors = if (!is.null(nd)) round(H_total_factors, nd) else H_total_factors
+    Hnormalized = list(
+      H.items = if (!is.null(nd)) round(H_i, nd) else H_i,
+      H.factors = if (!is.null(nd)) round(H_f, nd) else H_f,
+      H.total = if (!is.null(nd)) round(H_total, nd) else H_total
+    )
   )
   
   if (scaled) {
@@ -138,8 +135,11 @@ entropyFL <- function(loadings_matrix, base = 2, normalized = TRUE, scaled = FAL
     if (normalized) Hmin_i <- Hmin_i / Hmax
     Hscaled_i <- (H_i - Hmin_i) / (Hmax - Hmin_i)
     
-    result$Hmin.items <- if (!is.null(nd)) round(Hmin_i, nd) else Hmin_i
-    result$Hscaled.items <- if (!is.null(nd)) round(Hscaled_i, nd) else Hscaled_i
+    result$Hscaled <- list(
+      Hmin.items = if (!is.null(nd)) round(Hmin_i, nd) else Hmin_i,
+      Hscaled.items = if (!is.null(nd)) round(Hscaled_i, nd) else Hscaled_i,
+      Hscaled.total = result$Hnormalized$H.total
+    )
   }
   
   return(result)
