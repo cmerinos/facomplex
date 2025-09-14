@@ -2,143 +2,146 @@
 #'
 #' @description
 #' Computes entropy-based indices to quantify the factorial simplicity or complexity of an Exploratory Factor Analysis (EFA) solution.
-#' The entropy is calculated from the squared factor loadings, interpreted as proportional contributions of each factor to an item (or vice versa).
-#' Entropy is computed at three levels: by item, by factor, and globally.
+#' Entropy is computed at three levels: by item, by factor, and globally. Two types of entropy measures are available: normalized and scaled.
 #'
 #' @param loadings_matrix A numeric matrix or data frame of factor loadings, where rows represent items and columns represent factors.
 #' @param base The logarithmic base used to compute entropy. Default is \code{2}, corresponding to entropy in bits.
-#' @param normalized Logical. If \code{TRUE} (default), entropy values are normalized to range from 0 to 1.
-#' @param scaled Logical. If \code{TRUE}, also returns the scaled entropy index and the theoretical minimum entropy (\eqn{H_{min}}). Default is \code{FALSE}.
+#' @param normalized Logical. If \code{TRUE} (default), entropy values are normalized to range from 0 to 1 by dividing by \eqn{\log_b(k)} or \eqn{\log_b(n)}.
+#' @param scaled Logical. If \code{TRUE}, returns the scaled entropy index and the theoretical minimum entropy as proposed by Beisel & Moreteau (1997). Default is \code{FALSE}.
+#' @param bounded Logical. If \code{TRUE} (default), forces scaled entropy values to remain within the [0, 1] range by truncating negative or >1 values.
 #' @param nd Integer. Number of decimal places to round the results. Default is \code{3}. Use \code{NULL} for no rounding.
 #'
 #' @details
-#' The function assumes that the squared factor loadings (\eqn{\lambda_{ij}^2}) represent the proportion of common variance
-#' that item \eqn{i} shares with factor \eqn{j}. These are normalized within rows or columns to form pseudo-probability distributions,
-#' over which Shannon entropy is computed.
+#' The entropy index is based on the squared factor loadings (\eqn{\lambda_{ij}^2}), interpreted as the proportion of shared variance between item \eqn{i} and factor \eqn{j} (Shannon, 1948).
 #'
-#' \strong{1. Entropy by item:}  
-#' For each item \eqn{i}, let \eqn{\lambda_{ij}} be its loading on factor \eqn{j}, with \eqn{j = 1, ..., k}. Define:
-#'
-#' \deqn{p_{ij} = \frac{\lambda_{ij}^2}{\sum_{j=1}^{k} \lambda_{ij}^2}}
-#'
-#' Then the entropy for item \eqn{i} is:
-#'
-#' \deqn{H_i = - \sum_{j=1}^{k} p_{ij} \log_b(p_{ij})}
-#'
-#' If \code{normalized = TRUE}, the value is divided by \eqn{\log_b(k)} to constrain the index to [0, 1].
-#' Lower values indicate that most of the variance is concentrated in one factor (simple structure); higher values indicate cross-loadings.
-#'
-#' \strong{2. Entropy by factor:}  
-#' Similarly, for each factor \eqn{j}, entropy is calculated over its squared loadings across items:
-#'
-#' \deqn{q_{ij} = \frac{\lambda_{ij}^2}{\sum_{i=1}^{n} \lambda_{ij}^2}}
-#'
-#' \deqn{H_j = - \sum_{i=1}^{n} q_{ij} \log_b(q_{ij})}
-#'
-#' Normalization is done by dividing by \eqn{\log_b(n)}.
-#' A factor with low entropy loads strongly on only a few items; high entropy suggests broad dispersion across many items.
-#'
-#' \strong{3. Total entropy:}  
-#' The total entropy (\code{H.total}) is computed by treating the entire matrix of squared loadings as a single probability vector. It represents global factorial complexity.
-#' This value is also equivalent to the scaled entropy for the total structure (\code{H.scaled.total}) when \code{scaled = TRUE}.
-#'
-#' \strong{4. Minimum and scaled entropy (optional):}  
-#' When \code{scaled = TRUE}, the function returns additional values:
+#' \strong{1. Normalized Entropy:}
 #' \itemize{
-#'   \item \code{Hmin.items}: Theoretical minimum entropy for each item, based on Beisel & Moreteau (1997)
-#'   \item \code{Hscaled.items}: Scaled entropy index for each item:
-#'   \deqn{H_{scaled} = \frac{H - H_{min}}{H_{max} - H_{min}}}
-#'   where \eqn{H_{max} = \log_b(k)}
-#'   \item \code{Hscaled.total}: Scaled entropy index for the total structure. This is mathematically equivalent to the normalized \code{H.total}.
+#'   \item For each item \eqn{i}, define the pseudo-proportions:
+#'     \deqn{p_{ij} = \frac{\lambda_{ij}^2}{\sum_{j=1}^k \lambda_{ij}^2}}
+#'   \item Then compute Shannon entropy:
+#'     \deqn{H_i = - \sum_{j=1}^k p_{ij} \log_b(p_{ij})}
+#'   \item If \code{normalized = TRUE}, divide by \eqn{\log_b(k)} to constrain values to [0, 1].
 #' }
 #'
-#' \strong{Interpretation:}  
+#' The same logic applies for factors (across items), replacing \eqn{p_{ij}} with:
+#' \deqn{q_{ij} = \frac{\lambda_{ij}^2}{\sum_{i=1}^n \lambda_{ij}^2}}
+#'
+#' \strong{2. Global Entropy:}
+#' Entropy can also be calculated for the full loading matrix as a whole:
+#' \deqn{p_{ij} = \frac{\lambda_{ij}^2}{\sum_{i,j} \lambda_{ij}^2}}
+#' \deqn{H = - \sum_{i,j} p_{ij} \log_b(p_{ij})}
+#' and normalized by \eqn{\log_b(n \cdot k)}.
+#'
+#' \strong{3. Scaled Entropy (Beisel & Moreteau, 1997):}
+#' When \code{scaled = TRUE}, the function returns:
 #' \itemize{
-#'   \item Values near 0 indicate highly simple structures (loadings concentrated in few components).  
-#'   \item Values near 1 suggest factorial ambiguity or complexity.  
-#'   \item \code{Hnormalized} compares \eqn{H} to the maximum entropy.  
-#'   \item \code{Hscaled} compares \eqn{H} relative to its minimum and maximum, offering finer distinctions.  
-#'   \item Useful to compare different rotation methods, number of factors, or loading patterns.
+#'   \item \eqn{H_{min}}: A theoretical lower bound for entropy when one factor dominates:
+#'     \deqn{H_{min} = - [p_{max} \log_b(p_{max}) + (1 - p_{max}) \log_b((1 - p_{max}) / (k - 1))]}
+#'   \item \eqn{H_{scaled}}: A scaled measure between \eqn{H_{min}} and \eqn{H_{max}}:
+#'     \deqn{H_{scaled} = \frac{H - H_{min}}{H_{max} - H_{min}}}
 #' }
 #'
-#' Although no formal cutoff exists, lower entropy values (e.g., < 0.20) typically reflect strong
-#' factorial simplicity, whereas values approaching 1 indicate dispersed or ambiguous loading 
-#' patterns. Interpretation should be contextualized with additional indices and visual inspection.
+#' \strong{4. Argument \code{bounded}:}
+#' Scaled entropy can occasionally produce values outside [0, 1] if entropy is below the theoretical minimum.
+#' If \code{bounded = TRUE}, the function truncates those values to stay within [0, 1] for interpretive clarity.
 #'
-#' @return A list with the following components:
+#' @return A list with:
 #' \describe{
-#'   \item{\code{Hnormalized}}{List with \code{H.items}, \code{H.factors}, and \code{H.total} entropy values.}
-#'   \item{\code{Hscaled}}{(If \code{scaled = TRUE}) List with \code{Hmin.items}, \code{Hscaled.items}, and \code{Hscaled.total}.}
+#'   \item{\code{Hnormalized}}{A list with entropy by item, factor, and total.}
+#'   \item{\code{Hscaled}}{A list with \code{Hmin.items}, \code{Hscaled.items}, and \code{Hscaled.total} (if \code{scaled = TRUE}).}
 #' }
 #'
+#'#' \strong{Interpretation:}  
+#' \itemize{
+#'   \item Values near 0 indicate high factorial simplicity (loadings concentrated on a single factor).  
+#'   \item Values near 1 suggest factorial complexity or ambiguity (dispersed loadings across factors).  
+#'   \item \code{Hnormalized} expresses entropy as a proportion of the maximum possible entropy.  
+#'   \item \code{Hscaled} expresses entropy relative to its theoretical minimum and maximum, allowing finer differentiation across contexts.  
+#'   \item The index can be used to compare different rotation methods, number of factors, or item structures.
+#' }
+#'
+#' Although no formal cutoff exists, entropy values below 0.20 typically reflect strong factorial simplicity,
+#' while values near or above 0.80 may indicate multidimensionality or poor simple structure.
+#' Interpretation should always be contextualized using additional indices, visual inspection of loadings, and substantive theory.
+#' 
 #' @examples
 #' # Example: items with different factorial complexity
 #' loadings <- matrix(c(
-#'   0.7, 0.0, 0.01,  # simple item
-#'   0.1, 0.2, 0.15,  # moderately complex
-#'   0.4, 0.8, 0.2,   # complex with a dominant factor
-#'   0.4, 0.4, 0.4    # maximally complex (equal loadings)
+#'   0.7, 0.0, 0.01,
+#'   0.1, 0.2, 0.15,
+#'   0.4, 0.8, 0.2,
+#'   0.4, 0.4, 0.4
 #' ), nrow = 4, byrow = TRUE)
-#' 
-#' entropyFL(loadings, scaled = TRUE)
+#'
+#' entropyFL(loadings, normalized = TRUE, scaled = TRUE, bounded = TRUE)
 #'
 #' @references
-#' Shannon, C. E. (1948). A mathematical theory of communication. \emph{Bell System Technical Journal}, 27(3), 379--423. \doi{10.1002/j.1538-7305.1948.tb00917.x}  
-#' Hofmann, R. J. (1978). Complexity and simplicity as objective indices descriptive of factor solutions. \emph{Multivariate Behavioral Research}, 13(2), 247--250.  
-#' Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika}, 68(1), 49--60. \doi{10.1007/BF02296652}  
-#' Beisel, J. N., & Moreteau, J.-C. (1997). A new method to estimate the lower bound of the Shannon-Wiener index of diversity. \emph{Ecological Modelling}, 99(1), 99--105.
+#' Shannon, C. E. (1948). A mathematical theory of communication. \emph{Bell System Technical Journal}, 27(3), 379–423. \doi{10.1002/j.1538-7305.1948.tb00917.x}
 #'
+#' Beisel, J. N., & Moreteau, J.-C. (1997). A new method to estimate the lower bound of the Shannon-Wiener index of diversity. \emph{Ecological Modelling}, 99(1), 99–105.
+#'
+#' Hofmann, R. J. (1978). Complexity and simplicity as objective indices descriptive of factor solutions. \emph{Multivariate Behavioral Research}, 13(2), 247–250.
+#'
+#' Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika}, 68(1), 49–60. \doi{10.1007/BF02296652}
+#' 
 #' @export
-entropyFL <- function(loadings_matrix, base = 2, normalized = TRUE, scaled = FALSE, nd = 3) {
+entropyFL <- function(loadings_matrix, base = 2, normalized = TRUE, scaled = FALSE, bounded = TRUE, nd = 3) {
   if (!(is.matrix(loadings_matrix) || is.data.frame(loadings_matrix))) {
     stop("Input must be a matrix or data.frame")
   }
   loadings_matrix <- as.matrix(loadings_matrix)
   n_items <- nrow(loadings_matrix)
   n_factors <- ncol(loadings_matrix)
-  
   load_sq <- loadings_matrix^2
   
+  # --- H_i: Entropía por ítem
   row_sums <- rowSums(load_sq)
   pij <- sweep(load_sq, 1, row_sums, FUN = "/")
   pij[is.nan(pij)] <- 0
-  
   H_i <- -rowSums(ifelse(pij > 0, pij * log(pij, base = base), 0))
-  Hmax <- log(n_factors, base = base)
-  if (normalized) H_i <- H_i / Hmax
+  Hmax_i <- log(n_factors, base = base)
+  if (normalized) H_i <- H_i / Hmax_i
   
+  # --- H_f: Entropía por factor
   col_sums <- colSums(load_sq)
   qij <- sweep(load_sq, 2, col_sums, FUN = "/")
   qij[is.nan(qij)] <- 0
-  
   H_f <- -colSums(ifelse(qij > 0, qij * log(qij, base = base), 0))
   if (normalized) H_f <- H_f / log(n_items, base = base)
   
-  # Global entropy
-  p_total <- as.vector(load_sq) / sum(load_sq)
-  p_total[is.nan(p_total)] <- 0
-  H_total <- -sum(ifelse(p_total > 0, p_total * log(p_total, base = base), 0))
+  # --- H_total (matriz completa)
+  p_all <- load_sq / sum(load_sq)
+  p_all[is.nan(p_all)] <- 0
+  H_total <- -sum(ifelse(p_all > 0, p_all * log(p_all, base = base), 0))
   if (normalized) H_total <- H_total / log(n_items * n_factors, base = base)
   
+  # --- Resultados normalizados
   result <- list(
     Hnormalized = list(
-      H.items = if (!is.null(nd)) round(H_i, nd) else H_i,
+      H.items  = if (!is.null(nd)) round(H_i, nd) else H_i,
       H.factors = if (!is.null(nd)) round(H_f, nd) else H_f,
-      H.total = if (!is.null(nd)) round(H_total, nd) else H_total
+      H.total   = if (!is.null(nd)) round(H_total, nd) else H_total
     )
   )
   
+  # --- Resultados escalados (Beisel)
   if (scaled) {
     max_p <- apply(pij, 1, max)
-    Hmin_i <- - (max_p * log(max_p, base = base) + (1 - max_p) * log((1 - max_p) / (n_factors - 1), base = base))
+    Hmin_i <- - (max_p * log(max_p, base = base) + (1 - max_p) * log((1 - max_p)/(n_factors - 1), base = base))
     Hmin_i[is.nan(Hmin_i)] <- 0
-    if (normalized) Hmin_i <- Hmin_i / Hmax
-    Hscaled_i <- (H_i - Hmin_i) / (Hmax - Hmin_i)
+    if (normalized) Hmin_i <- Hmin_i / Hmax_i
+    Hscaled_i <- (H_i - Hmin_i) / (Hmax_i - Hmin_i)
+    
+    if (bounded) {
+      Hscaled_i <- pmin(1, pmax(0, Hscaled_i))
+    }
+    
+    Hscaled_total <- H_total  # matemáticamente equivalente
     
     result$Hscaled <- list(
-      Hmin.items = if (!is.null(nd)) round(Hmin_i, nd) else Hmin_i,
-      Hscaled.items = if (!is.null(nd)) round(Hscaled_i, nd) else Hscaled_i,
-      Hscaled.total = result$Hnormalized$H.total
+      Hmin.items     = if (!is.null(nd)) round(Hmin_i, nd) else Hmin_i,
+      Hscaled.items  = if (!is.null(nd)) round(Hscaled_i, nd) else Hscaled_i,
+      Hscaled.total  = if (!is.null(nd)) round(Hscaled_total, nd) else Hscaled_total
     )
   }
   
