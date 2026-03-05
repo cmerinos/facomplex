@@ -71,46 +71,81 @@
 #' 
 #' @export
 SSindices <- function(loadings, target, per.factor = FALSE) {
+  
+  # --- Coerce to matrices ---
   Lx <- as.matrix(loadings)
   Tx <- as.matrix(target)
   
-  if (!all(dim(L) == dim(Tx))) {
+  # --- Basic checks ---
+  if (!is.numeric(Lx)) {
+    stop("Argument 'loadings' must be numeric (a loading matrix).")
+  }
+  if (!all(dim(Lx) == dim(Tx))) {
     stop("Dimensions of 'loadings' and 'target' must match.")
   }
   
-  L2 <- L^2
+  # target should be 0/1 (allow logical too)
+  if (is.logical(Tx)) Tx <- 1 * Tx
+  
+  if (anyNA(Lx)) {
+    warning("Missing values detected in 'loadings'. They will be replaced by 0.")
+    Lx[is.na(Lx)] <- 0
+  }
+  if (anyNA(Tx)) {
+    warning("Missing values detected in 'target'. They will be replaced by 0.")
+    Tx[is.na(Tx)] <- 0
+  }
+  
+  # --- Core computations ---
+  L2 <- Lx^2
   
   if (isTRUE(per.factor)) {
+    
     results <- sapply(seq_len(ncol(Lx)), function(j) {
+      
       total_var_j <- sum(L2[, j])
+      
       if (total_var_j == 0) {
-        c(SStarget = NA, SSntarget = NA, SSratio = NA)
+        c(SStarget = NA_real_, SSntarget = NA_real_, SSratio = NA_real_)
       } else {
-        var_target_j <- sum(L2[, j] * Tx[, j])
+        var_target_j    <- sum(L2[, j] * Tx[, j])
         var_nontarget_j <- sum(L2[, j] * (1 - Tx[, j]))
-        SStarget_j <- var_target_j / total_var_j
+        
+        SStarget_j  <- var_target_j / total_var_j
         SSntarget_j <- var_nontarget_j / total_var_j
-        SSratio_j <- if (SSntarget_j == 0) Inf else SStarget_j / SSntarget_j
-        c(SStarget = round(SStarget_j, 4),
+        SSratio_j   <- if (SSntarget_j == 0) Inf else SStarget_j / SSntarget_j
+        
+        c(
+          SStarget  = round(SStarget_j, 4),
           SSntarget = round(SSntarget_j, 4),
-          SSratio = round(SSratio_j, 4))
+          SSratio   = round(SSratio_j, 4)
+        )
       }
     })
-    return(as.data.frame(t(results), row.names = paste0("Factor", seq_len(ncol(L)))))
+    
+    out <- as.data.frame(t(results))
+    rownames(out) <- paste0("Factor", seq_len(ncol(Lx)))
+    return(out)
+    
   } else {
+    
     total_var <- sum(L2)
-    var_target <- sum(L2 * Tx)
+    
+    if (total_var == 0) {
+      return(data.frame(SStarget = NA_real_, SSntarget = NA_real_, SSratio = NA_real_))
+    }
+    
+    var_target    <- sum(L2 * Tx)
     var_nontarget <- sum(L2 * (1 - Tx))
     
-    SStarget <- var_target / total_var
+    SStarget  <- var_target / total_var
     SSntarget <- var_nontarget / total_var
-    SSratio <- if (SSntarget == 0) Inf else SStarget / SSntarget
+    SSratio   <- if (SSntarget == 0) Inf else SStarget / SSntarget
     
-    result <- data.frame(
-      SStarget = round(SStarget, 4),
+    return(data.frame(
+      SStarget  = round(SStarget, 4),
       SSntarget = round(SSntarget, 4),
-      SSratio = round(SSratio, 4)
-    )
-    return(result)
+      SSratio   = round(SSratio, 4)
+    ))
   }
 }
