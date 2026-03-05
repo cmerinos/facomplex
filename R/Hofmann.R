@@ -16,15 +16,15 @@
 #' @return A data frame with two columns:
 #' \itemize{
 #'   \item \code{CHof}: Hofmann's original complexity coefficient for each item.
-#'   \item \code{CHof_R}: The inverse of \code{Hoff}, representing factorial simplicity in [0, 1].
+#'   \item \code{CHof_R}: The inverse of \code{Hofmann}, representing in factor-level (range: 0, 1).
 #' }
 #'
 #' @details
 #' The Hofmann complexity index is computed as:
-#' \deqn{Hoff_i = \frac{(\sum_j \lambda_{ij}^2)^2}{\sum_j \lambda_{ij}^4}}
+#' \deqn{CHof_i = \frac{(\sum_j \lambda_{ij}^2)^2}{\sum_j \lambda_{ij}^4}}
 #' where \eqn{\lambda_{ij}} is the loading of item \eqn{i} on factor \eqn{j}.
 #'
-#' The rescaled index \code{Hoff_R} is computed as \code{1 / Hoff}, and provides a 
+#' The rescaled index \code{Hoff_R} is computed as \code{1 / CHof_1}, and provides a 
 #' bounded indicator of simplicity (closer to 1 means simpler structure).
 #' 
 #' These indices are particularly useful when comparing items in terms of their factorial clarity, 
