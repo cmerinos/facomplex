@@ -3,7 +3,9 @@
 #' Calculates a fit indices to evaluate the factorial simplicity of 
 #' multidimensional scales. The function estimates factorial simplicity at the item level, 
 #' factor level, and overall solution level. It is particularly useful for solutions that 
-#' include expected cross-loadings.
+#' include expected cross-loadings. The approach used in this function is when there is prior 
+#' knowledge of the factor structure; that is, the items that correspond to a factor 
+#' (target items) are known. It is appropriate for target rotations in EFA/ESEM.
 #'
 #' @param data A matrix or data frame where rows represent items and columns represent factors. 
 #'             Each value should be a standardized or pattern factor loading.
@@ -87,6 +89,7 @@
 #' 
 #' @export
 simload <- function(data, items_target) {
+  
   # Convert matrices to data frame
   if (is.matrix(data)) {
     data <- as.data.frame(data)
@@ -103,57 +106,69 @@ simload <- function(data, items_target) {
     row_names <- paste0("FSI_", seq_len(nrow(data)))
   }
   
+  # Check that factor names in items_target exist in data
+  if (!all(names(items_target) %in% names(data))) {
+    stop("All names in 'items_target' must match column names in 'data'.")
+  }
+  
   # Square all factor loadings
   data_squared <- data^2
   
   # Initialize lists to store results
-  FSI_F <- list()
+  SFI <- list()
   IFS <- list()
   
-  # Initialize variables for total calculation
-  SSTF_total <- 0
-  SS_NTF_total <- 0
+  # Initialize totals for TSFI (Fleming-like denominator: total SSQ)
+  SS_T_total  <- 0  # total sum of squares (all loadings in all columns)
+  SS_NT_total <- 0  # non-target sum of squares (per target specification)
   
   # Ensure numeric indices are valid
   n_rows <- nrow(data_squared)
   
   for (factor in names(items_target)) {
+    
     target_rows <- items_target[[factor]]
     
     if (any(target_rows < 1 | target_rows > n_rows)) {
       stop("One or more 'items_target' indices are out of range.")
     }
     
-    # Compute SSTF and SS_NTF
-    SSTF <- sum(data_squared[target_rows, factor])
-    no_target_rows <- setdiff(seq_len(n_rows), target_rows)
-    SS_NTF <- sum(data_squared[no_target_rows, factor])
+    # Rows that are non-target for this factor
+    non_target_rows <- setdiff(seq_len(n_rows), target_rows)
     
-    # FSI_F and totals
-    FSI_F[[factor]] <- 1 - (SS_NTF / SSTF)
-    SSTF_total <- SSTF_total + SSTF
-    SS_NTF_total <- SS_NTF_total + SS_NTF
+    # SSQ for this factor (column)
+    SS_T_j  <- sum(data_squared[, factor], na.rm = TRUE)                 # total (target + non-target)
+    SS_NT_j <- sum(data_squared[non_target_rows, factor], na.rm = TRUE)  # non-target only
     
-    # IFS
+    # SFI_j (target-based adaptation, Fleming-like denominator)
+    SFI[[factor]] <- if (SS_T_j == 0) NA_real_ else 1 - (SS_NT_j / SS_T_j)
+    
+    # Accumulate totals for TSFI
+    SS_T_total  <- SS_T_total  + SS_T_j
+    SS_NT_total <- SS_NT_total + SS_NT_j
+    
+    # IFS (kept as you implemented: item target vs cross-loadings on other factors)
     for (item in target_rows) {
       target_loading <- data_squared[item, factor]
-      sum_non_target <- sum(data_squared[item, setdiff(names(data), factor)])
-      IFS[[row_names[item]]] <- 1 - (sum_non_target / target_loading)
+      sum_non_target <- sum(data_squared[item, setdiff(names(data), factor)], na.rm = TRUE)
+      
+      IFS[[row_names[item]]] <- if (target_loading == 0) NA_real_ else 1 - (sum_non_target / target_loading)
     }
   }
   
-  # FSI_total
-  TSFI_total <- 1 - (SS_NTF_total / SSTF_total)
+  # TSFI (matrix-level: non-target SSQ / total SSQ)
+  TSFI_total <- if (SS_T_total == 0) NA_real_ else 1 - (SS_NT_total / SS_T_total)
   
-  # Output
+  # Output (same structure)
   result_list <- list(
     TSFI = round(TSFI_total, 3),
-    SFI = sapply(FSI_F, round, 3),
-    IFS = data.frame(
+    SFI  = sapply(SFI, round, 3),
+    IFS  = data.frame(
       Items = names(IFS),
-      IFS = round(unlist(IFS), 3),
+      IFS   = round(unlist(IFS), 3),
       row.names = NULL
     )
   )
+  
   return(result_list)
 }

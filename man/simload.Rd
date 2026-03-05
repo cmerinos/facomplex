@@ -27,7 +27,9 @@ A list containing three elements:
 Calculates a fit indices to evaluate the factorial simplicity of
 multidimensional scales. The function estimates factorial simplicity at the item level,
 factor level, and overall solution level. It is particularly useful for solutions that
-include expected cross-loadings.
+include expected cross-loadings. The approach used in this function is when there is prior
+knowledge of the factor structure; that is, the items that correspond to a factor
+(target items) are known. It is appropriate for target rotations in EFA/ESEM.
 }
 \details{
 This function is designed for factorial solutions from models such as EFA with target rotation
