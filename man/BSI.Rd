@@ -4,69 +4,63 @@
 \alias{BSI}
 \title{BSI - Bentler Simplicity Index}
 \usage{
-BSI(data, item_names = NULL, sort_items = NULL)
+BSI(data)
 }
 \arguments{
-\item{data}{A matrix or data frame of factor loadings with \code{k} rows (items) and \code{n} columns (factors).}
-
-\item{item_names}{Optional vector of item names. If \code{NULL}, default item labels will be generated.}
-
-\item{sort_items}{Determines the ordering of items in the output. Options are \code{"up"} (ascending), \code{"down"} (descending), or \code{NULL} (retain original order). Default is \code{NULL}.}
+\item{data}{A numeric matrix or data frame of factor loadings with
+\code{p} rows (items/variables) and \code{r} columns (factors).}
 }
 \value{
-A list with two components:
-\itemize{
-\item \code{BSI_per_item}: A data frame with the Bentler simplicity value computed for each item.
-\item \code{BSI_global}: A scalar value representing the global Bentler Simplicity Index (i.e., the mean across all items).
-}
+A single numeric value in the interval \code{[0, 1]} representing
+Bentler's global simplicity index for the full loading matrix.
 }
 \description{
-Computes the Bentler Simplicity Index (BSI), a scale-free matrix measure that quantifies the factorial simplicity of a solution.
-It is derived from the squared factor loadings and indicates the extent to which the factor structure approaches a perfectly simple pattern.
+Computes Bentler's Simplicity Index (BSI) for a loading matrix.
+This is a scale-free, matrix-level measure of factor simplicity
+originally proposed by Bentler (1977).
 }
 \details{
-The BSI quantifies the simplicity of the factorial structure at the item level by assessing the
-degree to which each item predominantly loads on a single factor. It is computed using the formula:
+Let \eqn{L} be a \eqn{p \times r} loading matrix, and let
+\eqn{A = [l_{ij}^2]} be the matrix of squared loadings. Define
 
-\deqn{BSI_i = \frac{\sum_j a_{ij}^4}{\left( \sum_j a_{ij}^2 \right)^2}}
+\deqn{D = \mathrm{diag}(A'A)}
 
-where \eqn{a_{ij}} is the loading of item \eqn{i} on factor \eqn{j}. This adaptation follows the logic
-of the global Bentler Simplicity Index, but applies it row-wise (per item) instead of matrix-wise.
-While Bentler (1977) originally defined the BSI as a scale-level index, computing it at the item level
-offers a complementary view for identifying items that may contribute disproportionately to factorial complexity.
+where \eqn{D} is the diagonal matrix formed from the diagonal elements
+of \eqn{A'A}. Bentler's Simplicity Index is then:
 
-The global BSI reported by this function is simply the mean of the item-level BSI values.
+\deqn{BSI = \left| D^{-1/2} A'A D^{-1/2} \right|}
 
-\strong{Interpretation:} In practice, a BSI value near 1.0 suggests that the item reflects a "pure" or
-unidimensional measure aligned with a single latent factor. Conversely, lower values (e.g., below 0.50) may
-indicate factorial complexity, potentially undermining the interpretability or construct validity of
-that item within a scale. This makes BSI especially useful for refining multidimensional scales by
-identifying items with cross-loadings.
+where \eqn{|.|} denotes the determinant.
+
+The index ranges from 0 to 1. Higher values indicate a simpler factor
+structure. A value of 1 is obtained when the loading matrix shows
+perfect factorial simplicity (i.e., each variable is associated with
+only one factor). Bentler's index is invariant to the scale of the
+factors.
 }
 \examples{
-# Example data
 ex1_data <- data.frame(
   F1 = c(0.536, 0.708, 0.600, 0.673, 0.767, 0.481, -0.177, 0.209, -0.097, -0.115, 0.047, 0.024),
   F2 = c(-0.110, 0.026, 0.076, 0.011, -0.160, 0.106, 0.668, 0.438, 0.809, 0.167, 0.128, 0.041),
   F3 = c(-0.100, 0.036, 0.086, 0.021, -0.150, 0.116, 0.678, 0.448, 0.819, 0.577, 0.738, 0.751)
 )
 
-# Compute BSI
-BSI_result <- BSI(ex1_data)
-
-# Sort by ascending order
-BSI_result_up <- BSI(ex1_data, sort_items = "up")
-
-# Sort by descending order
-BSI_result_down <- BSI(ex1_data, sort_items = "down")
+BSI(ex1_data)
 
 }
 \references{
-Bentler, P. M. (1977). Factor simplicity index and transformations. \emph{Psychometrika, 42}(2),
-277–295. https://doi.org/10.1007/BF02294054
-}
-\seealso{
-\code{\link{plot_simplicity}} for a graphical representation of BSI values.
+Bentler, P. M. (1977). Factor simplicity index and transformations.
+\emph{Psychometrika, 42}(2), 277--295.
+https://doi.org/10.1007/BF02294054
+
+Fleming, J. S. (2003). Computing measures of simplicity of fit for
+loadings in factor-analytically derived scales.
+\emph{Behavior Research Methods, Instruments, & Computers, 35}(4), 520--524.
+https://doi.org/10.3758/BF03195531
+
+Lorenzo-Seva, U. (2003). A factor simplicity index.
+\emph{Psychometrika, 68}(1), 49--60.
+https://doi.org/10.1007/BF02296652
 }
 \author{
 Cesar Merino-Soto
