@@ -7,10 +7,11 @@
 #'
 #' @format Un data frame con <número> filas y <número> columnas:
 #' \describe{
-#'   \item{<nombre_col1>}{<descripción de la columna 1>. Tipo: <numérico/factor/etc.>}
-#'   \item{<nombre_col2>}{<descripción de la columna 2>. Tipo: <numérico/factor/etc.>}
-#'   \item{<nombre_col3>}{<descripción de la columna 3>. Tipo: <numérico/factor/etc.>}
-#'   \item{<nombre_col4>}{<descripción de la columna 4>. Tipo: <numérico/factor/etc.>}
+#'   \item{<ID>}{Número de identificación del sujeto}
+#'   \item{<EDAD>}{Edad del sujeto. Tipo: numérico}
+#'   \item{<TIEMPODOC>}{Tiempo de docencia, en años. Tipo: <numérico/factor/etc.>}
+#'   \item{<SEXO>}{<descripción de la columna 4>. Tipo: <numérico/factor/etc.>}
+#'   \item{<SEXO>}{<descripción de la columna 4>. Tipo: <numérico/factor/etc.>}
 #'   # ... agrega todas las columnas que tengas
 #' }
 #'
