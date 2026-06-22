@@ -1,14 +1,13 @@
 #' fullclean: <Título descriptivo de los datos>
 #'
-#' <Descripción extensa del dataset. Por ejemplo:>
-#' Este conjunto de datos contiene los resultados de un análisis factorial
-#' utilizado como ejemplo en las funciones del paquete \code{facomplex}.
-#' Incluye las cargas factoriales de <número> ítems en <número> factores.
-#'
-#' @format Un data frame con <número> filas y <número> columnas:
+#' Datos reales, de un estudio sobre motivaciones para investigar en docentes universitarios peruanos.
+#' Fueron obtenidos de varias universidades peruanas.
+#' 
+#' @format Un data frame con 589 filas y <número> columnas:
 #' \describe{
 #'   \item{<ID>}{Número de identificación del sujeto}
 #'   \item{<EDAD>}{Edad del sujeto. Tipo: numérico}
+#'   \item{<ESTUDIO>}{Nivel de estudio. Tipo: numérico}
 #'   \item{<TIEMPODOC>}{Tiempo de docencia, en años. Tipo: <numérico/factor/etc.>}
 #'   \item{<SEXO>}{<descripción de la columna 4>. Tipo: <numérico/factor/etc.>}
 #'   \item{<SEXO>}{<descripción de la columna 4>. Tipo: <numérico/factor/etc.>}

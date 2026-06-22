@@ -5,10 +5,11 @@
 \alias{fullclean}
 \title{fullclean: <Título descriptivo de los datos>}
 \format{
-Un data frame con <número> filas y <número> columnas:
+Un data frame con 589 filas y <número> columnas:
 \describe{
 \item{\if{html}{\out{<ID>}}}{Número de identificación del sujeto}
 \item{\if{html}{\out{<EDAD>}}}{Edad del sujeto. Tipo: numérico}
+\item{\if{html}{\out{<ESTUDIO>}}}{Nivel de estudio. Tipo: numérico}
 \item{\if{html}{\out{<TIEMPODOC>}}}{Tiempo de docencia, en años. Tipo: <numérico/factor/etc.>}
 \item{\if{html}{\out{<SEXO>}}}{<descripción de la columna 4>. Tipo: <numérico/factor/etc.>}
 \item{\if{html}{\out{<SEXO>}}}{<descripción de la columna 4>. Tipo: <numérico/factor/etc.>}... agrega todas las columnas que tengas
@@ -23,10 +24,8 @@ o "Estudio realizado en X población", o "Tomado de la publicación Y">
 data(fullclean)
 }
 \description{
-<Descripción extensa del dataset. Por ejemplo:>
-Este conjunto de datos contiene los resultados de un análisis factorial
-utilizado como ejemplo en las funciones del paquete \code{facomplex}.
-Incluye las cargas factoriales de <número> ítems en <número> factores.
+Datos reales, de un estudio sobre motivaciones para investigar en docentes universitarios peruanos.
+Fueron obtenidos de varias universidades peruanas.
 }
 \examples{
 data(fullclean)
