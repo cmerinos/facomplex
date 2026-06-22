@@ -9,6 +9,9 @@ Authors@R: c(
          email = "sdominguezmpcs@gmail.com",
          role = c("ctb")))
 Depends: R (>= 3.1.0)
+Imports: 
+    ggplot2,
+    stats
 Description: Provides methods for estimating factor complexity coefficients in exploratory and confirmatory factor analysis (EFA/CFA) results. Included indices are the Hofman coefficient, Fleming's approach for factor simplicity , and others. Additional outputs include descriptive statistics (minimum, maximum, and mean) for target and non-target loadings, and visualization of results.
 License: GPL-3
 Encoding: UTF-8
