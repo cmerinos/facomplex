@@ -1,20 +1,19 @@
 Package: facomplex
 Title: Methods for Assessing Factor Complexity in Factor Analysis Solutions
-Version: 0.0.1.000
+Version: 0.0.1
 Authors@R: c(
   person("Merino-Soto", "Cesar A.", 
          email = "sikayax@yahoo.com.ar", 
          role = c("aut", "cre")),
   person("Dominguez-Lara", "Sergio",
          email = "sdominguezmpcs@gmail.com",
-         role = c("ctb", "rev")))
-Maintainer: Cesar Merino-Soto <sikayax@yahoo.com.ar>
+         role = c("ctb")))
 Depends: R (>= 3.1.0)
-Description: Provides methods for estimating factor complexity coefficients in exploratory and confirmatory factor analysis (EFA/CFA) results. Included indices are the Hofman coefficient, its revised version, Fleming's approach for factorsimplicity , and others. Additional outputs include descriptive statistics (minimum, maximum, and mean) for target and non-target loadings, and visualization of results.
+Description: Provides methods for estimating factor complexity coefficients in exploratory and confirmatory factor analysis (EFA/CFA) results. Included indices are the Hofman coefficient, Fleming's approach for factor simplicity , and others. Additional outputs include descriptive statistics (minimum, maximum, and mean) for target and non-target loadings, and visualization of results.
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-LazyData: true
+LazyData: TRUE
 Suggests: 
     knitr,
     rmarkdown
