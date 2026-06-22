@@ -17,7 +17,7 @@
 #' greater factorial simplicity, while lower values (close to 0) reflect more diffuse or 
 #' complex loading patterns.
 #'
-#' The index is scaled to the interval [0, 1] as follows:
+#' The index is scaled to the interval 0 to 1 as follows:
 #' \deqn{
 #' LSI = \frac{w - e}{1 - e}
 #' }

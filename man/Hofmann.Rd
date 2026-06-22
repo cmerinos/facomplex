@@ -27,7 +27,7 @@ on multiple factors. It ranges from 1 (perfect factorial simplicity, i.e., loadi
 on one factor) to \eqn{p} (maximum complexity, where the item loads equally on all \eqn{p} factors).
 
 The modified version is the reciprocal of \code{Hofmann}, resulting in a simplicity index
-normalized to the interval \link{0, 1}. Higher values indicate greater factorial simplicity.
+normalized to the interval 0 to 1. Higher values indicate greater factorial simplicity.
 
 The Hofmann complexity index is computed as:
 \deqn{CHof_i = \frac{(\sum_j \lambda_{ij}^2)^2}{\sum_j \lambda_{ij}^4}}

@@ -22,7 +22,7 @@ entropyFL(
 
 \item{scaled}{Logical. If \code{TRUE}, returns the scaled entropy index and the theoretical minimum entropy as proposed by Beisel & Moreteau (1997). Default is \code{FALSE}.}
 
-\item{bounded}{Logical. If \code{TRUE} (default), forces scaled entropy values to remain within the \link{0, 1} range by truncating negative or >1 values.}
+\item{bounded}{Logical. If \code{TRUE} (default), forces scaled entropy values to remain within the 0 to 1 range by truncating negative or >1 values.}
 
 \item{nd}{Integer. Number of decimal places to round the results. Default is \code{3}. Use \code{NULL} for no rounding.}
 }
@@ -59,7 +59,7 @@ The entropy index is based on the squared factor loadings (\eqn{\lambda_{ij}^2})
 \deqn{p_{ij} = \frac{\lambda_{ij}^2}{\sum_{j=1}^k \lambda_{ij}^2}}
 \item Then compute Shannon entropy:
 \deqn{H_i = - \sum_{j=1}^k p_{ij} \log_b(p_{ij})}
-\item If \code{normalized = TRUE}, divide by \eqn{\log_b(k)} to constrain values to \link{0, 1}.
+\item If \code{normalized = TRUE}, divide by \eqn{\log_b(k)} to constrain values to 0 to 1 range.
 }
 
 The same logic applies for factors (across items), replacing \eqn{p_{ij}} with:
@@ -83,8 +83,8 @@ When \code{scaled = TRUE}, the function returns:
 This calculation is applied both to items and to factors. For factors, \eqn{k} is replaced by \eqn{n} (number of items).
 
 \strong{4. Argument \code{bounded}:}
-Scaled entropy can occasionally produce values outside \link{0, 1} if entropy is below the theoretical minimum.
-If \code{bounded = TRUE}, the function truncates those values to stay within \link{0, 1} for interpretive clarity.
+Scaled entropy can occasionally produce values outside 0 to 1 range if entropy is below the theoretical minimum.
+If \code{bounded = TRUE}, the function truncates those values to stay within 0 to 1 range for interpretive clarity.
 }
 \examples{
 # Example: items with different factorial complexity

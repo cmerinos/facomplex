@@ -8,7 +8,7 @@
 #' on one factor) to \eqn{p} (maximum complexity, where the item loads equally on all \eqn{p} factors).
 #' 
 #' The modified version is the reciprocal of \code{Hofmann}, resulting in a simplicity index
-#' normalized to the interval [0, 1]. Higher values indicate greater factorial simplicity.
+#' normalized to the interval 0 to 1. Higher values indicate greater factorial simplicity.
 #'
 #' @param data A numeric data frame or matrix of factor loadings, where rows represent items 
 #' and columns represent factors. Factor loadings are typically between -1 and 1.
