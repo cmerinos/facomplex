@@ -4,7 +4,7 @@ utils::globalVariables(".data")
 #' @title Plot Simplicity Index Values
 #' @description
 #' Creates a horizontal bar plot of item-level simplicity or complexity values (e.g., from FSI, BSI, Hofmann indices).
-#' The user must specify the column name that contains the coefficient values (e.g., "FSI_i", "Complexity", etc.).
+#' The user must specify the column name that contains the coefficient values (e.g., "IFS", "Complexity", etc.).
 #'
 #' @param data A data frame with item labels and simplicity or complexity values.
 #' @param item.col Character. Name of the column with item labels. Default is \code{"Item"}.
@@ -51,7 +51,7 @@ utils::globalVariables(".data")
 #'   threshold.line = 0.90
 #' )
 #'
-#' # ❌ This will trigger an error if value.col is missing:
+#' # This will trigger an error if value.col is missing:
 #' \dontrun{
 #' plotFacomplex(data = FSIout$IFS)  # Error: 'value.col' is required
 #' }
@@ -77,7 +77,7 @@ plotFacomplex <- function(data,
     stop(paste("The data.frame must contain columns:", item.col, "and", value.col))
   }
   
-  # Determinar el orden base de los ítems según sort.items
+  # Determinar el orden base de los items segun sort.items
   levels.base <- switch(
     sort.items,
     ascending  = data[[item.col]][order(data[[value.col]])],
@@ -97,7 +97,7 @@ plotFacomplex <- function(data,
                     minimal = ggplot2::theme_minimal()
   )
   
-  # Crear gráfico
+  # Crear grafico
   p <- ggplot2::ggplot(data, ggplot2::aes(x = .data[[item.col]], y = .data[[value.col]])) +
     ggplot2::geom_bar(stat = "identity", fill = bar.color) +
     ggplot2::coord_flip() +
@@ -105,7 +105,7 @@ plotFacomplex <- function(data,
     ggtheme +
     ggplot2::theme(axis.text.y = ggplot2::element_text(size = 10))
   
-  # Línea de umbral
+  # Linea de umbral
   if (!is.null(threshold.line)) {
     p <- p +
       ggplot2::geom_hline(yintercept = threshold.line, linetype = "dashed", color = threshold.color, size = 1) +

@@ -22,7 +22,7 @@
 #'   \item \strong{Min.Target, Max.Target}: Minimum and maximum of the target loadings.
 #'   \item \strong{Mean.Cross, Median.Cross, SD.Cross}: Descriptive statistics of cross-loadings (i.e., loadings on non-target factors).
 #'   \item \strong{Min.Cross, Max.Cross}: Minimum and maximum of the cross-loadings.
-#'   \item \strong{Perc.Cross.≤.cutoff, Perc.Cross.>.cutoff}: If `cutoff` is specified, these show the percentage of cross-loadings <= or > that threshold.
+#'   \item \strong{Perc.Cross.<=.cutoff, Perc.Cross.>.cutoff}: If `cutoff` is specified, these show the percentage of cross-loadings <= or > that threshold.
 #'   \item \strong{n.Items}: Number of items assigned to each factor.
 #' }
 #'

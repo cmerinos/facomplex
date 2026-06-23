@@ -96,7 +96,7 @@ entropyFL <- function(loadings_matrix, base = 2, normalized = TRUE, scaled = FAL
   n_factors <- ncol(loadings_matrix)
   load_sq <- loadings_matrix^2
   
-  # --- H_i: Entropía por ítem
+  # --- H_i: Entropia por item
   row_sums <- rowSums(load_sq)
   pij <- sweep(load_sq, 1, row_sums, FUN = "/")
   pij[is.nan(pij)] <- 0
@@ -104,7 +104,7 @@ entropyFL <- function(loadings_matrix, base = 2, normalized = TRUE, scaled = FAL
   Hmax_i <- log(n_factors, base = base)
   if (normalized) H_i <- H_i / Hmax_i
   
-  # --- H_f: Entropía por factor
+  # --- H_f: Entropia por factor
   col_sums <- colSums(load_sq)
   qij <- sweep(load_sq, 2, col_sums, FUN = "/")
   qij[is.nan(qij)] <- 0
@@ -144,7 +144,7 @@ entropyFL <- function(loadings_matrix, base = 2, normalized = TRUE, scaled = FAL
     Hscaled_f <- (H_f - Hmin_f) / (Hmax_f - Hmin_f)
     if (bounded) Hscaled_f <- pmin(1, pmax(0, Hscaled_f))
     
-    Hscaled_total <- H_total  # matemáticamente equivalente
+    Hscaled_total <- H_total  # matematicamente equivalente
     
     result$Hscaled <- list(
       Hmin.items     = if (!is.null(nd)) round(Hmin_i, nd) else Hmin_i,
