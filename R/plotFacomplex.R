@@ -18,7 +18,7 @@
 #'
 #' @examples
 #' # Example using FSI output:
-#' FSIout <- FSI(ex1_fl,  
+#' FSIout <- simload(ex1_fl,  
 #'               items_target = list(F1 = c(1, 2, 3, 4, 5, 6),
 #'                                   F2 = c(7, 8, 9),
 #'                                   F3 = c(10, 11, 12)))
