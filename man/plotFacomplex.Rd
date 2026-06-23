@@ -67,9 +67,9 @@ plotFacomplex(
 
 # Customizing options:
 plotFacomplex(
-  data = FSIout$FSI_i,
+  data = FSIout$IFS,
   item.col = "Items",
-  value.col = "FSI_i",
+  value.col = "IFS",
   sort.items = "none",
   reverse.items = TRUE,
   theme = "classic",
@@ -79,7 +79,7 @@ plotFacomplex(
 
 # ❌ This will trigger an error if value.col is missing:
 \dontrun{
-plotFacomplex(data = FSIout$FSI_i)  # Error: 'value.col' is required
+plotFacomplex(data = FSIout$IFS)  # Error: 'value.col' is required
 }
 
 }
