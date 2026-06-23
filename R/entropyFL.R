@@ -80,11 +80,11 @@
 #' @references
 #' Shannon, C. E. (1948). A mathematical theory of communication. \emph{Bell System Technical Journal}, 27(3), 379--423. \doi{10.1002/j.1538-7305.1948.tb00917.x}
 #'
-#' Beisel, J. N., & Moreteau, J.-C. (1997). A new method to estimate the lower bound of the Shannon-Wiener index of diversity. \emph{Ecological Modelling}, 99(1), 99–-105.
+#' Beisel, J. N., & Moreteau, J.-C. (1997). A new method to estimate the lower bound of the Shannon-Wiener index of diversity. \emph{Ecological Modelling}, 99(1), 99-105.
 #'
-#' Hofmann, R. J. (1978). Complexity and simplicity as objective indices descriptive of factor solutions. \emph{Multivariate Behavioral Research}, 13(2), 247–-250.
+#' Hofmann, R. J. (1978). Complexity and simplicity as objective indices descriptive of factor solutions. \emph{Multivariate Behavioral Research}, 13(2), 247-250.
 #'
-#' Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika}, 68(1), 49-–60. \doi{10.1007/BF02296652}
+#' Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika}, 68(1), 49-60. \doi{10.1007/BF02296652}
 #' 
 #' @export
 entropyFL <- function(loadings_matrix, base = 2, normalized = TRUE, scaled = FALSE, bounded = TRUE, nd = 3) {
