@@ -55,6 +55,6 @@ colnames(loadings) <- c("F1", "F2")
 target <- list(F1 = c("item1", "item2"),
                F2 = c("item3", "item4"))
 
-profile.facomplex(loadings, target, cutoff = 0.30)
+profileFacomplex(loadings, target, cutoff = 0.30)
 
 }
