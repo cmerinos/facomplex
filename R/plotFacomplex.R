@@ -54,6 +54,7 @@
 #' }
 #' 
 #' @export
+
 utils::globalVariables(".data")
 
 plotFacomplex <- function(data,
