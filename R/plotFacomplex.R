@@ -31,9 +31,9 @@
 #'
 #' # Basic use (value.col is required)
 #' plotFacomplex(
-#'   data = FSIout$FSI_i,
+#'   data = FSIout$IFS,
 #'   item.col = "Items",
-#'   value.col = "FSI_i"
+#'   value.col = "IFS"
 #' )
 #'
 #' # Customizing options:
