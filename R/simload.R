@@ -82,7 +82,7 @@
 #'                                                   algorithm = "gpa",
 #'                                                   std.ov = TRUE))
 #'
-#' simload(data = lavInspect(INV.esem.fit, what = "std")$lambda,
+#' simload(data = lavaan::lavInspect(INV.esem.fit, what = "std")$lambda,
 #'     items_target = list(f1 = c(1, 2, 3, 4, 5, 6),
 #'                         f2 = c(7, 8, 9, 10, 11, 12)))
 #'
