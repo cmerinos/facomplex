@@ -54,6 +54,8 @@
 #' }
 #' 
 #' @export
+utils::globalVariables(".data")
+
 plotFacomplex <- function(data,
                             item.col = "Item",
                             value.col = "Coefficient",
