@@ -43,7 +43,7 @@ A horizontal ggplot2 bar plot of item-level values.
 }
 \description{
 Creates a horizontal bar plot of item-level simplicity or complexity values (e.g., from FSI, BSI, Hofmann indices).
-The user must specify the column name that contains the coefficient values (e.g., "FSI_i", "Complexity", etc.).
+The user must specify the column name that contains the coefficient values (e.g., "IFS", "Complexity", etc.).
 }
 \examples{
 # Data frame of factor loadings: 3 factors, 12 items; ESEM solution from published article
@@ -77,7 +77,7 @@ plotFacomplex(
   threshold.line = 0.90
 )
 
-# ❌ This will trigger an error if value.col is missing:
+# This will trigger an error if value.col is missing:
 \dontrun{
 plotFacomplex(data = FSIout$IFS)  # Error: 'value.col' is required
 }
