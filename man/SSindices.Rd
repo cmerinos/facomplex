@@ -7,7 +7,7 @@
 SSindices(loadings, target, per.factor = FALSE)
 }
 \arguments{
-\item{loadings}{A numeric matrix or data frame of factor loadings (items × factors).}
+\item{loadings}{A numeric matrix or data frame of factor loadings (items x factors).}
 
 \item{target}{A binary matrix or data frame of the same dimensions as \code{loadings},
 indicating the expected loading structure: 1 = expected (target) loading, 0 = non-target.}
@@ -48,15 +48,15 @@ It indicates how dominant the expected structure is over residual complexity.
 \itemize{
 \item \code{~= 0.00}: Perfectly simple structure (each item loads clearly on only one factor).
 \item \code{< 0.05}: Very good factor differentiation.
-\item \code{0.05 – 0.15}: Moderate cross-loading complexity.
+\item \code{0.05 - 0.15}: Moderate cross-loading complexity.
 \item \code{> 0.15}: Substantial interdependence or noise across factors.
 }
 
 \strong{Suggestive interpretion for SSratio:}
 \itemize{
 \item \code{> 4}: Excellent structure – target pattern clearly dominates.
-\item \code{2 – 4}: Good structure with acceptable noise.
-\item \code{1 – 2}: Target and cross-loadings are comparable – caution advised.
+\item \code{2 - 4}: Good structure with acceptable noise.
+\item \code{1 - 2}: Target and cross-loadings are comparable – caution advised.
 \item \code{~= 1}: Equal contribution – borderline structure.
 \item \code{< 1}: Cross-loadings dominate – weak or misaligned structure.
 }

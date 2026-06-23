@@ -16,7 +16,7 @@
 #' where \code{a_{ij}} is the loading of item \code{i} on factor \code{j}, and \code{m} is the number of items.
 #' 
 #' This index provides a quantitative assessment of factorial parsimony, where lower values of \code{f_j}
-#' indicate a clearer hyperplane structure—meaning more loadings are close to zero—thus favoring simpler factor interpretation.
+#' indicate a clearer hyperplane structure-meaning more loadings are close to zero-thus favoring simpler factor interpretation.
 #' 
 #' The function also reports the \emph{ideal hyperplane count}, defined as:
 #' \deqn{
@@ -35,7 +35,7 @@
 #' Cattell, R. B. (1952). Factor analysis: an introduction and manual for the psychologist and social scientist. Oxford, 
 #' England: Harper.
 #' Kaiser, H. F., & Cerny, B. A. (1978). Casey's Method For Fitting Hyperplanes From An Intermediate Orthomax Solution. 
-#' \emph{Multivariate Behavioral Research}, 13(4), 395–401. https://doi.org/10.1207/s15327906mbr1304_2
+#' \emph{Multivariate Behavioral Research}, 13(4), 395-401. https://doi.org/10.1207/s15327906mbr1304_2
 #' 
 #' Kendall, M. G., & Stuart, A. (1969). \emph{The Advanced Theory of Statistics}, Vol. 2. London: Griffin.
 #'

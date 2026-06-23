@@ -12,7 +12,7 @@
 #' }
 #'
 #' @details
-#' Hofmann’s complexity index for factors evaluates how many items contribute to the definition of each factor. A value close to 1 indicates that a factor is well-defined by only one item (unidimensional), while values closer to p indicate higher complexity.
+#' Hofmann's complexity index for factors evaluates how many items contribute to the definition of each factor. A value close to 1 indicates that a factor is well-defined by only one item (unidimensional), while values closer to p indicate higher complexity.
 #' 
 #' The formula is based on the sum of squared and quartic factor loadings, and the result is normalized so that higher complexity values suggest factors defined by multiple items.
 #'

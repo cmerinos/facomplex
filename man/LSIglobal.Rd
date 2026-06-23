@@ -43,7 +43,7 @@ LSIglobal(L)
 
 }
 \references{
-Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika}, 68(1), 49–60.
+Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika}, 68(1), 49-60.
 \doi{10.1007/BF02296652}
 
 Code adapted from: \code{lazy.fa::LS_index}
