@@ -18,7 +18,7 @@ A data frame with two columns:
 }
 }
 \description{
-Computes Hofmann’s (1977) coefficient of factorial complexity for each item
+Computes Hofmann's (1977) coefficient of factorial complexity for each item
 in a factor loading matrix, along with a normalized inverse version rescaled between 0 and 1.
 }
 \details{
@@ -37,7 +37,7 @@ The rescaled index \code{Hoff_R} is computed as \code{1 / CHof_1}, and provides 
 bounded indicator of simplicity (closer to 1 means simpler structure).
 
 These indices are particularly useful when comparing items in terms of their factorial clarity,
-and complement other measures such as Bentler’s or Fleming’s simplicity indices. An extensive use of this
+and complement other measures such as Bentler's or Fleming's simplicity indices. An extensive use of this
 coefficient can be found in: Pettersson & Turkheimer (2010, 2014).
 }
 \examples{
@@ -51,12 +51,12 @@ Hofmann(ex1.data)
 
 }
 \references{
-Hofmann, R. J. (1977). Indices descriptive of factor complexity. \emph{The Journal of General Psychology}, 96(1), 103–110.
+Hofmann, R. J. (1977). Indices descriptive of factor complexity. \emph{The Journal of General Psychology}, 96(1), 103-110.
 https://doi.org/10.1080/00221309.1977.9920803
 
 Pettersson, E., & Turkheimer, E. (2014). Self-Reported Personality Pathology Has Complex Structure and Imposing Simple
-Structure Degrades Test Information. \emph{Multivariate Behavioral Research}, 49(4), 372–389. https://doi.org/10.1080/00273171.2014.911073
+Structure Degrades Test Information. \emph{Multivariate Behavioral Research}, 49(4), 372-389. https://doi.org/10.1080/00273171.2014.911073
 
 Pettersson, E., & Turkheimer, E. (2010). Item selection, evaluation, and simple structure in personality data. \emph{Journal
-of Research in Personality}, 44(4), 407–420. https://doi.org/10.1016/j.jrp.2010.03.002
+of Research in Personality}, 44(4), 407-420. https://doi.org/10.1016/j.jrp.2010.03.002
 }
