@@ -1,22 +1,17 @@
-## Resumen de la verificación del paquete `facomplex`
+## Test environments
 
-* R CMD check local: 0 errores, 0 warnings, 0 notas.
-* R CMD check en win-builder (R-devel y R-release): 
-   - Sin errores, warnings o notas significativas (solo nota sobre falta de pdflatex, que es esperada por no tener LaTeX instalado).
-* Dependencias externas: Ninguna.
-* Tamaño del paquete: <X> MB (dentro del límite de CRAN).
+* Local Windows 10, R 4.5.3
+* Win-builder (R-devel) - passed without errors or warnings
+* Win-builder (R-release) - passed without errors or warnings
 
-## Notas específicas
+## R CMD check results
 
-* El paquete incluye datos en `data/fullclean.rda` que requieren R >= 3.5.0 por el formato de serialización. Esto está declarado en `Depends: R (>= 3.5.0)`.
+0 errors | 0 warnings | 1 note
 
-## Pruebas realizadas
+* checking CRAN incoming feasibility ... NOTE
+  New submission
+  Possibly misspelled words: CFA, EFA, Hofman (these are accepted terms in the field)
 
-* Se ejecutaron pruebas unitarias con `testthat` que verifican el comportamiento de las funciones principales (`simload`, `BSI`, `plotFacomplex`). Todas pasaron correctamente.
-* Los ejemplos en la documentación se ejecutan sin errores.
-* Las viñetas se compilan sin problemas.
+## Downstream dependencies
 
-## Observaciones adicionales
-
-* Este es el primer envío del paquete a CRAN.
-* El paquete está diseñado para métodos de análisis factorial y no tiene dependencias externas más allá de las listadas en `Imports` y `Suggests`.
+There are currently no downstream dependencies for this package.
