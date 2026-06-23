@@ -1,3 +1,6 @@
+# Declarar variables globales para evitar notas en R CMD check
+utils::globalVariables(".data")
+
 #' @title Plot Simplicity Index Values
 #' @description
 #' Creates a horizontal bar plot of item-level simplicity or complexity values (e.g., from FSI, BSI, Hofmann indices).
@@ -54,8 +57,6 @@
 #' }
 #' 
 #' @export
-
-utils::globalVariables(".data")
 plotFacomplex <- function(data,
                             item.col = "Item",
                             value.col = "Coefficient",
