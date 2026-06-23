@@ -13,7 +13,13 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 library(facomplex)
-library(lavaan)
+
+if (!requireNamespace("psych", quietly = TRUE)) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+if (!requireNamespace("lavaan", quietly = TRUE)) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
 ```
 
 # Example 1: Estimating Factor Complexity in an ESEM Solution

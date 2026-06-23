@@ -13,7 +13,7 @@ profileFacomplex(loadings, target, abs = TRUE, cutoff = NULL, digits = 3)
 
 \item{abs}{Logical. Should absolute values of loadings be used? Default is TRUE.}
 
-\item{cutoff}{Optional numeric. If defined, reports the percentage of cross-loadings ≤ and > this value.}
+\item{cutoff}{Optional numeric. If defined, reports the percentage of cross-loadings <= and > this value.}
 
 \item{digits}{Integer. Number of decimal places to round the output. Default is 3.}
 }
@@ -37,7 +37,7 @@ The following statistics are computed per factor:
 \item \strong{Min.Target, Max.Target}: Minimum and maximum of the target loadings.
 \item \strong{Mean.Cross, Median.Cross, SD.Cross}: Descriptive statistics of cross-loadings (i.e., loadings on non-target factors).
 \item \strong{Min.Cross, Max.Cross}: Minimum and maximum of the cross-loadings.
-\item \strong{Perc.Cross.≤.cutoff, Perc.Cross.>.cutoff}: If \code{cutoff} is specified, these show the percentage of cross-loadings ≤ or > that threshold.
+\item \strong{Perc.Cross.≤.cutoff, Perc.Cross.>.cutoff}: If \code{cutoff} is specified, these show the percentage of cross-loadings <= or > that threshold.
 \item \strong{n.Items}: Number of items assigned to each factor.
 }
 
