@@ -34,7 +34,7 @@ complexity based on squared loadings. \code{SSindices()} extends the concept by 
 a user-defined binary target structure, allowing explicit evaluation of how well the factor
 solution conforms to theoretical expectations.
 
-\strong{Interpretation of the indices:}
+\strong{Suggestive interpretation of the indices:}
 \itemize{
 \item \code{SStarget}: Proportion of total variance that is aligned with the expected structure.
 Higher values indicate clearer factor-item alignment.
@@ -44,20 +44,20 @@ Reflects the degree of noise or factorial complexity in the solution.
 It indicates how dominant the expected structure is over residual complexity.
 }
 
-\strong{Interpreting SSntarget (cross-loading contribution):}
+\strong{Suggestive interpretation for SSntarget (cross-loading contribution):}
 \itemize{
-\item \code{≈ 0.00}: Perfectly simple structure (each item loads clearly on only one factor).
+\item \code{~= 0.00}: Perfectly simple structure (each item loads clearly on only one factor).
 \item \code{< 0.05}: Very good factor differentiation.
 \item \code{0.05 – 0.15}: Moderate cross-loading complexity.
 \item \code{> 0.15}: Substantial interdependence or noise across factors.
 }
 
-\strong{Interpreting SSratio:}
+\strong{Suggestive interpretion for SSratio:}
 \itemize{
 \item \code{> 4}: Excellent structure – target pattern clearly dominates.
 \item \code{2 – 4}: Good structure with acceptable noise.
 \item \code{1 – 2}: Target and cross-loadings are comparable – caution advised.
-\item \code{≈ 1}: Equal contribution – borderline structure.
+\item \code{~= 1}: Equal contribution – borderline structure.
 \item \code{< 1}: Cross-loadings dominate – weak or misaligned structure.
 }
 }

@@ -54,7 +54,6 @@
 #'
 #' BSI(ex1_data)
 #'
-#' @author Cesar Merino-Soto
 #' @export
 BSI <- function(data) {
   # Validate input

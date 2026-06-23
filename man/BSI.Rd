@@ -62,6 +62,3 @@ Lorenzo-Seva, U. (2003). A factor simplicity index.
 \emph{Psychometrika, 68}(1), 49--60.
 https://doi.org/10.1007/BF02296652
 }
-\author{
-Cesar Merino-Soto
-}

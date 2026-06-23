@@ -12,7 +12,7 @@
 #' }
 #'
 #' @details
-#' Hofman’s complexity index for factors evaluates how many items contribute to the definition of each factor. A value close to 1 indicates that a factor is well-defined by only one item (unidimensional), while values closer to p indicate higher complexity.
+#' Hofmann’s complexity index for factors evaluates how many items contribute to the definition of each factor. A value close to 1 indicates that a factor is well-defined by only one item (unidimensional), while values closer to p indicate higher complexity.
 #' 
 #' The formula is based on the sum of squared and quartic factor loadings, and the result is normalized so that higher complexity values suggest factors defined by multiple items.
 #'
@@ -21,7 +21,7 @@
 #' In this case, when calculating the complexity at the factor level, we assess how many items significantly contribute to each 
 #' factor. In a latent dimension with known structure, the resulting value should be equal or close to the number of items expected in this dimension. Values different from the expected 
 #' number of items suggests there are items with significant loadings or items close to or in the hyperplane. As more items contribute to the factor, 
-#' the value of **Choff** increases, reaching p (the number of items) when all items significantly contribute to the factor.
+#' the value of **Chof** increases, reaching p (the number of items) when all items significantly contribute to the factor.
 
 #' @examples
 #' # Example factor loading matrix
@@ -63,10 +63,10 @@ HofmannFac <- function(data) {
   hoffman_denom <- rowSums(datos_cuarta)
   
   # Step 6: Calculate Choff for the factors (factor complexity)
-  Choff <- hoffman_num / hoffman_denom
+  Chof <- hoffman_num / hoffman_denom
   
   # Create a data frame with the results (only Choff)
-  resultado <- data.frame(Choff = Choff)
+  resultado <- data.frame(Chof = Chof)
   
   return(resultado)
 }
