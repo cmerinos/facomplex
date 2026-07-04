@@ -31,12 +31,14 @@
 #' Code adapted from: \code{lazy.fa::LS_index}
 #'
 #' @examples
-#' L <- matrix(c(
+#' \donttest{L <- matrix(c(
 #'   0.6, 0.2,
 #'   0.5, 0.3,
 #'   0.1, 0.7
 #' ), nrow = 3, byrow = TRUE)
+#' 
 #' LSIglobal(L)
+#'}
 #'
 #' @export
 LSIglobal <- function(loadings) {

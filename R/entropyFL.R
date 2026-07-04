@@ -66,17 +66,6 @@
 #' while values near or above 0.80 may indicate multidimensionality or poor simple structure.
 #' Interpretation should always be contextualized using additional indices, visual inspection of loadings, and substantive theory.
 #' 
-#' @examples
-#' # Example: items with different factorial complexity
-#' loadings <- matrix(c(
-#'   0.7, 0.0, 0.01,
-#'   0.1, 0.2, 0.15,
-#'   0.4, 0.8, 0.2,
-#'   0.4, 0.4, 0.4
-#' ), nrow = 4, byrow = TRUE)
-#'
-#' entropyFL(loadings, normalized = TRUE, scaled = TRUE, bounded = TRUE)
-#'
 #' @references
 #' Shannon, C. E. (1948). A mathematical theory of communication. \emph{Bell System Technical Journal}, 27(3), 379--423. \doi{10.1002/j.1538-7305.1948.tb00917.x}
 #'
@@ -86,6 +75,18 @@
 #'
 #' Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika}, 68(1), 49-60. \doi{10.1007/BF02296652}
 #' 
+#' @examples
+#' # Example: items with different factorial complexity
+#' \donttest{loadings <- matrix(c(
+#'   0.7, 0.0, 0.01,
+#'   0.1, 0.2, 0.15,
+#'   0.4, 0.8, 0.2,
+#'   0.4, 0.4, 0.4
+#' ), nrow = 4, byrow = TRUE)
+#' 
+#' entropyFL(loadings, normalized = TRUE, scaled = TRUE, bounded = TRUE)
+#' }
+#'
 #' @export
 entropyFL <- function(loadings_matrix, base = 2, normalized = TRUE, scaled = FALSE, bounded = TRUE, nd = 3) {
   if (!(is.matrix(loadings_matrix) || is.data.frame(loadings_matrix))) {

@@ -41,9 +41,10 @@
 #'
 #' @examples
 #' # Simulated example
-#' set.seed(123)
+#' \donttest{set.seed(123)
 #' loadings <- matrix(runif(30, -1, 1), nrow = 10, ncol = 3)
 #' KC(loadings)
+#' }
 #'
 #' @export
 KC <- function(data, b = 4) {

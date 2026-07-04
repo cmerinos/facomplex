@@ -50,8 +50,11 @@
 #'   \item \code{< 1}: Cross-loadings dominate – weak or misaligned structure.
 #' }
 #'
+#' @references
+#' Thurstone, L. L. (1947). *Multiple factor analysis*. University of Chicago Press.
+#' 
 #' @examples
-#' Lx <- matrix(c(
+#' \donttest{Lx <- matrix(c(
 #'   0.6, 0.2,
 #'   0.5, 0.3,
 #'   0.1, 0.7
@@ -64,11 +67,11 @@
 #' ), nrow = 3, byrow = TRUE)
 #'
 #' SSindices(Lx, Tx)
-#' SSindices(Lx, Tx, per.factor = TRUE)
-#'
-#' @references
-#' Thurstone, L. L. (1947). *Multiple factor analysis*. University of Chicago Press.
 #' 
+#' SSindices(Lx, Tx, per.factor = TRUE)
+#'}
+#'
+
 #' @export
 SSindices <- function(loadings, target, per.factor = FALSE) {
   

@@ -34,7 +34,7 @@ the value of \strong{Chof} increases, reaching p (the number of items) when all 
 }
 \examples{
 # Example factor loading matrix
-ex1.data <- data.frame(
+ \donttest{ex1.data <- data.frame(
   F1 = c(0.536, 0.708, 0.600, 0.673, 0.767, 0.481, -0.177, 0.209, -0.097, -0.115, 0.047, 0.024),
   F2 = c(-0.11, 0.026, 0.076, 0.011, -0.16, 0.106, 0.668, 0.438, 0.809, 0.167, 0.128, 0.041),
   F3 = c(-0.1, 0.036, 0.086, 0.021, -0.15, 0.116, 0.678, 0.448, 0.819, 0.577, 0.738, 0.751)
@@ -45,6 +45,7 @@ results_factor <- HofmannFac(ex1.data)
 
 # View results
 print(results_factor)
+}
 
 }
 \references{

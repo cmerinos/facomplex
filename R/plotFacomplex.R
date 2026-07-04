@@ -21,7 +21,7 @@ utils::globalVariables(".data")
 #'
 #' @examples
 #' # Data frame of factor loadings: 3 factors, 12 items; ESEM solution from published article
-#' ex1_fl <- data.frame(
+#' \donttest{ex1_fl <- data.frame(
 #' F1 = c(0.536, 0.708, 0.600, 0.673, 0.767, 0.481, -0.177, 0.209, -0.097, -0.115, 0.047, 0.024),
 #' F2 = c(-0.110, 0.026, 0.076, 0.011, -0.160, 0.106, 0.668, 0.438, 0.809, 0.167, 0.128, 0.041),
 #' F3 = c(-0.100, 0.036, 0.086, 0.021, -0.150, 0.116, 0.678, 0.448, 0.819, 0.577, 0.738, 0.751))
@@ -36,8 +36,7 @@ utils::globalVariables(".data")
 #' plotFacomplex(
 #'   data = FSIout$IFS,
 #'   item.col = "Items",
-#'   value.col = "IFS"
-#' )
+#'   value.col = "IFS")
 #'
 #' # Customizing options:
 #' plotFacomplex(
@@ -48,11 +47,11 @@ utils::globalVariables(".data")
 #'   reverse.items = TRUE,
 #'   theme = "classic",
 #'   bar.color = "darkgreen",
-#'   threshold.line = 0.90
-#' )
+#'   threshold.line = 0.90)
+#'   }
 #'
 #' # This will trigger an error if value.col is missing:
-#' \dontrun{
+#' \donttest{
 #' plotFacomplex(data = FSIout$IFS)  # Error: 'value.col' is required
 #' }
 #' 

@@ -62,7 +62,7 @@ It indicates how dominant the expected structure is over residual complexity.
 }
 }
 \examples{
-Lx <- matrix(c(
+\donttest{Lx <- matrix(c(
   0.6, 0.2,
   0.5, 0.3,
   0.1, 0.7
@@ -75,7 +75,9 @@ Tx <- matrix(c(
 ), nrow = 3, byrow = TRUE)
 
 SSindices(Lx, Tx)
+
 SSindices(Lx, Tx, per.factor = TRUE)
+}
 
 }
 \references{

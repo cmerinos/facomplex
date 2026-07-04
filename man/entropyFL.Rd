@@ -88,7 +88,7 @@ If \code{bounded = TRUE}, the function truncates those values to stay within 0 t
 }
 \examples{
 # Example: items with different factorial complexity
-loadings <- matrix(c(
+\donttest{loadings <- matrix(c(
   0.7, 0.0, 0.01,
   0.1, 0.2, 0.15,
   0.4, 0.8, 0.2,
@@ -96,6 +96,7 @@ loadings <- matrix(c(
 ), nrow = 4, byrow = TRUE)
 
 entropyFL(loadings, normalized = TRUE, scaled = TRUE, bounded = TRUE)
+}
 
 }
 \references{
