@@ -4,29 +4,28 @@
 \alias{KC}
 \title{KC: Kaiser-Cerny Simplicity Index and Ideal Hyperplane Count}
 \usage{
-KC(data, b = 4, verbose = TRUE)
+KC(data, b = 4)
 }
 \arguments{
 \item{data}{A \code{data.frame} or numeric \code{matrix} of factor loadings, where rows represent items (variables)
 and columns represent factors.}
 
 \item{b}{A positive numeric value for the power parameter in the Kaiser-Cerny formula. Default is \code{4}.}
-
-\item{verbose}{Logical. If \code{TRUE} (default), prints results to the console. If \code{FALSE}, returns results silently.}
 }
 \value{
-An object of class \code{"KC"} (invisibly if \code{verbose = TRUE}), which is a list containing:
+An object of class \code{"KC"} containing:
 \itemize{
 \item \code{fj}: A numeric vector with the Kaiser-Cerny simplicity index for each factor.
 \item \code{ideal_hyperplane_count}: The ideal hyperplane count.
+\item \code{m}: Number of items.
+\item \code{p}: Number of factors.
 \item \code{b}: The power parameter used.
-\item \code{data}: The original input data (for reference).
 }
 }
 \description{
 Computes the Kaiser-Cerny (1978) criterion for factorial simplicity based on a power function
 of the absolute loadings (inspired by Kendall & Stuart, 1969). Also returns the ideal hyperplane count
-as an expected benchmark of factorial parsimony (Cattell, 1952).
+as an expected benchmark of factorial parsimony (Catell, 1952).
 }
 \details{
 The Kaiser-Cerny simplicity index is computed for each factor \code{j} using the formula:
@@ -49,16 +48,14 @@ required for a perfectly simple structure in factor analysis.
 # Simulated example
 \donttest{set.seed(123)
 loadings <- matrix(runif(30, -1, 1), nrow = 10, ncol = 3)
-
-res <- KC(loadings)
-
-res  # print the results
+KC(loadings)
 }
 
 }
 \references{
 Cattell, R. B. (1952). Factor analysis: an introduction and manual for the psychologist and social scientist. Oxford,
 England: Harper.
+
 Kaiser, H. F., & Cerny, B. A. (1978). Casey's Method For Fitting Hyperplanes From An Intermediate Orthomax Solution.
 \emph{Multivariate Behavioral Research}, 13(4), 395-401. https://doi.org/10.1207/s15327906mbr1304_2
 

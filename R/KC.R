@@ -2,12 +2,11 @@
 #'
 #' Computes the Kaiser-Cerny (1978) criterion for factorial simplicity based on a power function
 #' of the absolute loadings (inspired by Kendall & Stuart, 1969). Also returns the ideal hyperplane count 
-#' as an expected benchmark of factorial parsimony (Cattell, 1952).
+#' as an expected benchmark of factorial parsimony (Catell, 1952).
 #'
 #' @param data A \code{data.frame} or numeric \code{matrix} of factor loadings, where rows represent items (variables) 
 #' and columns represent factors.
 #' @param b A positive numeric value for the power parameter in the Kaiser-Cerny formula. Default is \code{4}.
-#' @param verbose Logical. If \code{TRUE} (default), prints results to the console. If \code{FALSE}, returns results silently.
 #'
 #' @details
 #' The Kaiser-Cerny simplicity index is computed for each factor \code{j} using the formula:
@@ -27,17 +26,19 @@
 #' required for a perfectly simple structure in factor analysis.
 #'
 #' @return
-#' An object of class \code{"KC"} (invisibly if \code{verbose = TRUE}), which is a list containing:
+#' An object of class \code{"KC"} containing:
 #' \itemize{
 #'   \item \code{fj}: A numeric vector with the Kaiser-Cerny simplicity index for each factor.
 #'   \item \code{ideal_hyperplane_count}: The ideal hyperplane count.
+#'   \item \code{m}: Number of items.
+#'   \item \code{p}: Number of factors.
 #'   \item \code{b}: The power parameter used.
-#'   \item \code{data}: The original input data (for reference).
 #' }
 #'
 #' @references
 #' Cattell, R. B. (1952). Factor analysis: an introduction and manual for the psychologist and social scientist. Oxford, 
 #' England: Harper.
+#' 
 #' Kaiser, H. F., & Cerny, B. A. (1978). Casey's Method For Fitting Hyperplanes From An Intermediate Orthomax Solution. 
 #' \emph{Multivariate Behavioral Research}, 13(4), 395-401. https://doi.org/10.1207/s15327906mbr1304_2
 #' 
@@ -47,15 +48,11 @@
 #' # Simulated example
 #' \donttest{set.seed(123)
 #' loadings <- matrix(runif(30, -1, 1), nrow = 10, ncol = 3)
-#' 
-#' res <- KC(loadings)
-#' 
-#' res  # print the results
+#' KC(loadings)
 #' }
 #'
 #' @export
-KC <- function(data, b = 4, verbose = TRUE) {
-  
+KC <- function(data, b = 4) {
   # Ensure numeric matrix
   if (!is.matrix(data)) {
     data <- as.matrix(data)
@@ -74,24 +71,21 @@ KC <- function(data, b = 4, verbose = TRUE) {
     term^(b / 2)
   })
   
+  names(fj_values) <- paste0("F", seq_along(fj_values))
+  
   ideal_hyperplane_count <- m * (p - 1)
   
-  # Prepare the output object (invisible)
-  out <- list(
+  # Create object of class "KC"
+  result <- list(
     fj = fj_values,
     ideal_hyperplane_count = ideal_hyperplane_count,
-    b = b,
-    data = data
+    m = m,
+    p = p,
+    b = b
   )
-  class(out) <- "KC"
   
-  # Print if verbose
-  if (verbose) {
-    print(out)
-  }
-  
-  # Return invisibly so the object can be assigned
-  invisible(out)
+  class(result) <- "KC"
+  result
 }
 
 #' Print method for KC objects
@@ -103,7 +97,7 @@ print.KC <- function(x, ...) {
   cat("Kaiser-Cerny Factor Simplicity Analysis:\n")
   cat("- Threshold f_j for hyperplane inclusion (per factor):\n")
   for (i in seq_along(x$fj)) {
-    cat(paste0("  F", i, ": ", round(x$fj[i], 6), "\n"))
+    cat(paste0("  ", names(x$fj)[i], ": ", round(x$fj[i], 6), "\n"))
   }
   cat("\n- Ideal hyperplane count: ", x$ideal_hyperplane_count, "\n")
   invisible(x)
