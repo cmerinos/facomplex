@@ -77,8 +77,8 @@ plotFacomplex(
   }
 
 # This will trigger an error if value.col is missing:
-\donttest{
-plotFacomplex(data = FSIout$IFS)  # Error: 'value.col' is required
-}
+#
+# plotFacomplex(data = FSIout$IFS)  # Error: 'value.col' is required
+#
 
 }

@@ -51,9 +51,9 @@ utils::globalVariables(".data")
 #'   }
 #'
 #' # This will trigger an error if value.col is missing:
-#' \donttest{
-#' plotFacomplex(data = FSIout$IFS)  # Error: 'value.col' is required
-#' }
+#' #
+#' # plotFacomplex(data = FSIout$IFS)  # Error: 'value.col' is required
+#' #
 #' 
 #' @export
 plotFacomplex <- function(data,
@@ -107,7 +107,7 @@ plotFacomplex <- function(data,
   # Linea de umbral
   if (!is.null(threshold.line)) {
     p <- p +
-      ggplot2::geom_hline(yintercept = threshold.line, linetype = "dashed", color = threshold.color, size = 1) +
+      ggplot2::geom_hline(yintercept = threshold.line, linetype = "dashed", color = threshold.color, linewidth = 1) +
       ggplot2::annotate("text", x = 1, y = threshold.line,
                         label = paste("Threshold =", threshold.line),
                         vjust = -1, color = threshold.color)
