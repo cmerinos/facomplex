@@ -4,25 +4,29 @@
 \alias{KC}
 \title{KC: Kaiser-Cerny Simplicity Index and Ideal Hyperplane Count}
 \usage{
-KC(data, b = 4)
+KC(data, b = 4, verbose = TRUE)
 }
 \arguments{
 \item{data}{A \code{data.frame} or numeric \code{matrix} of factor loadings, where rows represent items (variables)
 and columns represent factors.}
 
 \item{b}{A positive numeric value for the power parameter in the Kaiser-Cerny formula. Default is \code{4}.}
+
+\item{verbose}{Logical. If \code{TRUE} (default), prints results to the console. If \code{FALSE}, returns results silently.}
 }
 \value{
-No return value. The function prints:
+An object of class \code{"KC"} (invisibly if \code{verbose = TRUE}), which is a list containing:
 \itemize{
-\item The Kaiser-Cerny simplicity index \code{f_j} for each factor.
-\item The ideal hyperplane count \code{m(p - 1)}.
+\item \code{fj}: A numeric vector with the Kaiser-Cerny simplicity index for each factor.
+\item \code{ideal_hyperplane_count}: The ideal hyperplane count.
+\item \code{b}: The power parameter used.
+\item \code{data}: The original input data (for reference).
 }
 }
 \description{
 Computes the Kaiser-Cerny (1978) criterion for factorial simplicity based on a power function
 of the absolute loadings (inspired by Kendall & Stuart, 1969). Also returns the ideal hyperplane count
-as an expected benchmark of factorial parsimony (Catell, 1952).
+as an expected benchmark of factorial parsimony (Cattell, 1952).
 }
 \details{
 The Kaiser-Cerny simplicity index is computed for each factor \code{j} using the formula:
@@ -45,7 +49,10 @@ required for a perfectly simple structure in factor analysis.
 # Simulated example
 \donttest{set.seed(123)
 loadings <- matrix(runif(30, -1, 1), nrow = 10, ncol = 3)
-KC(loadings)
+
+res <- KC(loadings)
+
+res  # print the results
 }
 
 }
