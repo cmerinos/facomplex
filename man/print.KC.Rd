@@ -11,6 +11,9 @@
 
 \item{...}{Additional arguments (not used).}
 }
+\value{
+Invisibly returns the input object \code{x} (called for side effects of printing).
+}
 \description{
 Print method for KC objects
 }
