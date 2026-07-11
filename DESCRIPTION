@@ -1,6 +1,6 @@
 Package: facomplex
 Title: Methods for Assessing Factor Complexity in Factor Analysis Solutions
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: c(
   person("Merino-Soto", "Cesar A.", 
          email = "sikayax@yahoo.com.ar", 
