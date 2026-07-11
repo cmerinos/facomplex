@@ -92,6 +92,7 @@ KC <- function(data, b = 4) {
 #'
 #' @param x An object of class \code{"KC"}.
 #' @param ... Additional arguments (not used).
+#' @return Invisibly returns the input object \code{x} (called for side effects of printing).
 #' @export
 print.KC <- function(x, ...) {
   cat("Kaiser-Cerny Factor Simplicity Analysis:\n")
