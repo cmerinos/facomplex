@@ -1,249 +1,218 @@
-#' @title Entropy Index for Factor Simplicity (Exploratory and Confirmatory)
+#' Entropy Index for Factor Simplicity
 #'
 #' @description
-#' Computes entropy-based indices to quantify the factorial simplicity or complexity 
-#' of an Exploratory Factor Analysis (EFA) or confirmatory solution (e.g., target rotations, ESEM).
-#' The entropy is calculated from the squared factor loadings, interpreted as proportional 
-#' contributions of each factor to an item (or vice versa).
-#' 
-#' When the input matrix corresponds to **network loadings (NT)** obtained from 
-#' Exploratory Graph Analysis (EGA), this index serves as a measure of 
-#' **node-community assignment clarity**. Low entropy indicates that nodes load 
-#' predominantly on a single community (simple structure), whereas high entropy 
-#' suggests diffuse or ambiguous community membership, complementing the global 
-#' fit assessment provided by the Total Entropy Fit Index (TEFI).
+#' Computes entropy‑based indices to quantify factorial simplicity or complexity
+#' from a matrix of factor loadings (or network loadings from EGA).
+#' Two modes are available: exploratory (\code{type = "expl"}) and confirmatory
+#' (\code{type = "conf"}). In confirmatory mode, a target vector must be provided
+#' indicating the expected factor for each item; entropy is then computed on a
+#' binary distribution (target vs. non‑target variance).
 #'
-#' @param loadings_matrix A numeric matrix or data frame of factor loadings, where rows represent items and columns represent factors.
-#' @param base The logarithmic base used to compute entropy. Default is \code{2}, corresponding to entropy in bits.
-#' @param normalized Logical. If \code{TRUE} (default), entropy values are normalized to range from 0 to 1.
-#' @param nd Integer. Number of decimal places to round the results. Default is \code{3}. Use \code{NULL} for no rounding.
-#' @param type Character string indicating the mode: \code{"expl"} for exploratory (entropy over all factors/items) 
-#'        or \code{"conf"} for confirmatory (entropy collapses into target vs non-target categories). 
-#'        Default is \code{"expl"}.
-#' @param target A numeric vector of length \code{nrow(loadings_matrix)} indicating, for each item, 
-#'        the factor index (1 to ncol(loadings_matrix)) to which it is expected to belong. 
-#'        Required when \code{type = "conf"}.
+#' The function returns entropy values per item, per factor, and globally.
+#' Entropy can be normalized (divided by the maximum possible entropy) to
+#' obtain values between 0 and 1.
+#'
+#' @param loadings_matrix A numeric matrix of factor loadings (rows = items, columns = factors).
+#' @param base Logarithmic base (default \code{2}, entropy in bits).
+#' @param normalized Logical. If \code{TRUE}, entropy is divided by the maximum
+#'        possible entropy: for items \eqn{\log(k)} (or \eqn{\log(2)} in conf mode),
+#'        for factors \eqn{\log(n)} (or \eqn{\log(2)} in conf mode),
+#'        and for global \eqn{\log(n \cdot k)}. Default is \code{TRUE}.
+#' @param type Character. Either \code{"expl"} (exploratory, default) or \code{"conf"} (confirmatory).
+#' @param target Integer vector of length \code{nrow(loadings_matrix)}. Required when
+#'        \code{type = "conf"}. Each entry indicates the factor (column index) that
+#'        the item is expected to load on. Values must be between 1 and number of factors.
 #'
 #' @details
-#' The function assumes that the squared factor loadings (\eqn{\lambda_{ij}^2}) represent the proportion of common variance
-#' that item \eqn{i} shares with factor \eqn{j}. These are normalized within rows or columns to form pseudo-probability distributions,
-#' over which Shannon entropy is computed.
+#' In exploratory mode, entropy for an item is computed from the normalized squared
+#' loadings across all factors. In confirmatory mode, the squared loadings are
+#' collapsed into two categories: the target factor and all others combined.
+#' Similarly for factors: target items vs. non‑target items.
 #'
-#' \strong{Exploratory mode (\code{type = "expl"}):}
-#' \itemize{
-#'   \item Entropy by item: \eqn{H_i = -\sum_{j=1}^{k} p_{ij} \log(p_{ij})}, where \eqn{p_{ij} = \lambda_{ij}^2 / \sum_j \lambda_{ij}^2}.
-#'   \item Entropy by factor: \eqn{H_f = -\sum_{i=1}^{n} q_{ij} \log(q_{ij})}, where \eqn{q_{ij} = \lambda_{ij}^2 / \sum_i \lambda_{ij}^2}.
-#'   \item Normalization: divide by \eqn{\log(k)} for items, and by \eqn{\log(n)} for factors.
-#' }
-#'
-#' \strong{Confirmatory mode (\code{type = "conf"}):}
-#' For each item, its squared loadings are collapsed into two categories: the target factor (given by \code{target}) and the sum of all other factors.
-#' Likewise, for each factor, its squared loadings are collapsed into target items (those assigned to that factor) vs. non-target items.
-#' Entropy is then computed over these two proportions.
-#' \itemize{
-#'   \item Item entropy: \eqn{H_i^{conf} = - (p_t \log(p_t) + (1-p_t) \log(1-p_t))}, with \eqn{p_t = \lambda_{i,t}^2 / \sum_j \lambda_{ij}^2}.
-#'   \item Factor entropy: \eqn{H_f^{conf} = - (q_t \log(q_t) + (1-q_t) \log(1-q_t))}, with \eqn{q_t = \sum_{i \in target} \lambda_{ij}^2 / \sum_i \lambda_{ij}^2}.
-#'   \item Normalization (if \code{normalized = TRUE}) divides by \eqn{\log(2)}.
-#' }
-#'
-#' \strong{Total entropy:}
-#' \itemize{
-#'   \item \code{H_total_items}: Average entropy across items.
-#'   \item \code{H_total_factors}: Average entropy across factors.
-#' }
+#' The global entropy is computed on the entire matrix of squared loadings:
+#' \deqn{p_{ij} = \frac{\lambda_{ij}^2}{\sum_i \sum_j \lambda_{ij}^2}}
+#' \deqn{H_{global} = -\sum_i \sum_j p_{ij} \log(p_{ij})}
+#' and normalized by \eqn{\log(n \cdot k)} if \code{normalized = TRUE}.
 #'
 #' \strong{Interpretation:}
 #' \itemize{
-#'   \item Values near 0 indicate highly simple structures (loadings concentrated in few components).  
-#'   \item Values near 1 suggest factorial ambiguity or complexity.  
-#'   \item Useful to compare different rotation methods, number of factors, or loading patterns.
+#'   \item \strong{Item entropy (\code{H_i})}: Low values (near 0) indicate that the item loads predominantly on a single factor (simple structure). High values (near 1) suggest cross‑loadings or factorial complexity.
+#'   \item \strong{Factor entropy (\code{H_f})}: Low values indicate that the factor is defined by few items (specific factor). High values suggest that the factor is broadly dispersed across many items (general or diffuse factor).
+#'   \item \strong{Global entropy (\code{H_total})}: Reflects the overall dispersion of variance across all matrix cells. A value near 0 indicates that variance is concentrated in very few cells (e.g., a sparse loading matrix); a value near 1 suggests a uniform distribution across all cells. This measure is not directly comparable to the item or factor entropies because it aggregates across all cells.
 #' }
 #'
-#' @return A list with:
+#' When applied to network loadings (NT) from EGA, this index quantifies the
+#' clarity of node‑community assignment. Low entropy indicates that nodes load
+#' predominantly on a single community (simple structure), high entropy suggests
+#' diffuse or ambiguous membership, complementing the Total Entropy Fit Index (TEFI).
+#'
+#' @return A list of data frames:
 #' \describe{
-#'   \item{\code{H_i}}{A numeric vector with the entropy for each item (normalized if requested).}
-#'   \item{\code{H_f}}{A numeric vector with the entropy for each factor (normalized if requested).}
-#'   \item{\code{H_total_items}}{The average entropy across items.}
-#'   \item{\code{H_total_factors}}{The average entropy across factors.}
-#'   \item{\code{type}}{Character indicating the mode used.}
-#'   \item{\code{normalized}}{Logical indicating whether values are normalized.}
+#'   \item{\code{item}}{Data frame with columns \code{item} (names) and \code{entropy}.}
+#'   \item{\code{factor}}{Data frame with columns \code{factor} (names) and \code{entropy}.}
+#'   \item{\code{total}}{Data frame with a single row: \code{metric = "global"} and \code{entropy}.}
 #' }
+#' If \code{normalized = FALSE}, the raw entropy values are returned; otherwise,
+#' normalized values (0–1) are returned.
+#'
+#' @references
+#' Shannon, C. E. (1948). A mathematical theory of communication. \emph{Bell System Technical Journal}, 27(3), 379–423.
+#' Hofmann, R. J. (1978). Complexity and simplicity as objective indices descriptive of factor solutions. \emph{Multivariate Behavioral Research}, 13(2), 247–250.
+#' Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika}, 68(1), 49–60.
+#' McCammon, R. B. (1966). Minimum entropy criterion for factor analysis. \emph{Journal of the ACM}, 13(2), 247–250.
 #'
 #' @examples
 #' \donttest{
-#' # --- Exploratory example ---
-#' loadings_expl <- matrix(c(
-#'   0.7, 0.0, 0.01,  # simple item
-#'   0.1, 0.2, 0.15,  # moderately complex
-#'   0.4, 0.8, 0.2,   # complex with a dominant factor
-#'   0.4, 0.4, 0.4    # maximally complex (equal loadings)
-#' ), nrow = 4, byrow = TRUE)
-#' 
-#' entropyFL(loadings_expl, type = "expl")
+#' # Exploratory mode
+#' loadings_expl <- matrix(c(0.7,0.1,0.1, 0.2,0.8,0.1, 0.3,0.3,0.9), nrow=3, byrow=TRUE)
+#' rownames(loadings_expl) <- paste0("Item", 1:3)
+#' colnames(loadings_expl) <- paste0("F", 1:3)
 #'
-#' # --- Confirmatory example ---
-#' # Suppose 3 factors, first 3 items target factor 1, next 2 target factor 2, last 3 target factor 3
-#' target_vec <- c(1,1,1, 2,2, 3,3,3)
-#' entropyFL(loadings_expl, type = "conf", target = target_vec)
+#' entropyFL(loadings_expl, type = "expl", normalized = TRUE)
+#'
+#' # Confirmatory mode
+#' loadings_conf <- loadings_expl
+#' target <- c(1, 2, 3)
+#' entropyFL(loadings_conf, type = "conf", target = target, normalized = FALSE)
 #' }
 #'
-#' @references
-#' Shannon, C. E. (1948). A mathematical theory of communication. \emph{Bell System Technical Journal}, 27(3), 379--423.  
-#' Hofmann, R. J. (1978). Complexity and simplicity as objective indices descriptive of factor solutions. \emph{Multivariate Behavioral Research}, 13(2), 247--250.  
-#' Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika}, 68(1), 49--60. \doi{10.1007/BF02296652}
-#' McCammon, R. B. (1966). Minimum entropy criterion for factor analysis. \emph{Nature}, 211, 146-148.
-#'
 #' @export
-entropyFL2 <- function(loadings_matrix, 
-                      base = 2, 
-                      normalized = TRUE, 
-                      nd = 3,
+entropyFL2 <- function(loadings_matrix,
+                      base = 2,
+                      normalized = TRUE,
                       type = c("expl", "conf"),
                       target = NULL) {
   
-  # --- Basic checks ---
-  if (!is.matrix(loadings_matrix)) {
-    loadings_matrix <- as.matrix(loadings_matrix)
-  }
-  if (!is.numeric(loadings_matrix)) {
-    stop("loadings_matrix must be numeric.")
-  }
+  # ---- Validaciones ----
+  if (!is.matrix(loadings_matrix)) stop("'loadings_matrix' must be a matrix.")
+  n_items <- nrow(loadings_matrix)
+  n_factors <- ncol(loadings_matrix)
+  if (n_items < 1 || n_factors < 1) stop("Matrix must have at least one row and one column.")
   
   type <- match.arg(type)
   
-  n_items <- nrow(loadings_matrix)
-  n_factors <- ncol(loadings_matrix)
-  
   if (type == "conf") {
-    if (is.null(target)) {
-      stop("When type = 'conf', 'target' must be provided.")
-    }
-    if (length(target) != n_items) {
-      stop("'target' must have length equal to number of rows in loadings_matrix.")
+    if (is.null(target)) stop("For type='conf', 'target' must be provided.")
+    if (!is.numeric(target) || length(target) != n_items) {
+      stop("'target' must be a numeric vector of length nrow(loadings_matrix).")
     }
     if (any(target < 1 | target > n_factors)) {
       stop("'target' values must be between 1 and ncol(loadings_matrix).")
     }
-    # Convert to integer for safety
-    target <- as.integer(target)
   }
   
-  # --- Squared loadings ---
+  # ---- Obtener nombres ----
+  item_names <- rownames(loadings_matrix)
+  if (is.null(item_names) || all(item_names == "")) {
+    item_names <- paste0("Item", seq_len(n_items))
+  }
+  factor_names <- colnames(loadings_matrix)
+  if (is.null(factor_names) || all(factor_names == "")) {
+    factor_names <- paste0("F", seq_len(n_factors))
+  }
+  
+  # ---- Cargas al cuadrado ----
   load_sq <- loadings_matrix^2
   
-  # --- Placeholders for results ---
-  H_i <- numeric(n_items)
-  H_f <- numeric(n_factors)
+  # ---- Funciones auxiliares ----
+  entropy_vec <- function(p, base) {
+    p <- p[p > 0]
+    if (length(p) == 0) return(0)
+    -sum(p * log(p, base = base))
+  }
   
-  # --- Compute entropies ---
+  entropy_binary <- function(p, base) {
+    if (p <= 0 || p >= 1) return(0)
+    - (p * log(p, base) + (1 - p) * log(1 - p, base))
+  }
   
+  # ---- Entropía global (siempre sobre toda la matriz) ----
+  total_ssq <- sum(load_sq)
+  if (total_ssq == 0) {
+    H_global_raw <- 0
+    H_global <- 0
+  } else {
+    p_global <- load_sq / total_ssq
+    H_global_raw <- entropy_vec(as.vector(p_global), base)
+    H_max_global <- log(n_items * n_factors, base = base)
+    H_global <- if (normalized) H_global_raw / H_max_global else H_global_raw
+  }
+  
+  # ---- Modo EXPLORATORIO ----
   if (type == "expl") {
-    # ----- EXPLORATORY MODE -----
-    
-    # Row-wise (items)
+    # ---- Entropía por ítem ----
     row_sums <- rowSums(load_sq)
-    pij <- sweep(load_sq, 1, row_sums, FUN = "/")
-    pij[is.nan(pij)] <- 0   # handles zero-sum rows
-    H_i <- -rowSums(ifelse(pij > 0, pij * log(pij, base = base), 0), na.rm = TRUE)
-    if (normalized) {
-      H_i <- H_i / log(n_factors, base = base)
-    }
+    p_items <- sweep(load_sq, 1, row_sums, FUN = "/")
+    p_items[is.nan(p_items)] <- 0
+    H_i_raw <- apply(p_items, 1, entropy_vec, base = base)
+    H_max_items <- log(n_factors, base = base)
+    H_i <- if (normalized) H_i_raw / H_max_items else H_i_raw
     
-    # Column-wise (factors)
+    # ---- Entropía por factor ----
     col_sums <- colSums(load_sq)
-    qij <- sweep(load_sq, 2, col_sums, FUN = "/")
-    qij[is.nan(qij)] <- 0
-    H_f <- -colSums(ifelse(qij > 0, qij * log(qij, base = base), 0), na.rm = TRUE)
-    if (normalized) {
-      H_f <- H_f / log(n_items, base = base)
-    }
+    p_factors <- sweep(load_sq, 2, col_sums, FUN = "/")
+    p_factors[is.nan(p_factors)] <- 0
+    H_f_raw <- apply(p_factors, 2, entropy_vec, base = base)
+    H_max_factors <- log(n_items, base = base)
+    H_f <- if (normalized) H_f_raw / H_max_factors else H_f_raw
     
-  } else { # type == "conf"
-    # ----- CONFIRMATORY MODE -----
-    
-    # 1) Item entropies: target vs all other factors
+  } else { # ---- Modo CONFIRMATORIO ----
+    # ---- Entropía por ítem (target vs resto) ----
+    H_i_raw <- numeric(n_items)
     for (i in 1:n_items) {
-      t <- target[i]
-      p_target <- load_sq[i, t] / sum(load_sq[i, ])   # proportion on target
-      # If sum of row is zero, p_target = NaN; handle later
-      if (is.nan(p_target) || sum(load_sq[i, ]) == 0) {
-        H_i[i] <- NA
-        next
-      }
-      # p_other = 1 - p_target
-      p_other <- 1 - p_target
-      
-      # Entropy for two categories (target vs non-target)
-      if (p_target == 0 || p_target == 1) {
-        H_i[i] <- 0
+      target_col <- target[i]
+      sq_target <- load_sq[i, target_col]
+      sq_other <- sum(load_sq[i, -target_col])
+      total <- sq_target + sq_other
+      if (total == 0) {
+        H_i_raw[i] <- 0
       } else {
-        H_i[i] <- -(p_target * log(p_target, base = base) + p_other * log(p_other, base = base))
-      }
-      # Normalize (if requested)
-      if (normalized) {
-        H_i[i] <- H_i[i] / log(2, base = base)
+        p_t <- sq_target / total
+        H_i_raw[i] <- entropy_binary(p_t, base)
       }
     }
+    H_max_items <- log(2, base = base)
+    H_i <- if (normalized) H_i_raw / H_max_items else H_i_raw
     
-    # 2) Factor entropies: target items vs all other items
+    # ---- Entropía por factor (ítems target vs no-target) ----
+    H_f_raw <- numeric(n_factors)
     for (j in 1:n_factors) {
       target_items <- which(target == j)
-      if (length(target_items) == 0) {
-        H_f[j] <- NA
-        next
-      }
-      # Total sum of squares for this factor
-      total_ss <- sum(load_sq[, j])
-      if (total_ss == 0) {
-        H_f[j] <- NA
-        next
-      }
-      target_ss <- sum(load_sq[target_items, j])
-      q_target <- target_ss / total_ss
-      q_other <- 1 - q_target
-      
-      if (q_target == 0 || q_target == 1) {
-        H_f[j] <- 0
+      non_target_items <- setdiff(seq_len(n_items), target_items)
+      sq_target <- sum(load_sq[target_items, j])
+      sq_other <- sum(load_sq[non_target_items, j])
+      total <- sq_target + sq_other
+      if (total == 0) {
+        H_f_raw[j] <- 0
       } else {
-        H_f[j] <- -(q_target * log(q_target, base = base) + q_other * log(q_other, base = base))
-      }
-      if (normalized) {
-        H_f[j] <- H_f[j] / log(2, base = base)
+        p_t <- sq_target / total
+        H_f_raw[j] <- entropy_binary(p_t, base)
       }
     }
+    H_max_factors <- log(2, base = base)
+    H_f <- if (normalized) H_f_raw / H_max_factors else H_f_raw
   }
   
-  # --- Handle cases where n_factors == 1 or n_items == 1 (exploratory) ---
-  if (type == "expl") {
-    if (n_factors == 1 && normalized) {
-      H_i <- rep(0, n_items)
-    }
-    if (n_items == 1 && normalized) {
-      H_f <- rep(0, n_factors)
-    }
-  }
+  # ---- Construcción de la salida en data.frames ----
+  result <- list()
   
-  # --- Totals ---
-  H_total_items <- mean(H_i, na.rm = TRUE)
-  H_total_factors <- mean(H_f, na.rm = TRUE)
-  
-  # --- Rounding ---
-  if (!is.null(nd) && is.numeric(nd) && nd >= 0) {
-    H_i <- round(H_i, nd)
-    H_f <- round(H_f, nd)
-    H_total_items <- round(H_total_items, nd)
-    H_total_factors <- round(H_total_factors, nd)
-  }
-  
-  # --- Output ---
-  out <- list(
-    H_i = H_i,
-    H_f = H_f,
-    H_total_items = H_total_items,
-    H_total_factors = H_total_factors,
-    type = type,
-    normalized = normalized
+  result$item <- data.frame(
+    item = item_names,
+    entropy = round(H_i, 3),
+    stringsAsFactors = FALSE
   )
-  class(out) <- c("entropyFL", "list")
-  return(out)
+  
+  result$factor <- data.frame(
+    factor = factor_names,
+    entropy = round(H_f, 3),
+    stringsAsFactors = FALSE
+  )
+  
+  result$total <- data.frame(
+    metric = "global",
+    entropy = round(H_global, 3),
+    stringsAsFactors = FALSE
+  )
+  
+  return(result)
 }
