@@ -94,7 +94,7 @@
 #' McCammon, R. B. (1966). Minimum entropy criterion for factor analysis. \emph{Nature}, 211, 146-148.
 #'
 #' @export
-entropyFL <- function(loadings_matrix, 
+entropyFL2 <- function(loadings_matrix, 
                       base = 2, 
                       normalized = TRUE, 
                       nd = 3,
