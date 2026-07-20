@@ -8,16 +8,25 @@
 #' indicating the expected factor for each item; entropy is then computed on a
 #' binary distribution (target vs. non‑target variance).
 #'
-#' The function returns entropy values per item, per factor, and globally.
+#' The function returns entropy values per item, per factor, and a global index.
 #' Entropy can be normalized (divided by the maximum possible entropy) to
 #' obtain values between 0 and 1.
+#'
+#' In exploratory mode, the global entropy is calculated on the entire matrix of
+#' squared loadings, normalized by \eqn{\log(n \cdot k)}.
+#' In confirmatory mode, the global entropy is computed as the average of two
+#' components: (1) the entropy of the squared loadings of target items within
+#' each factor (how concentrated are the expected loadings), and (2) the entropy
+#' of the squared loadings of non‑target items within each factor (how dispersed
+#' are the cross‑loadings). This provides a measure of overall factorial clarity
+#' that aligns with the confirmatory logic.
 #'
 #' @param loadings_matrix A numeric matrix of factor loadings (rows = items, columns = factors).
 #' @param base Logarithmic base (default \code{2}, entropy in bits).
 #' @param normalized Logical. If \code{TRUE}, entropy is divided by the maximum
 #'        possible entropy: for items \eqn{\log(k)} (or \eqn{\log(2)} in conf mode),
 #'        for factors \eqn{\log(n)} (or \eqn{\log(2)} in conf mode),
-#'        and for global \eqn{\log(n \cdot k)}. Default is \code{TRUE}.
+#'        and for global as described above. Default is \code{TRUE}.
 #' @param type Character. Either \code{"expl"} (exploratory, default) or \code{"conf"} (confirmatory).
 #' @param target Integer vector of length \code{nrow(loadings_matrix)}. Required when
 #'        \code{type = "conf"}. Each entry indicates the factor (column index) that
@@ -29,22 +38,33 @@
 #' collapsed into two categories: the target factor and all others combined.
 #' Similarly for factors: target items vs. non‑target items.
 #'
-#' The global entropy is computed on the entire matrix of squared loadings:
-#' \deqn{p_{ij} = \frac{\lambda_{ij}^2}{\sum_i \sum_j \lambda_{ij}^2}}
-#' \deqn{H_{global} = -\sum_i \sum_j p_{ij} \log(p_{ij})}
-#' and normalized by \eqn{\log(n \cdot k)} if \code{normalized = TRUE}.
+#' The global entropy in confirmatory mode is calculated as:
+#' \enumerate{
+#'   \item For each factor, compute the entropy of the distribution of squared
+#'         loadings among its target items (if any). Average these values across factors
+#'         to obtain \eqn{H_{target}}.
+#'   \item For each factor, compute the entropy of the distribution of squared
+#'         loadings among its non‑target items (if any). Average these values across factors
+#'         to obtain \eqn{H_{non-target}}.
+#'   \item The total confirmatory entropy is the average of the two: \eqn{H_{total} = (H_{target} + H_{non-target}) / 2}.
+#' }
+#' This measure reflects how well the loading matrix conforms to the expected
+#' structure: low values indicate that target items have concentrated loadings
+#' and non‑target items have low or dispersed cross‑loadings (good fit), while
+#' high values suggest ambiguity or poor discrimination.
 #'
 #' \strong{Interpretation:}
 #' \itemize{
 #'   \item \strong{Item entropy (\code{H_i})}: Low values (near 0) indicate that the item loads predominantly on a single factor (simple structure). High values (near 1) suggest cross‑loadings or factorial complexity.
 #'   \item \strong{Factor entropy (\code{H_f})}: Low values indicate that the factor is defined by few items (specific factor). High values suggest that the factor is broadly dispersed across many items (general or diffuse factor).
-#'   \item \strong{Global entropy (\code{H_total})}: Reflects the overall dispersion of variance across all matrix cells. A value near 0 indicates that variance is concentrated in very few cells (e.g., a sparse loading matrix); a value near 1 suggests a uniform distribution across all cells. This measure is not directly comparable to the item or factor entropies because it aggregates across all cells.
+#'   \item \strong{Global entropy (\code{H_total})}: In exploratory mode, reflects the overall dispersion of variance across all matrix cells. In confirmatory mode, it reflects the clarity of the target structure, with lower values indicating better alignment with the expected pattern.
 #' }
 #'
-#' When applied to network loadings (NT) from EGA, this index quantifies the
-#' clarity of node‑community assignment. Low entropy indicates that nodes load
-#' predominantly on a single community (simple structure), high entropy suggests
-#' diffuse or ambiguous membership, complementing the Total Entropy Fit Index (TEFI).
+#' When applied to network loadings (NT) from \strong{Exploratory Graph Analysis (EGA)},
+#' this index quantifies the clarity of node–community assignment. Low entropy
+#' indicates that nodes load predominantly on a single community (simple structure),
+#' high entropy suggests diffuse or ambiguous membership, complementing the
+#' \emph{Total Entropy Fit Index (TEFI)} for global fit assessment.
 #'
 #' @return A list of data frames:
 #' \describe{
@@ -126,18 +146,6 @@ entropyFL2 <- function(loadings_matrix,
     - (p * log(p, base) + (1 - p) * log(1 - p, base))
   }
   
-  # ---- Entropía global (siempre sobre toda la matriz) ----
-  total_ssq <- sum(load_sq)
-  if (total_ssq == 0) {
-    H_global_raw <- 0
-    H_global <- 0
-  } else {
-    p_global <- load_sq / total_ssq
-    H_global_raw <- entropy_vec(as.vector(p_global), base)
-    H_max_global <- log(n_items * n_factors, base = base)
-    H_global <- if (normalized) H_global_raw / H_max_global else H_global_raw
-  }
-  
   # ---- Modo EXPLORATORIO ----
   if (type == "expl") {
     # ---- Entropía por ítem ----
@@ -155,6 +163,17 @@ entropyFL2 <- function(loadings_matrix,
     H_f_raw <- apply(p_factors, 2, entropy_vec, base = base)
     H_max_factors <- log(n_items, base = base)
     H_f <- if (normalized) H_f_raw / H_max_factors else H_f_raw
+    
+    # ---- Entropía total (global) ----
+    total_ssq <- sum(load_sq)
+    if (total_ssq == 0) {
+      H_total <- 0
+    } else {
+      p_global <- load_sq / total_ssq
+      H_global_raw <- entropy_vec(as.vector(p_global), base)
+      H_max_global <- log(n_items * n_factors, base = base)
+      H_total <- if (normalized) H_global_raw / H_max_global else H_global_raw
+    }
     
   } else { # ---- Modo CONFIRMATORIO ----
     # ---- Entropía por ítem (target vs resto) ----
@@ -191,6 +210,61 @@ entropyFL2 <- function(loadings_matrix,
     }
     H_max_factors <- log(2, base = base)
     H_f <- if (normalized) H_f_raw / H_max_factors else H_f_raw
+    
+    # ---- Entropía total confirmatoria ----
+    # Para cada factor, calcular entropía de target y no-target por separado
+    # y luego promediar sobre factores
+    H_target_vals <- numeric(n_factors)
+    H_non_target_vals <- numeric(n_factors)
+    
+    for (j in 1:n_factors) {
+      target_items <- which(target == j)
+      non_target_items <- setdiff(seq_len(n_items), target_items)
+      
+      # Entropía de los ítems target en este factor
+      if (length(target_items) > 0) {
+        sq_target <- load_sq[target_items, j]
+        total_target <- sum(sq_target)
+        if (total_target > 0) {
+          p_target <- sq_target / total_target
+          H_target_raw <- entropy_vec(p_target, base)
+          H_max_target <- log(length(target_items), base = base)
+          H_target_vals[j] <- if (normalized) H_target_raw / H_max_target else H_target_raw
+        } else {
+          H_target_vals[j] <- 0
+        }
+      } else {
+        H_target_vals[j] <- NA
+      }
+      
+      # Entropía de los ítems no-target en este factor
+      if (length(non_target_items) > 0) {
+        sq_non_target <- load_sq[non_target_items, j]
+        total_non_target <- sum(sq_non_target)
+        if (total_non_target > 0) {
+          p_non_target <- sq_non_target / total_non_target
+          H_non_target_raw <- entropy_vec(p_non_target, base)
+          H_max_non_target <- log(length(non_target_items), base = base)
+          H_non_target_vals[j] <- if (normalized) H_non_target_raw / H_max_non_target else H_non_target_raw
+        } else {
+          H_non_target_vals[j] <- 0
+        }
+      } else {
+        H_non_target_vals[j] <- NA
+      }
+    }
+    
+    # Promediar sobre factores, omitiendo NA
+    mean_target <- mean(H_target_vals, na.rm = TRUE)
+    mean_non_target <- mean(H_non_target_vals, na.rm = TRUE)
+    
+    # Si algún factor no tiene target o no-target, se lanza un warning
+    if (any(is.na(H_target_vals)) || any(is.na(H_non_target_vals))) {
+      warning("Some factors have no target or no non-target items. Their entropy was omitted from the average.")
+    }
+    
+    # Total es el promedio de las dos medias
+    H_total <- (mean_target + mean_non_target) / 2
   }
   
   # ---- Construcción de la salida en data.frames ----
@@ -210,7 +284,7 @@ entropyFL2 <- function(loadings_matrix,
   
   result$total <- data.frame(
     metric = "global",
-    entropy = round(H_global, 3),
+    entropy = round(H_total, 3),
     stringsAsFactors = FALSE
   )
   
