@@ -97,7 +97,7 @@
 #' }
 #'
 #' @export
-entropyFL2 <- function(loadings_matrix,
+entropyFL <- function(loadings_matrix,
                       base = 2,
                       normalized = TRUE,
                       type = c("expl", "conf"),
