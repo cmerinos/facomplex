@@ -104,6 +104,11 @@ entropyFL2 <- function(loadings_matrix,
                       target = NULL) {
 
   # ---- Validaciones ----
+  # Convert matrices to data frame
+  if (is.matrix(data)) {
+    data <- as.data.frame(data)
+  }
+  
   if (!is.data.frame(loadings_matrix)) stop("'loadings_matrix' must be a dataframe.")
   n_items <- nrow(loadings_matrix)
   n_factors <- ncol(loadings_matrix)
