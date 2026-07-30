@@ -1,11 +1,8 @@
-# facomplex 1.0.1 (2026-07-31)
+# facomplex 1.0.0 (2026-07-31)
 
 * Minor corrections in documentation and references.
 * Fixed a typo in the package title in README.
-
-
-# facomplex 1.0.0 (2026-07-30)
-
+* Modified `entropyFL()`: several parameters, type `exp` and `conf`.
 * First stable CRAN release.
 * All core functions for factor complexity analysis are now stable.
 
