@@ -109,7 +109,6 @@ entropyFL2 <- function(loadings_matrix,
     data <- as.data.frame(data)
   }
   
-  if (!is.data.frame(loadings_matrix)) stop("'loadings_matrix' must be a dataframe.")
   n_items <- nrow(loadings_matrix)
   n_factors <- ncol(loadings_matrix)
   if (n_items < 1 || n_factors < 1) stop("Matrix must have at least one row and one column.")
