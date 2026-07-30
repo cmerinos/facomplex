@@ -2,115 +2,116 @@
 % Please edit documentation in R/entropyFL2.R
 \name{entropyFL2}
 \alias{entropyFL2}
-\title{Entropy Index for Factor Simplicity (Exploratory and Confirmatory)}
+\title{Entropy Index for Factor Simplicity}
 \usage{
 entropyFL2(
   loadings_matrix,
   base = 2,
   normalized = TRUE,
-  nd = 3,
   type = c("expl", "conf"),
   target = NULL
 )
 }
 \arguments{
-\item{loadings_matrix}{A numeric matrix or data frame of factor loadings, where rows represent items and columns represent factors.}
+\item{loadings_matrix}{A numeric matrix of factor loadings (rows = items, columns = factors).}
 
-\item{base}{The logarithmic base used to compute entropy. Default is \code{2}, corresponding to entropy in bits.}
+\item{base}{Logarithmic base (default \code{2}, entropy in bits).}
 
-\item{normalized}{Logical. If \code{TRUE} (default), entropy values are normalized to range from 0 to 1.}
+\item{normalized}{Logical. If \code{TRUE}, entropy is divided by the maximum
+possible entropy: for items \eqn{\log(k)} (or \eqn{\log(2)} in conf mode),
+for factors \eqn{\log(n)} (or \eqn{\log(2)} in conf mode),
+and for global as described above. Default is \code{TRUE}.}
 
-\item{nd}{Integer. Number of decimal places to round the results. Default is \code{3}. Use \code{NULL} for no rounding.}
+\item{type}{Character. Either \code{"expl"} (exploratory, default) or \code{"conf"} (confirmatory).}
 
-\item{type}{Character string indicating the mode: \code{"expl"} for exploratory (entropy over all factors/items)
-or \code{"conf"} for confirmatory (entropy collapses into target vs non-target categories).
-Default is \code{"expl"}.}
-
-\item{target}{A numeric vector of length \code{nrow(loadings_matrix)} indicating, for each item,
-the factor index (1 to ncol(loadings_matrix)) to which it is expected to belong.
-Required when \code{type = "conf"}.}
+\item{target}{Integer vector of length \code{nrow(loadings_matrix)}. Required when
+\code{type = "conf"}. Each entry indicates the factor (column index) that
+the item is expected to load on. Values must be between 1 and number of factors.}
 }
 \value{
-A list with:
+A list of data frames:
 \describe{
-\item{\code{H_i}}{A numeric vector with the entropy for each item (normalized if requested).}
-\item{\code{H_f}}{A numeric vector with the entropy for each factor (normalized if requested).}
-\item{\code{H_total_items}}{The average entropy across items.}
-\item{\code{H_total_factors}}{The average entropy across factors.}
-\item{\code{type}}{Character indicating the mode used.}
-\item{\code{normalized}}{Logical indicating whether values are normalized.}
+\item{\code{item}}{Data frame with columns \code{item} (names) and \code{entropy}.}
+\item{\code{factor}}{Data frame with columns \code{factor} (names) and \code{entropy}.}
+\item{\code{total}}{Data frame with a single row: \code{metric = "global"} and \code{entropy}.}
 }
+If \code{normalized = FALSE}, the raw entropy values are returned; otherwise,
+normalized values (0–1) are returned.
 }
 \description{
-Computes entropy-based indices to quantify the factorial simplicity or complexity
-of an Exploratory Factor Analysis (EFA) or confirmatory solution (e.g., target rotations, ESEM).
-The entropy is calculated from the squared factor loadings, interpreted as proportional
-contributions of each factor to an item (or vice versa).
+Computes entropy‑based indices to quantify factorial simplicity or complexity
+from a matrix of factor loadings (or network loadings from EGA).
+Two modes are available: exploratory (\code{type = "expl"}) and confirmatory
+(\code{type = "conf"}). In confirmatory mode, a target vector must be provided
+indicating the expected factor for each item; entropy is then computed on a
+binary distribution (target vs. non‑target variance).
 
-When the input matrix corresponds to \strong{network loadings (NT)} obtained from
-Exploratory Graph Analysis (EGA), this index serves as a measure of
-\strong{node-community assignment clarity}. Low entropy indicates that nodes load
-predominantly on a single community (simple structure), whereas high entropy
-suggests diffuse or ambiguous community membership, complementing the global
-fit assessment provided by the Total Entropy Fit Index (TEFI).
+The function returns entropy values per item, per factor, and a global index.
+Entropy can be normalized (divided by the maximum possible entropy) to
+obtain values between 0 and 1.
+
+In exploratory mode, the global entropy is calculated on the entire matrix of
+squared loadings, normalized by \eqn{\log(n \cdot k)}.
+In confirmatory mode, the global entropy is computed as the average of two
+components: (1) the entropy of the squared loadings of target items within
+each factor (how concentrated are the expected loadings), and (2) the entropy
+of the squared loadings of non‑target items within each factor (how dispersed
+are the cross‑loadings). This provides a measure of overall factorial clarity
+that aligns with the confirmatory logic.
 }
 \details{
-The function assumes that the squared factor loadings (\eqn{\lambda_{ij}^2}) represent the proportion of common variance
-that item \eqn{i} shares with factor \eqn{j}. These are normalized within rows or columns to form pseudo-probability distributions,
-over which Shannon entropy is computed.
+In exploratory mode, entropy for an item is computed from the normalized squared
+loadings across all factors. In confirmatory mode, the squared loadings are
+collapsed into two categories: the target factor and all others combined.
+Similarly for factors: target items vs. non‑target items.
 
-\strong{Exploratory mode (\code{type = "expl"}):}
-\itemize{
-\item Entropy by item: \eqn{H_i = -\sum_{j=1}^{k} p_{ij} \log(p_{ij})}, where \eqn{p_{ij} = \lambda_{ij}^2 / \sum_j \lambda_{ij}^2}.
-\item Entropy by factor: \eqn{H_f = -\sum_{i=1}^{n} q_{ij} \log(q_{ij})}, where \eqn{q_{ij} = \lambda_{ij}^2 / \sum_i \lambda_{ij}^2}.
-\item Normalization: divide by \eqn{\log(k)} for items, and by \eqn{\log(n)} for factors.
+The global entropy in confirmatory mode is calculated as:
+\enumerate{
+\item For each factor, compute the entropy of the distribution of squared
+loadings among its target items (if any). Average these values across factors
+to obtain \eqn{H_{target}}.
+\item For each factor, compute the entropy of the distribution of squared
+loadings among its non‑target items (if any). Average these values across factors
+to obtain \eqn{H_{non-target}}.
+\item The total confirmatory entropy is the average of the two: \eqn{H_{total} = (H_{target} + H_{non-target}) / 2}.
 }
-
-\strong{Confirmatory mode (\code{type = "conf"}):}
-For each item, its squared loadings are collapsed into two categories: the target factor (given by \code{target}) and the sum of all other factors.
-Likewise, for each factor, its squared loadings are collapsed into target items (those assigned to that factor) vs. non-target items.
-Entropy is then computed over these two proportions.
-\itemize{
-\item Item entropy: \eqn{H_i^{conf} = - (p_t \log(p_t) + (1-p_t) \log(1-p_t))}, with \eqn{p_t = \lambda_{i,t}^2 / \sum_j \lambda_{ij}^2}.
-\item Factor entropy: \eqn{H_f^{conf} = - (q_t \log(q_t) + (1-q_t) \log(1-q_t))}, with \eqn{q_t = \sum_{i \in target} \lambda_{ij}^2 / \sum_i \lambda_{ij}^2}.
-\item Normalization (if \code{normalized = TRUE}) divides by \eqn{\log(2)}.
-}
-
-\strong{Total entropy:}
-\itemize{
-\item \code{H_total_items}: Average entropy across items.
-\item \code{H_total_factors}: Average entropy across factors.
-}
+This measure reflects how well the loading matrix conforms to the expected
+structure: low values indicate that target items have concentrated loadings
+and non‑target items have low or dispersed cross‑loadings (good fit), while
+high values suggest ambiguity or poor discrimination.
 
 \strong{Interpretation:}
 \itemize{
-\item Values near 0 indicate highly simple structures (loadings concentrated in few components).
-\item Values near 1 suggest factorial ambiguity or complexity.
-\item Useful to compare different rotation methods, number of factors, or loading patterns.
+\item \strong{Item entropy (\code{H_i})}: Low values (near 0) indicate that the item loads predominantly on a single factor (simple structure). High values (near 1) suggest cross‑loadings or factorial complexity.
+\item \strong{Factor entropy (\code{H_f})}: Low values indicate that the factor is defined by few items (specific factor). High values suggest that the factor is broadly dispersed across many items (general or diffuse factor).
+\item \strong{Global entropy (\code{H_total})}: In exploratory mode, reflects the overall dispersion of variance across all matrix cells. In confirmatory mode, it reflects the clarity of the target structure, with lower values indicating better alignment with the expected pattern.
 }
+
+When applied to network loadings (NT) from \strong{Exploratory Graph Analysis (EGA)},
+this index quantifies the clarity of node–community assignment. Low entropy
+indicates that nodes load predominantly on a single community (simple structure),
+high entropy suggests diffuse or ambiguous membership, complementing the
+\emph{Total Entropy Fit Index (TEFI)} for global fit assessment.
 }
 \examples{
 \donttest{
-# --- Exploratory example ---
-loadings_expl <- matrix(c(
-  0.7, 0.0, 0.01,  # simple item
-  0.1, 0.2, 0.15,  # moderately complex
-  0.4, 0.8, 0.2,   # complex with a dominant factor
-  0.4, 0.4, 0.4    # maximally complex (equal loadings)
-), nrow = 4, byrow = TRUE)
+# Exploratory mode
+loadings_expl <- matrix(c(0.7,0.1,0.1, 0.2,0.8,0.1, 0.3,0.3,0.9), nrow=3, byrow=TRUE)
+rownames(loadings_expl) <- paste0("Item", 1:3)
+colnames(loadings_expl) <- paste0("F", 1:3)
 
-entropyFL(loadings_expl, type = "expl")
+entropyFL(loadings_expl, type = "expl", normalized = TRUE)
 
-# --- Confirmatory example ---
-# Suppose 3 factors, first 3 items target factor 1, next 2 target factor 2, last 3 target factor 3
-target_vec <- c(1,1,1, 2,2, 3,3,3)
-entropyFL(loadings_expl, type = "conf", target = target_vec)
+# Confirmatory mode
+loadings_conf <- loadings_expl
+target <- c(1, 2, 3)
+entropyFL(loadings_conf, type = "conf", target = target, normalized = FALSE)
 }
 
 }
 \references{
-Shannon, C. E. (1948). A mathematical theory of communication. \emph{Bell System Technical Journal}, 27(3), 379--423.
-Hofmann, R. J. (1978). Complexity and simplicity as objective indices descriptive of factor solutions. \emph{Multivariate Behavioral Research}, 13(2), 247--250.
-Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika}, 68(1), 49--60. \doi{10.1007/BF02296652}
-McCammon, R. B. (1966). Minimum entropy criterion for factor analysis. \emph{Nature}, 211, 146-148.
+Shannon, C. E. (1948). A mathematical theory of communication. \emph{Bell System Technical Journal}, 27(3), 379–423.
+Hofmann, R. J. (1978). Complexity and simplicity as objective indices descriptive of factor solutions. \emph{Multivariate Behavioral Research}, 13(2), 247–250.
+Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika}, 68(1), 49–60.
+McCammon, R. B. (1966). Minimum entropy criterion for factor analysis. \emph{Journal of the ACM}, 13(2), 247–250.
 }

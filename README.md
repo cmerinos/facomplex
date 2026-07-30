@@ -1,4 +1,4 @@
-# facomplex.
+# facomplex
 
 **facomplex** is an R package that provides tools for assessing factor complexity in exploratory and exploratory structural equations modeling analysis (EFA/ESEM) solutions.
 
@@ -22,15 +22,15 @@ devtools::install_github("cmerinos/facomplex", build_vignettes = TRUE)
 
 The package includes several methods for evaluating factor complexity:
 
--   **Hofman coefficient** (Hofman, 1977) for items (rows) and factors (columns)
--   **Revised Hofman coefficient**
--   **Factor Simplicity Index: factor** (Fleming, 2003)
--   **Factor Simplicity Index: items** (Kaiser, 1974)
--   **Bentler’s Simplicity Index** (Bentler, 1977)
--   **Loading Simplicity Index** (Lorenzo-Seva, 2003)
--   **Sum of squared loadings for target and non-target factor loadings**
--   Descriptive statistics (min, max, mean) of target and non-target loadings
--   Visualization tools for complexity structures
+- **Hofman coefficient** (Hofman, 1977) for items (rows) and factors (columns)
+- **Revised Hofman coefficient**
+- **Factor Simplicity Index: factor** (Fleming, 2003)
+- **Factor Simplicity Index: items** (Kaiser, 1974)
+- **Bentler’s Simplicity Index** (Bentler, 1977)
+- **Loading Simplicity Index** (Lorenzo-Seva, 2003)
+- **Sum of squared loadings for target and non-target factor loadings**
+- Descriptive statistics (min, max, mean) of target and non-target loadings
+- Visualization tools for complexity structures
 
 ## Example
 
@@ -61,17 +61,17 @@ plot.simplicity(
 
 ## References
 
--   Bentler, P. M. (1977). Factor Simplicity Index and Transformations. *Psychometrika*, *42*(2), 277–295. <https://doi.org/10.1007/BF02294054>
+- Bentler, P. M. (1977). Factor Simplicity Index and Transformations. *Psychometrika*, *42*(2), 277–295. <https://doi.org/10.1007/BF02294054>
 
--   Fleming, J. S. (1985). An index of fit for factor scales. Educational and Psychological Measurement, 45, 725-728. [https://doi.org/10.1177/0013164485454002](https://psycnet.apa.org/doi/10.1177/0013164485454002)
+- Fleming, J. S. (1985). An index of fit for factor scales. *Educational and Psychological Measurement*, *45*, 725-728. <https://doi.org/10.1177/0013164485454002>
 
--   Fleming, J. S. (2003). Computing measures of simplicity of fit for loadings in factor-analytically derived scales. Behavior Research Methods, Instruments, & Computers, 35, 520–524. <https://doi.org/10.3758/BF03195531>
+- Fleming, J. S. (2003). Computing measures of simplicity of fit for loadings in factor-analytically derived scales. *Behavior Research Methods, Instruments, & Computers*, *35*, 520–524. <https://doi.org/10.3758/BF03195531>
 
--   Hofmann, R. J. (1977). Indices descriptive of factor complexity. *The Journal of General Psychology*, *96*(1), 103–110. <https://doi.org/10.1080/00221309.1977.9920803>
+- Hofmann, R. J. (1977). Indices descriptive of factor complexity. *The Journal of General Psychology*, *96*(1), 103–110. <https://doi.org/10.1080/00221309.1977.9920803>
 
--   Kaiser, H. F. (1974). An Index of Factorial Simplicity. *Psychometrika*, *39*(1), 31–36. [https://doi.org/](https://doi.org/10.1007/BF02294054){.uri}[10.1007/BF02291575](https://doi.org/10.1007/BF02291575)
+- Kaiser, H. F. (1974). An Index of Factorial Simplicity. *Psychometrika*, *39*(1), 31–36. <https://doi.org/10.1007/BF02291575>
 
--   Lorenzo-Seva, U. (2003). A factor simplicity index. \emph{Psychometrika}, 68(1), 49–60. [https://doi.org/](https://doi.org/10.1007/BF02294054){.uri}[10.1007/BF02296652](https://doi.org/10.1007/BF02296652)
+- Lorenzo-Seva, U. (2003). A factor simplicity index. *Psychometrika*, *68*(1), 49–60. <https://doi.org/10.1007/BF02296652>
 
 ## License
 
