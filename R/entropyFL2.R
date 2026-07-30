@@ -102,15 +102,15 @@ entropyFL2 <- function(loadings_matrix,
                       normalized = TRUE,
                       type = c("expl", "conf"),
                       target = NULL) {
-  
+
   # ---- Validaciones ----
-  if (!is.matrix(loadings_matrix)) stop("'loadings_matrix' must be a matrix.")
+  if (!is.data.frame(loadings_matrix)) stop("'loadings_matrix' must be a dataframe.")
   n_items <- nrow(loadings_matrix)
   n_factors <- ncol(loadings_matrix)
   if (n_items < 1 || n_factors < 1) stop("Matrix must have at least one row and one column.")
-  
+
   type <- match.arg(type)
-  
+
   if (type == "conf") {
     if (is.null(target)) stop("For type='conf', 'target' must be provided.")
     if (!is.numeric(target) || length(target) != n_items) {
@@ -120,7 +120,7 @@ entropyFL2 <- function(loadings_matrix,
       stop("'target' values must be between 1 and ncol(loadings_matrix).")
     }
   }
-  
+
   # ---- Obtener nombres ----
   item_names <- rownames(loadings_matrix)
   if (is.null(item_names) || all(item_names == "")) {
@@ -130,22 +130,22 @@ entropyFL2 <- function(loadings_matrix,
   if (is.null(factor_names) || all(factor_names == "")) {
     factor_names <- paste0("F", seq_len(n_factors))
   }
-  
+
   # ---- Cargas al cuadrado ----
   load_sq <- loadings_matrix^2
-  
+
   # ---- Funciones auxiliares ----
   entropy_vec <- function(p, base) {
     p <- p[p > 0]
     if (length(p) == 0) return(0)
     -sum(p * log(p, base = base))
   }
-  
+
   entropy_binary <- function(p, base) {
     if (p <= 0 || p >= 1) return(0)
     - (p * log(p, base) + (1 - p) * log(1 - p, base))
   }
-  
+
   # ---- Modo EXPLORATORIO ----
   if (type == "expl") {
     # ---- Entropía por ítem ----
@@ -155,7 +155,7 @@ entropyFL2 <- function(loadings_matrix,
     H_i_raw <- apply(p_items, 1, entropy_vec, base = base)
     H_max_items <- log(n_factors, base = base)
     H_i <- if (normalized) H_i_raw / H_max_items else H_i_raw
-    
+
     # ---- Entropía por factor ----
     col_sums <- colSums(load_sq)
     p_factors <- sweep(load_sq, 2, col_sums, FUN = "/")
@@ -163,7 +163,7 @@ entropyFL2 <- function(loadings_matrix,
     H_f_raw <- apply(p_factors, 2, entropy_vec, base = base)
     H_max_factors <- log(n_items, base = base)
     H_f <- if (normalized) H_f_raw / H_max_factors else H_f_raw
-    
+
     # ---- Entropía total (global) ----
     total_ssq <- sum(load_sq)
     if (total_ssq == 0) {
@@ -174,7 +174,7 @@ entropyFL2 <- function(loadings_matrix,
       H_max_global <- log(n_items * n_factors, base = base)
       H_total <- if (normalized) H_global_raw / H_max_global else H_global_raw
     }
-    
+
   } else { # ---- Modo CONFIRMATORIO ----
     # ---- Entropía por ítem (target vs resto) ----
     H_i_raw <- numeric(n_items)
@@ -192,7 +192,7 @@ entropyFL2 <- function(loadings_matrix,
     }
     H_max_items <- log(2, base = base)
     H_i <- if (normalized) H_i_raw / H_max_items else H_i_raw
-    
+
     # ---- Entropía por factor (ítems target vs no-target) ----
     H_f_raw <- numeric(n_factors)
     for (j in 1:n_factors) {
@@ -210,17 +210,17 @@ entropyFL2 <- function(loadings_matrix,
     }
     H_max_factors <- log(2, base = base)
     H_f <- if (normalized) H_f_raw / H_max_factors else H_f_raw
-    
+
     # ---- Entropía total confirmatoria ----
     # Para cada factor, calcular entropía de target y no-target por separado
     # y luego promediar sobre factores
     H_target_vals <- numeric(n_factors)
     H_non_target_vals <- numeric(n_factors)
-    
+
     for (j in 1:n_factors) {
       target_items <- which(target == j)
       non_target_items <- setdiff(seq_len(n_items), target_items)
-      
+
       # Entropía de los ítems target en este factor
       if (length(target_items) > 0) {
         sq_target <- load_sq[target_items, j]
@@ -236,7 +236,7 @@ entropyFL2 <- function(loadings_matrix,
       } else {
         H_target_vals[j] <- NA
       }
-      
+
       # Entropía de los ítems no-target en este factor
       if (length(non_target_items) > 0) {
         sq_non_target <- load_sq[non_target_items, j]
@@ -253,40 +253,40 @@ entropyFL2 <- function(loadings_matrix,
         H_non_target_vals[j] <- NA
       }
     }
-    
+
     # Promediar sobre factores, omitiendo NA
     mean_target <- mean(H_target_vals, na.rm = TRUE)
     mean_non_target <- mean(H_non_target_vals, na.rm = TRUE)
-    
+
     # Si algún factor no tiene target o no-target, se lanza un warning
     if (any(is.na(H_target_vals)) || any(is.na(H_non_target_vals))) {
       warning("Some factors have no target or no non-target items. Their entropy was omitted from the average.")
     }
-    
+
     # Total es el promedio de las dos medias
     H_total <- (mean_target + mean_non_target) / 2
   }
-  
+
   # ---- Construcción de la salida en data.frames ----
   result <- list()
-  
+
   result$item <- data.frame(
     item = item_names,
     entropy = round(H_i, 3),
     stringsAsFactors = FALSE
   )
-  
+
   result$factor <- data.frame(
     factor = factor_names,
     entropy = round(H_f, 3),
     stringsAsFactors = FALSE
   )
-  
+
   result$total <- data.frame(
     metric = "global",
     entropy = round(H_total, 3),
     stringsAsFactors = FALSE
   )
-  
+
   return(result)
 }
