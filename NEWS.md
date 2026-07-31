@@ -4,6 +4,7 @@
 * Fixed a typo in the package title in README.
 * Modified `entropyFL()`: several parameters, type `exp` and `conf`.
 * First stable CRAN release.
+* Hofmann(), now 3 versions: original, 1-0 scaled for complexity, 1-0 scaled for simplicity
 * All core functions for factor complexity analysis are now stable.
 
 # facomplex 0.0.3 (2026-07-25)
