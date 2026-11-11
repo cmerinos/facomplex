@@ -31,11 +31,11 @@ ciLSI <- function(boot_result, conf.level = NULL, type = NULL) {
   Lb <- boot_result$loadings_boot
   R  <- boot_result$R; p <- nrow(L0); r <- ncol(L0)
   
-  est  <- facomplex::LSIglobal(L0)
+  est  <- LSIglobal(L0)
   vals <- vapply(seq_len(R), function(i) {
     L <- matrix(Lb[i, , ], p, r)
     if (anyNA(L)) return(NA_real_)
-    tryCatch(facomplex::LSIglobal(L), error = function(e) NA_real_)
+    tryCatch(LSIglobal(L), error = function(e) NA_real_)
   }, numeric(1))
   
   ci  <- computeCI(vals, est, conf.level, type)

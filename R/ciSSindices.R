@@ -45,11 +45,11 @@ ciSSindices <- function(boot_result, per.factor = FALSE,
   rownames(binary) <- rownames(L0)
   colnames(binary) <- colnames(L0)
   
-  est <- facomplex::SSindices(L0, binary, per.factor = per.factor)
+  est <- SSindices(L0, binary, per.factor = per.factor)
   boot_list <- lapply(seq_len(R), function(i) {
     L <- matrix(Lb[i, , ], p, r)
     if (anyNA(L)) return(NULL)
-    tryCatch(facomplex::SSindices(L, binary, per.factor = per.factor),
+    tryCatch(SSindices(L, binary, per.factor = per.factor),
              error = function(e) NULL)
   })
   

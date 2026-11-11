@@ -48,12 +48,12 @@ ciSimload <- function(boot_result, conf.level = NULL, type = NULL) {
       !all(names(items_target) %in% colnames(L0)))
     names(items_target) <- colnames(L0)
   
-  est <- facomplex::simload(as.data.frame(L0), items_target = items_target)
+  est <- simload(as.data.frame(L0), items_target = items_target)
   boot_list <- lapply(seq_len(R), function(i) {
     L <- matrix(Lb[i, , ], p, r)
     if (anyNA(L)) return(NULL)
     tryCatch(
-      facomplex::simload(as.data.frame(L), items_target = items_target),
+      simload(as.data.frame(L), items_target = items_target),
       error = function(e) NULL)
   })
   
