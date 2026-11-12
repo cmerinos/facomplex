@@ -53,9 +53,11 @@ algorithm (e.g., \code{list(target = Tmat)}).}
 \item{type}{Character. Type of asymmetric confidence interval: \code{"perc"}
 (percentile) or \code{"bc"} (bias-corrected). Defaults to \code{"perc"}.}
 
-\item{parallel, ncpus}{Controls for parallelization; see \code{\link[boot]{boot}}.}
+\item{parallel}{Character. Controls for parallelization; see \code{\link[boot]{boot}}.}
 
-\item{progress}{Logical. If \code{TRUE}, displays progress every 10\\%.}
+\item{ncpus}{Integer. Number of cores for parallelization.}
+
+\item{progress}{Logical. If \code{TRUE}, displays progress every 10 percent.}
 
 \item{align}{Logical. If \code{TRUE} (recommended), aligns bootstrap
 loadings with the original solution. See \strong{Details}.}
@@ -65,13 +67,13 @@ loadings with the original solution. See \strong{Details}.}
 }
 \value{
 An object of class \code{facomplexBoot} containing:
-\describe{
-\item{\code{loadings_original}}{A p x r matrix of loadings from the full sample.}
-\item{\code{loadings_boot}}{An R x p x r array of aligned bootstrap loadings.}
-\item{\code{boot}}{The \code{boot} object from \pkg{boot}.}
-\item{\code{R}, \code{R_valid}}{Requested and valid bootstrap replicates.}
-\item{\code{conf.level}, \code{type}}{Confidence interval parameters.}
-\item{\code{engine}, \code{rotation}, \code{target}, \code{nfactors}}{Metadata.}
+\itemize{
+\item \code{loadings_original}: A p x r matrix of loadings from the full sample.
+\item \code{loadings_boot}: An R x p x r array of aligned bootstrap loadings.
+\item \code{boot}: The \code{boot} object from \pkg{boot}.
+\item \code{R}, \code{R_valid}: Requested and valid bootstrap replicates.
+\item \code{conf.level}, \code{type}: Confidence interval parameters.
+\item \code{engine}, \code{rotation}, \code{target}, \code{nfactors}: Metadata.
 }
 }
 \description{
@@ -86,7 +88,7 @@ obtain asymmetric confidence intervals for the factorial simplicity indices.
 \strong{Factor alignment.} Each bootstrap replicate may return the factors
 in a different order or with opposite signs. If left uncorrected, between-replicate
 variability would be artificially inflated, and confidence intervals for indices
-such as \code{\link{HofmannFac}} or \code{simload::SFI} would be computed by
+such as \code{\link{HofmannFac}} or \code{\link{simload}} would be computed by
 comparing incompatible columns. Alignment involves three steps:
 \enumerate{
 \item Tucker's congruence coefficient between each bootstrap column and
@@ -115,8 +117,8 @@ target[1:3, 1] <- NA; target[4:6, 2] <- NA; target[7:9, 3] <- NA
 br <- bootLoadings(d, nfactors = 3, target = target, R = 50)
 
 # ESEM
-model <- 'efa("efa1")*f1 + efa("efa1")*f2 + efa("efa1")*f3 =~
-          x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9'
+model <- paste0('efa("efa1")*f1 + efa("efa1")*f2 + efa("efa1")*f3 =~ ',
+                'x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9')
 br <- bootLoadings(d, engine = "ESEM", model = model, target = target,
                    R = 50)
 }

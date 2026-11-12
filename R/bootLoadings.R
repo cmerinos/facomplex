@@ -1,66 +1,67 @@
 #' Bootstrap of Factor Loadings for facomplex Indices
 #'
 #' @description
-#' Executes a non-parametric bootstrap of factor loadings for EFA or ESEM 
-#' models fitted with \pkg{lavaan}. Each replicate is aligned to the original 
-#' solution using Tucker's congruence coefficient and optimal assignment via 
-#' the Hungarian algorithm, thereby resolving rotational indeterminacy. The 
-#' resulting object is passed to the \code{ci*} functions in the package to 
+#' Executes a non-parametric bootstrap of factor loadings for EFA or ESEM
+#' models fitted with \pkg{lavaan}. Each replicate is aligned to the original
+#' solution using Tucker's congruence coefficient and optimal assignment via
+#' the Hungarian algorithm, thereby resolving rotational indeterminacy. The
+#' resulting object is passed to the \code{ci*} functions in the package to
 #' obtain asymmetric confidence intervals for the factorial simplicity indices.
 #'
-#' @param data A \code{data.frame} containing the items (rows = subjects, 
+#' @param data A \code{data.frame} containing the items (rows = subjects,
 #'   columns = items).
 #' @param engine Character. Either \code{"EFA"} or \code{"ESEM"}.
 #' @param nfactors Integer. Number of factors. Required if \code{engine = "EFA"}.
 #' @param model Character string. Model syntax. Required if \code{engine = "ESEM"}.
-#' @param target Target structure. Accepts: (a) a 0/1 matrix (1 = expected 
-#'   loading, 0 = cross-loading); (b) a 0/NA matrix (\pkg{lavaan} convention: 
-#'   NA = free loading, 0 = fixed cross-loading); (c) a named list of indices 
+#' @param target Target structure. Accepts: (a) a 0/1 matrix (1 = expected
+#'   loading, 0 = cross-loading); (b) a 0/NA matrix (\pkg{lavaan} convention:
+#'   NA = free loading, 0 = fixed cross-loading); (c) a named list of indices
 #'   per factor (the \code{items_target} format used by \code{\link{simload}}).
 #'   If \code{NULL}, no target rotation is applied.
-#' @param rotation Character string indicating the rotation method for 
-#'   \pkg{lavaan}. If \code{target} is not \code{NULL}, defaults to 
-#'   \code{"target"}. If \code{NULL} and no target is provided, defaults to 
+#' @param rotation Character string indicating the rotation method for
+#'   \pkg{lavaan}. If \code{target} is not \code{NULL}, defaults to
+#'   \code{"target"}. If \code{NULL} and no target is provided, defaults to
 #'   \code{"oblimin"} (EFA) or \code{"geomin"} (ESEM).
-#' @param rotation_list A list of additional arguments to pass to the rotation 
+#' @param rotation_list A list of additional arguments to pass to the rotation
 #'   algorithm (e.g., \code{list(target = Tmat)}).
 #' @param R Integer. Number of bootstrap replicates. Defaults to 1000.
 #' @param conf.level Numeric. Confidence level for the intervals. Defaults to 0.95.
-#' @param type Character. Type of asymmetric confidence interval: \code{"perc"} 
+#' @param type Character. Type of asymmetric confidence interval: \code{"perc"}
 #'   (percentile) or \code{"bc"} (bias-corrected). Defaults to \code{"perc"}.
-#' @param parallel,ncpus Controls for parallelization; see \code{\link[boot]{boot}}.
-#' @param progress Logical. If \code{TRUE}, displays progress every 10\%.
-#' @param align Logical. If \code{TRUE} (recommended), aligns bootstrap 
+#' @param parallel Character. Controls for parallelization; see \code{\link[boot]{boot}}.
+#' @param ncpus Integer. Number of cores for parallelization.
+#' @param progress Logical. If \code{TRUE}, displays progress every 10 percent.
+#' @param align Logical. If \code{TRUE} (recommended), aligns bootstrap
 #'   loadings with the original solution. See \strong{Details}.
-#' @param ... Additional arguments passed to \code{lavaan::efa} or 
+#' @param ... Additional arguments passed to \code{lavaan::efa} or
 #'   \code{lavaan::sem} (e.g., \code{estimator}, \code{ordered}, \code{missing}).
 #'
 #' @return An object of class \code{facomplexBoot} containing:
-#' \describe{
-#'   \item{\code{loadings_original}}{A p x r matrix of loadings from the full sample.}
-#'   \item{\code{loadings_boot}}{An R x p x r array of aligned bootstrap loadings.}
-#'   \item{\code{boot}}{The \code{boot} object from \pkg{boot}.}
-#'   \item{\code{R}, \code{R_valid}}{Requested and valid bootstrap replicates.}
-#'   \item{\code{conf.level}, \code{type}}{Confidence interval parameters.}
-#'   \item{\code{engine}, \code{rotation}, \code{target}, \code{nfactors}}{Metadata.}
+#' \itemize{
+#'   \item \code{loadings_original}: A p x r matrix of loadings from the full sample.
+#'   \item \code{loadings_boot}: An R x p x r array of aligned bootstrap loadings.
+#'   \item \code{boot}: The \code{boot} object from \pkg{boot}.
+#'   \item \code{R}, \code{R_valid}: Requested and valid bootstrap replicates.
+#'   \item \code{conf.level}, \code{type}: Confidence interval parameters.
+#'   \item \code{engine}, \code{rotation}, \code{target}, \code{nfactors}: Metadata.
 #' }
 #'
 #' @details
-#' \strong{Factor alignment.} Each bootstrap replicate may return the factors 
-#' in a different order or with opposite signs. If left uncorrected, between-replicate 
-#' variability would be artificially inflated, and confidence intervals for indices 
-#' such as \code{\link{HofmannFac}} or \code{simload::SFI} would be computed by 
+#' \strong{Factor alignment.} Each bootstrap replicate may return the factors
+#' in a different order or with opposite signs. If left uncorrected, between-replicate
+#' variability would be artificially inflated, and confidence intervals for indices
+#' such as \code{\link{HofmannFac}} or \code{\link{simload}} would be computed by
 #' comparing incompatible columns. Alignment involves three steps:
 #' \enumerate{
-#'   \item Tucker's congruence coefficient between each bootstrap column and 
+#'   \item Tucker's congruence coefficient between each bootstrap column and
 #'     each original column.
-#'   \item Optimal assignment via the Hungarian algorithm 
+#'   \item Optimal assignment via the Hungarian algorithm
 #'     (\code{clue::solve_LSAP}) applied to the absolute congruences.
 #'   \item Sign reflection to ensure positive congruence with the original solution.
 #' }
-#' Alignment corrects for permutation and reflection, but not for local optima of 
-#' the rotation algorithm. If a replicate converges to a genuinely different 
-#' structure, the congruence will be low, and the confidence interval will reflect 
+#' Alignment corrects for permutation and reflection, but not for local optima of
+#' the rotation algorithm. If a replicate converges to a genuinely different
+#' structure, the congruence will be low, and the confidence interval will reflect
 #' this (wider intervals). This is valid information, not an error.
 #'
 #' @references
@@ -85,8 +86,8 @@
 #' br <- bootLoadings(d, nfactors = 3, target = target, R = 50)
 #'
 #' # ESEM
-#' model <- 'efa("efa1")*f1 + efa("efa1")*f2 + efa("efa1")*f3 =~
-#'           x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9'
+#' model <- paste0('efa("efa1")*f1 + efa("efa1")*f2 + efa("efa1")*f3 =~ ',
+#'                 'x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9')
 #' br <- bootLoadings(d, engine = "ESEM", model = model, target = target,
 #'                    R = 50)
 #' }
