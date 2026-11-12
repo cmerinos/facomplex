@@ -82,24 +82,30 @@ reconcileTarget <- function(tgt, L0) {
   tgt
 }
 
-#' Ajuste EFA / ESEM unificado
+#' Unified EFA / ESEM fit
 #' @noRd
 fitFA <- function(data, engine = "EFA", nfactors = NULL, model = NULL,
-                  rotation = "oblimin", rotation.args = list(), ...) {
+                  rotation = "oblimin", rotation_list = list(), ...) {
   dots <- list(...)
   if (!is.null(dots$se) && identical(dots$se, "bootstrap"))
-    stop("'se = \"bootstrap\"' es incompatible con el bootstrap externo.")
+    stop("'se = \"bootstrap\"' is incompatible with external bootstrapping.")
+  
+  # Construir el argumento rotation como lista (nueva sintaxis de lavaan)
+  if (is.character(rotation)) {
+    rot_arg <- c(list(rotation), rotation_list)
+  } else {
+    rot_arg <- rotation # Ya viene como lista
+  }
+  
   if (engine == "EFA") {
-    if (is.null(nfactors)) stop("'nfactors' es obligatorio para EFA.")
+    if (is.null(nfactors)) stop("'nfactors' is required for EFA.")
     do.call(lavaan::efa, c(list(data = data, nfactors = nfactors,
-                                rotation = rotation,
-                                rotation.args = rotation.args), dots))
+                                rotation = rot_arg), dots))
   } else if (engine == "ESEM") {
-    if (is.null(model)) stop("'model' es obligatorio para ESEM.")
+    if (is.null(model)) stop("'model' is required for ESEM.")
     do.call(lavaan::sem, c(list(model = model, data = data,
-                                rotation = rotation,
-                                rotation.args = rotation.args), dots))
-  } else stop("'engine' debe ser 'EFA' o 'ESEM'.")
+                                rotation = rot_arg), dots))
+  } else stop("'engine' must be 'EFA' or 'ESEM'.")
 }
 
 #' Extraer cargas estandarizadas

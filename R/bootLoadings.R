@@ -1,66 +1,67 @@
-#' Bootstrap de cargas factoriales para indices de facomplex
+#' Bootstrap of Factor Loadings for facomplex Indices
 #'
 #' @description
-#' Ejecuta un bootstrap no parametrico sobre las cargas factoriales de un
-#' modelo EFA o ESEM estimado con \pkg{lavaan}. Cada replica se alinea con la
-#' solucion original mediante congruencia de Tucker y asignacion optima por
-#' algoritmo hungaro, resolviendo la indeterminacion rotacional. El objeto
-#' resultante se pasa a las funciones \code{ci*} del paquete para obtener
-#' intervalos de confianza asimetricos de los indices de simplicidad.
+#' Executes a non-parametric bootstrap of factor loadings for EFA or ESEM 
+#' models fitted with \pkg{lavaan}. Each replicate is aligned to the original 
+#' solution using Tucker's congruence coefficient and optimal assignment via 
+#' the Hungarian algorithm, thereby resolving rotational indeterminacy. The 
+#' resulting object is passed to the \code{ci*} functions in the package to 
+#' obtain asymmetric confidence intervals for the factorial simplicity indices.
 #'
-#' @param data \code{data.frame} con los items (filas = sujetos,
-#'   columnas = items).
-#' @param engine \code{"EFA"} o \code{"ESEM"}.
-#' @param nfactors Numero de factores. Obligatorio si \code{engine = "EFA"}.
-#' @param model Sintaxis del modelo. Obligatorio si \code{engine = "ESEM"}.
-#' @param target Estructura objetivo. Acepta: (a) matriz 0/1 (1 = carga
-#'   esperada, 0 = cruzada); (b) matriz 0/NA (convencion \pkg{lavaan}:
-#'   NA = carga libre, 0 = cruzada fija); (c) lista nombrada de indices por
-#'   factor (formato \code{items_target} de \code{\link[facomplex]{simload}}).
-#'   Si \code{NULL}, no se aplica rotacion target.
-#' @param rotation Tipo de rotacion para \pkg{lavaan}. Si \code{target} no es
-#'   \code{NULL}, por defecto \code{"target"}. Si es \code{NULL} y no hay
-#'   target, por defecto \code{"oblimin"} (EFA) o \code{"geomin"} (ESEM).
-#' @param rotation.args Lista de argumentos adicionales para la rotacion.
-#' @param R Numero de replicas bootstrap. Por defecto 1000.
-#' @param conf.level Nivel de confianza para los IC. Por defecto 0.95.
-#' @param type Tipo de IC asimetrico: \code{"perc"} (percentil) o
-#'   \code{"bc"} (bias-corrected). Por defecto \code{"perc"}.
-#' @param parallel,ncpus Control de paralelizacion; ver
-#'   \code{\link[boot]{boot}}.
-#' @param progress Logico. Si \code{TRUE}, muestra progreso cada 10\\%.
-#' @param align Logico. Si \code{TRUE} (recomendado), alinea las cargas
-#'   bootstrap con la solucion original. Ver \strong{Detalles}.
-#' @param ... Argumentos adicionales para \code{lavaan::efa} o
-#'   \code{lavaan::sem} (p. ej. \code{estimator}, \code{ordered}, \code{missing}).
+#' @param data A \code{data.frame} containing the items (rows = subjects, 
+#'   columns = items).
+#' @param engine Character. Either \code{"EFA"} or \code{"ESEM"}.
+#' @param nfactors Integer. Number of factors. Required if \code{engine = "EFA"}.
+#' @param model Character string. Model syntax. Required if \code{engine = "ESEM"}.
+#' @param target Target structure. Accepts: (a) a 0/1 matrix (1 = expected 
+#'   loading, 0 = cross-loading); (b) a 0/NA matrix (\pkg{lavaan} convention: 
+#'   NA = free loading, 0 = fixed cross-loading); (c) a named list of indices 
+#'   per factor (the \code{items_target} format used by \code{\link{simload}}).
+#'   If \code{NULL}, no target rotation is applied.
+#' @param rotation Character string indicating the rotation method for 
+#'   \pkg{lavaan}. If \code{target} is not \code{NULL}, defaults to 
+#'   \code{"target"}. If \code{NULL} and no target is provided, defaults to 
+#'   \code{"oblimin"} (EFA) or \code{"geomin"} (ESEM).
+#' @param rotation_list A list of additional arguments to pass to the rotation 
+#'   algorithm (e.g., \code{list(target = Tmat)}).
+#' @param R Integer. Number of bootstrap replicates. Defaults to 1000.
+#' @param conf.level Numeric. Confidence level for the intervals. Defaults to 0.95.
+#' @param type Character. Type of asymmetric confidence interval: \code{"perc"} 
+#'   (percentile) or \code{"bc"} (bias-corrected). Defaults to \code{"perc"}.
+#' @param parallel,ncpus Controls for parallelization; see \code{\link[boot]{boot}}.
+#' @param progress Logical. If \code{TRUE}, displays progress every 10\%.
+#' @param align Logical. If \code{TRUE} (recommended), aligns bootstrap 
+#'   loadings with the original solution. See \strong{Details}.
+#' @param ... Additional arguments passed to \code{lavaan::efa} or 
+#'   \code{lavaan::sem} (e.g., \code{estimator}, \code{ordered}, \code{missing}).
 #'
-#' @return Objeto de clase \code{facomplexBoot} con:
+#' @return An object of class \code{facomplexBoot} containing:
 #' \describe{
-#'   \item{\code{loadings_original}}{Matriz p x r de cargas en la muestra completa.}
-#'   \item{\code{loadings_boot}}{Array R x p x r de cargas alineadas por replica.}
-#'   \item{\code{boot}}{Objeto \code{boot} de \pkg{boot}.}
-#'   \item{\code{R}, \code{R_valid}}{Replicas solicitadas y validas.}
-#'   \item{\code{conf.level}, \code{type}}{Parametros de los IC.}
-#'   \item{\code{engine}, \code{rotation}, \code{target}, \code{nfactors}}{Metadatos.}
+#'   \item{\code{loadings_original}}{A p x r matrix of loadings from the full sample.}
+#'   \item{\code{loadings_boot}}{An R x p x r array of aligned bootstrap loadings.}
+#'   \item{\code{boot}}{The \code{boot} object from \pkg{boot}.}
+#'   \item{\code{R}, \code{R_valid}}{Requested and valid bootstrap replicates.}
+#'   \item{\code{conf.level}, \code{type}}{Confidence interval parameters.}
+#'   \item{\code{engine}, \code{rotation}, \code{target}, \code{nfactors}}{Metadata.}
 #' }
 #'
 #' @details
-#' \strong{Alineacion factorial.} Cada replica bootstrap puede devolver los
-#' factores en un orden distinto o con signo opuesto. Si no se corrige, la
-#' variabilidad entre replicas se infla artificialmente y los IC de indices
-#' como \code{\link[facomplex]{HofmannFac}} o \code{simload::SFI} se calculan
-#' comparando columnas no comparables. La alineacion consta de tres pasos:
+#' \strong{Factor alignment.} Each bootstrap replicate may return the factors 
+#' in a different order or with opposite signs. If left uncorrected, between-replicate 
+#' variability would be artificially inflated, and confidence intervals for indices 
+#' such as \code{\link{HofmannFac}} or \code{simload::SFI} would be computed by 
+#' comparing incompatible columns. Alignment involves three steps:
 #' \enumerate{
-#'   \item Congruencia de Tucker entre cada columna bootstrap y cada columna
-#'     original.
-#'   \item Asignacion optima por algoritmo hungaro (\code{clue::solve_LSAP})
-#'     sobre \code{-abs(congruencia)}.
-#'   \item Volteo de signo para congruencia positiva con la solucion original.
+#'   \item Tucker's congruence coefficient between each bootstrap column and 
+#'     each original column.
+#'   \item Optimal assignment via the Hungarian algorithm 
+#'     (\code{clue::solve_LSAP}) applied to the absolute congruences.
+#'   \item Sign reflection to ensure positive congruence with the original solution.
 #' }
-#' La alineacion corrige permutacion y reflexion, pero no optimos locales de
-#' la rotacion. Si una replica converge a una estructura genuinamente distinta,
-#' la congruencia sera baja y el IC lo reflejara (ancho). Esto es informacion
-#' valida, no un error.
+#' Alignment corrects for permutation and reflection, but not for local optima of 
+#' the rotation algorithm. If a replicate converges to a genuinely different 
+#' structure, the congruence will be low, and the confidence interval will reflect 
+#' this (wider intervals). This is valid information, not an error.
 #'
 #' @references
 #' Efron, B., & Tibshirani, R. J. (1993). \emph{An Introduction to the
@@ -74,11 +75,11 @@
 #' data(HolzingerSwineford1939, package = "lavaan")
 #' d <- HolzingerSwineford1939[, paste0("x", 1:9)]
 #'
-#' # Sin target: rotacion libre + alineacion automatica
+#' # Without target: free rotation + automatic alignment
 #' br <- bootLoadings(d, nfactors = 3, R = 50)
 #' print(br)
 #'
-#' # Con target (convencion 0/NA de lavaan)
+#' # With target (lavaan's 0/NA convention)
 #' target <- matrix(0, 9, 3)
 #' target[1:3, 1] <- NA; target[4:6, 2] <- NA; target[7:9, 3] <- NA
 #' br <- bootLoadings(d, nfactors = 3, target = target, R = 50)
@@ -97,7 +98,7 @@ bootLoadings <- function(
     model = NULL,
     target = NULL,
     rotation = NULL,
-    rotation.args = list(),
+    rotation_list = list(),
     R = 1000,
     conf.level = 0.95,
     type = c("perc", "bc"),
@@ -112,27 +113,28 @@ bootLoadings <- function(
   parallel <- match.arg(parallel)
   
   tgt <- prepareTarget(target, n_items = nrow(data))
+  
+  # Build rotation arguments according to the new lavaan syntax
   if (!is.null(tgt)) {
     if (is.null(nfactors) && engine == "EFA") nfactors <- ncol(tgt$binary)
     if (is.null(rotation)) rotation <- "target"
-    rotation.args <- utils::modifyList(rotation.args,
-                                       list(target = tgt$rotation))
+    rotation_list$target <- tgt$rotation
   } else if (is.null(rotation)) {
     rotation <- if (engine == "EFA") "oblimin" else "geomin"
   }
   
   fit_args <- list(data = data, engine = engine, nfactors = nfactors,
                    model = model, rotation = rotation,
-                   rotation.args = rotation.args, ...)
+                   rotation_list = rotation_list, ...)
   
-  if (progress) message("Ajustando el modelo original...")
+  if (progress) message("Fitting the original model...")
   fit0 <- do.call(fitFA, fit_args)
   L0 <- extractLoadings(fit0)
   p  <- nrow(L0); r <- ncol(L0)
   if (!is.null(tgt)) tgt <- reconcileTarget(tgt, L0)
   
   stat_fn <- function(d_b, idx) {
-    # 1. Extraer la muestra bootstrap y limpiar nombres de fila (crucial para lavaan)
+    # 1. Extract the bootstrap sample and clear row names (crucial for lavaan)
     d_sample <- d_b[idx, , drop = FALSE]
     rownames(d_sample) <- NULL
     
@@ -143,8 +145,8 @@ bootLoadings <- function(
       if (align) L <- alignFactors(L, L0)
       as.vector(L)
     }, error = function(e) {
-      # 2. Imprimir el error real en la consola para saber qué pasa
-      message("Error en replica bootstrap: ", conditionMessage(e))
+      # 2. Print the actual error to the console for diagnostics
+      message("Error in bootstrap replicate: ", conditionMessage(e))
       rep(NA_real_, p * r)
     })
     
@@ -161,7 +163,7 @@ bootLoadings <- function(
                         counter$i, R, 100 * counter$i / R))
       stat_fn(d_b, idx)
     }
-    message(sprintf("Iniciando bootstrap (R = %d)...", R))
+    message(sprintf("Starting bootstrap (R = %d)...", R))
     b <- boot::boot(data = data, statistic = stat_wrapper, R = R,
                     parallel = "no")
   } else {
@@ -175,9 +177,10 @@ bootLoadings <- function(
     v <- b$t[i, ]
     if (!anyNA(v)) L_boot[i, , ] <- matrix(v, p, r)
   }
+  
   n_fail <- sum(is.na(L_boot[, 1, 1]))
   if (n_fail > 0)
-    warning(sprintf("%d/%d replicas fallaron o devolvieron NA.",
+    warning(sprintf("%d/%d bootstrap replicates failed or returned NA.",
                     n_fail, R))
   
   structure(
