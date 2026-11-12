@@ -33,9 +33,9 @@ ciLSI <- function(boot_result, conf.level = NULL, type = NULL) {
   
   est  <- LSIglobal(L0)
   vals <- vapply(seq_len(R), function(i) {
-    L <- matrix(Lb[i, , ], p, r)
+    L <- Lb[i, , ] # <--- El cambio
     if (anyNA(L)) return(NA_real_)
-    tryCatch(LSIglobal(L), error = function(e) NA_real_)
+    tryCatch(BSI(as.data.frame(L)), error = function(e) NA_real_) # o LSIglobal(L)
   }, numeric(1))
   
   ci  <- computeCI(vals, est, conf.level, type)

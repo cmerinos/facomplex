@@ -22,7 +22,7 @@ alignFactors <- function(L, L0) {
     C[i, j] <- tuckerCongruence(L[, i], L0[, j])
   
   if (requireNamespace("clue", quietly = TRUE)) {
-    perm <- clue::solve_LSAP(-abs(C), maximum = FALSE)
+    perm <- clue::solve_LSAP(abs(C), maximum = TRUE)
   } else {
     perm <- integer(r); used <- logical(r)
     ord  <- order(apply(abs(C), 1, max), decreasing = TRUE)
@@ -105,12 +105,24 @@ fitFA <- function(data, engine = "EFA", nfactors = NULL, model = NULL,
 #' Extraer cargas estandarizadas
 #' @noRd
 extractLoadings <- function(fit) {
-  L <- lavaan::lavInspect(fit, "std")$lambda
-  L <- as.matrix(L); storage.mode(L) <- "double"
+  # Caso 1: EFA (devuelve efaList)
+  if (inherits(fit, "efaList")) {
+    # En lavaan, fit[[n]] extrae directamente la matriz rotada del modelo de n factores
+    L <- fit[[length(fit)]] 
+    L <- as.matrix(L)
+  } else {
+    # Caso 2: ESEM o SEM (devuelve un objeto lavaan normal)
+    L <- lavaan::lavInspect(fit, "std")$lambda
+    L <- as.matrix(L)
+  }
+  
+  storage.mode(L) <- "double"
+  
   if (is.null(rownames(L)) || all(rownames(L) == ""))
     rownames(L) <- paste0("item", seq_len(nrow(L)))
   if (is.null(colnames(L)) || all(colnames(L) == ""))
     colnames(L) <- paste0("F", seq_len(ncol(L)))
+  
   L
 }
 

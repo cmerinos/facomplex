@@ -66,12 +66,10 @@ ciHofmann <- function(boot_result,
                               scaledVersion = scaledVersion,
                               simplVersion = simplVersion)
     boot_list <- lapply(seq_len(R), function(i) {
-      L <- matrix(Lb[i, , ], p, r)
+      L <- Lb[i, , ] # <--- El cambio
       if (anyNA(L)) return(NULL)
       tryCatch(
-        Hofmann(as.data.frame(L),
-                           scaledVersion = scaledVersion,
-                           simplVersion = simplVersion),
+        Hofmann(as.data.frame(L), scaledVersion = scaledVersion, simplVersion = simplVersion), # Sin facomplex::
         error = function(e) NULL)
     })
     
@@ -98,13 +96,14 @@ ciHofmann <- function(boot_result,
   if (level %in% c("factor", "both")) {
     est_f <- HofmannFac(as.data.frame(L0))
     col <- names(est_f)[1]
-    boot_list_f <- lapply(seq_len(R), function(i) {
-      L <- matrix(Lb[i, , ], p, r)
+    boot_list <- lapply(seq_len(R), function(i) {
+      L <- Lb[i, , ] # <--- El cambio
       if (anyNA(L)) return(NULL)
       tryCatch(
-        HofmannFac(as.data.frame(L)),
+        Hofmann(as.data.frame(L), scaledVersion = scaledVersion, simplVersion = simplVersion), # Sin facomplex::
         error = function(e) NULL)
     })
+    
     mat <- do.call(rbind, lapply(boot_list_f, function(df) {
       if (is.null(df) || !col %in% names(df)) return(rep(NA_real_, r))
       v <- df[[col]]; if (length(v) != r) rep(NA_real_, r) else v

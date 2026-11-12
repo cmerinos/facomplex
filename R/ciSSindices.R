@@ -47,10 +47,9 @@ ciSSindices <- function(boot_result, per.factor = FALSE,
   
   est <- SSindices(L0, binary, per.factor = per.factor)
   boot_list <- lapply(seq_len(R), function(i) {
-    L <- matrix(Lb[i, , ], p, r)
+    L <- Lb[i, , ] # <--- El cambio
     if (anyNA(L)) return(NULL)
-    tryCatch(SSindices(L, binary, per.factor = per.factor),
-             error = function(e) NULL)
+    tryCatch(SSindices(L, binary, per.factor = per.factor), error = function(e) NULL)
   })
   
   rows <- list()

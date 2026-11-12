@@ -132,13 +132,22 @@ bootLoadings <- function(
   if (!is.null(tgt)) tgt <- reconcileTarget(tgt, L0)
   
   stat_fn <- function(d_b, idx) {
+    # 1. Extraer la muestra bootstrap y limpiar nombres de fila (crucial para lavaan)
+    d_sample <- d_b[idx, , drop = FALSE]
+    rownames(d_sample) <- NULL
+    
     out <- tryCatch({
       f <- do.call(fitFA, utils::modifyList(
-        fit_args, list(data = d_b[idx, , drop = FALSE])))
+        fit_args, list(data = d_sample)))
       L <- extractLoadings(f)
       if (align) L <- alignFactors(L, L0)
       as.vector(L)
-    }, error = function(e) rep(NA_real_, p * r))
+    }, error = function(e) {
+      # 2. Imprimir el error real en la consola para saber qué pasa
+      message("Error en replica bootstrap: ", conditionMessage(e))
+      rep(NA_real_, p * r)
+    })
+    
     if (length(out) != p * r) rep(NA_real_, p * r) else out
   }
   

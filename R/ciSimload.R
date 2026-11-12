@@ -50,10 +50,10 @@ ciSimload <- function(boot_result, conf.level = NULL, type = NULL) {
   
   est <- simload(as.data.frame(L0), items_target = items_target)
   boot_list <- lapply(seq_len(R), function(i) {
-    L <- matrix(Lb[i, , ], p, r)
+    L <- Lb[i, , ] # <--- Aquí está el cambio (extrae la matriz conservando nombres)
     if (anyNA(L)) return(NULL)
     tryCatch(
-      simload(as.data.frame(L), items_target = items_target),
+      simload(as.data.frame(L), items_target = items_target), # Quitamos facomplex::
       error = function(e) NULL)
   })
   
