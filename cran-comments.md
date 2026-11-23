@@ -1,16 +1,18 @@
 ## Resubmission
-This is a resubmission of version 0.0.3.
 
-### Changes since last submission (0.0.2):
-* Added missing `@return` tag to `print.KC` documentation, as requested by CRAN.
-* The function `print.KC` now correctly documents that it invisibly returns the input object.
+This is a new release of facomplex (2.0.0).
+
+### Major changes
+* This release introduces confidence interval estimation for the simplicity and complexity coefficients, representing a substantial extension of the package functionality.
+* Added confidence interval estimation for simplicity coefficients.
+* Added confidence interval estimation for complexity coefficients.
+* Updated documentation and NEWS.md accordingly.
 
 ### Test environments
-* Local Windows 10, R 4.5.3
-* Win-builder (R-devel and R-release) - no errors, warnings, or notes
+
+* local Windows installation, R-release
+* local Windows installation, R-devel
 
 ### R CMD check results
-0 errors | 0 warnings | 0 notes
 
-### Downstream dependencies
-There are currently no downstream dependencies for this package.
+0 errors | 0 warnings | 0 notes
