@@ -9,6 +9,7 @@ Authors@R: c(
            email = "sdominguezmpcs@gmail.com", 
            role = c("ctb"))
     )
+Description: Provides methods para examinar la complejidad y simplicidad factorial en escalas multidimensionales, y tambien en escalas unidimensionales pero comparadas. The package implements coeficientes provenientes de los trabajos de Kaiser, Hofmann, Flemings, Bentler y Lorenzo-Seva. Suma de cuadrados de las cargas factoriales pueden ser estimados para propositos descriptivos. Se obtienen tambien estimaciones puntuales e intervalos de confianza con muestreo bootstrap.
 Depends: R (>= 3.1.0)
 Imports: 
     ggplot2,
